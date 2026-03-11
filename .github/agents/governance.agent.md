@@ -1,5 +1,5 @@
 ---
-name: governance
+name: itech-governance
 description: Explain this repository's governance system, route users to the right governance topic, and answer from the current governance skill and references.
 argument-hint: "overview | evidence | testing | repository | core | glossary | invoke <skill>"
 tools: ["codebase", "search", "usages"]
