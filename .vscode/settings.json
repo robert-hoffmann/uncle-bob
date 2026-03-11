@@ -1,0 +1,122 @@
+{
+  // ── Editor UI & Language Associations ────────────────────────────────────
+  "css.customData": [
+    ".vscode/tailwind.json"
+  ],
+  "files.associations": {
+    "*.css": "tailwindcss"
+  },
+  "editor.quickSuggestions": {
+    "strings": "on"
+  },
+  "tailwindCSS.includeLanguages": {
+    "plaintext": "html"
+  },
+  // ── Copilot & Chat ────────────────────────────────────────────────────────
+  "chat.useNestedAgentsMdFiles": true,
+  "chat.mcp.gallery.enabled": true,
+  "chat.useAgentSkills": true,
+  "chat.customAgentInSubagent.enabled": true,
+  "chat.plugins.marketplaces": [
+    "i-technology/itech-agents"
+  ],
+  "github.copilot.chat.cli.customAgents.enabled": true,
+  "github.copilot.chat.copilotMemory.enabled": true,
+  "github.copilot.chat.languageContext.inline.typescript.enabled": true,
+  "github.copilot.chat.languageContext.typescript.enabled": true,
+  "github.copilot.chat.languageContext.fix.typescript.enabled": true,
+  "github.copilot.chat.notebook.enhancedNextEditSuggestions.enabled": true,
+  "inlineChat.enableV2": true,
+  // ── Python: Interpreter & Environment ────────────────────────────────────
+  "python.defaultInterpreterPath.osx": "${workspaceFolder}/.venv/bin/python",
+  "python.defaultInterpreterPath.linux": "${workspaceFolder}/.venv/bin/python",
+  "python.defaultInterpreterPath.windows": "${workspaceFolder}/.venv/Scripts/python.exe",
+  "python.languageServer": "Pylance",
+  "python.missingPackage.severity": "Information",
+  "python.experiments.optInto": [],
+  // ── Python: Analysis (Pylance) ────────────────────────────────────────────
+  // ⚠ CONFLICT: settings.old.json had "standard" — keeping current value "basic".
+  // Change to "standard" if stricter type-checking is desired project-wide.
+  "python.analysis.typeCheckingMode": "basic",
+  "python.analysis.languageServerMode": "full",
+  "python.analysis.aiHoverSummaries": true,
+  "python.analysis.autoFormatStrings": true,
+  "python.analysis.completeFunctionParens": false,
+  "python.analysis.displayEnglishDiagnostics": true,
+  "python.analysis.generateWithTypeAnnotation": true,
+  "python.analysis.includeAliasesFromUserFiles": true,
+  "python.analysis.enablePytestSupport": true,
+  "python.analysis.enableTroubleshootMissingImports": true,
+  "python.analysis.disableTaggedHints": false,
+  "python.analysis.typeEvaluation.deprecateTypingAliases": true,
+  "python.analysis.typeEvaluation.enableReachabilityAnalysis": true,
+  "python.analysis.typeEvaluation.strictDictionaryInference": true,
+  "python.analysis.typeEvaluation.strictListInference": true,
+  "python.analysis.typeEvaluation.strictSetInference": true,
+  // ── Python: Inlay Hints ───────────────────────────────────────────────────
+  "python.analysis.inlayHints.functionReturnTypes": true,
+  "python.analysis.inlayHints.variableTypes": true,
+  "python.analysis.inlayHints.callArgumentNames": "off",
+  "python.analysis.inlayHints.pytestParameters": false,
+  // ── Python: Terminal ──────────────────────────────────────────────────────
+  "python.terminal.activateEnvironment": true,
+  "python.terminal.activateEnvInCurrentTerminal": true,
+  "python.terminal.useEnvFile": true,
+  "python.terminal.focusAfterLaunch": true,
+  // ── Python: Testing ───────────────────────────────────────────────────────
+  "python.testing.pytestEnabled": true,
+  // ── Debugpy & Indent helper ───────────────────────────────────────────────
+  "debugpy.showPythonInlineValues": true,
+  "pythonIndent.trimLinesWithOnlyWhitespace": true,
+  // ── Jupyter ───────────────────────────────────────────────────────────────
+  "jupyter.notebookFileRoot": "${workspaceFolder}",
+  // ── YAML ──────────────────────────────────────────────────────────────────
+  "yaml.validate": true,
+  "yaml.format.enable": true,
+  "yaml.format.singleQuote": false,
+  "yaml.format.bracketSpacing": true,
+  "yaml.schemas": {
+    "https://json.schemastore.org/github-workflow.json": ".github/workflows/*.yml"
+  },
+  // ── Language-specific Save Behaviour ─────────────────────────────────────
+  "[markdown]": {
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll.markdownlint": "explicit"
+    },
+    "editor.defaultFormatter": "DavidAnson.vscode-markdownlint"
+  },
+  // ruff format disabled — strips separator-column alignment (our standard).
+  // codeActionsOnSave runs lint auto-fix and import sort only.
+  "[python]": {
+    "editor.formatOnSave": false,
+    "editor.codeActionsOnSave": {
+      "source.fixAll.ruff": "explicit",
+      "source.organizeImports.ruff": "explicit"
+    }
+  },
+  "[yaml]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "redhat.vscode-yaml"
+  },
+  "[json]": {
+    "editor.formatOnSave": false,
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  "[jsonc]": {
+    "editor.formatOnSave": false,
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  "[typescript]": {
+    "editor.formatOnSave": false,
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit"
+    }
+  },
+  "[javascript]": {
+    "editor.formatOnSave": false,
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit"
+    }
+  }
+}

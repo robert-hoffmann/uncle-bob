@@ -1,0 +1,214 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pulse-bi.local/schemas/claim-register.schema.json",
+  "title": "Claim Register",
+  "description": "Machine-readable claim confidence register used by governance checks.",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "generatedAt",
+    "claims"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "1"
+    },
+    "generatedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "claims": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/claim"
+      },
+      "uniqueItems": true
+    }
+  },
+  "$defs": {
+    "source": {
+      "type": "object",
+      "required": [
+        "title",
+        "url"
+      ],
+      "properties": {
+        "title": {
+          "type": "string",
+          "minLength": 3
+        },
+        "url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "publishedAt": {
+          "type": "string",
+          "format": "date"
+        }
+      },
+      "additionalProperties": false
+    },
+    "exception": {
+      "type": "object",
+      "required": [
+        "owner",
+        "expiresAt",
+        "followUp"
+      ],
+      "properties": {
+        "owner": {
+          "type": "string",
+          "minLength": 2
+        },
+        "expiresAt": {
+          "type": "string",
+          "format": "date"
+        },
+        "followUp": {
+          "type": "string",
+          "format": "uri"
+        },
+        "rationale": {
+          "type": "string",
+          "minLength": 5
+        }
+      },
+      "additionalProperties": false
+    },
+    "claim": {
+      "type": "object",
+      "required": [
+        "claimId",
+        "claimText",
+        "status",
+        "sourceTier",
+        "sources",
+        "verifiedAt",
+        "reviewBy",
+        "owner"
+      ],
+      "properties": {
+        "claimId": {
+          "type": "string",
+          "pattern": "^CLM-[0-9]{4,}$"
+        },
+        "claimText": {
+          "type": "string",
+          "minLength": 10
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "verified",
+            "partial",
+            "unverified"
+          ]
+        },
+        "sourceTier": {
+          "type": "string",
+          "enum": [
+            "primary",
+            "secondary",
+            "social"
+          ]
+        },
+        "sources": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/source"
+          },
+          "minItems": 1
+        },
+        "verifiedAt": {
+          "type": "string",
+          "format": "date"
+        },
+        "reviewBy": {
+          "type": "string",
+          "format": "date"
+        },
+        "owner": {
+          "type": "string",
+          "minLength": 2
+        },
+        "blockingUse": {
+          "type": "boolean",
+          "default": false
+        },
+        "exception": {
+          "$ref": "#/$defs/exception"
+        },
+        "notes": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "unverified"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "blockingUse": {
+                "const": false
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "partial"
+              },
+              "blockingUse": {
+                "const": true
+              }
+            },
+            "required": [
+              "status",
+              "blockingUse"
+            ]
+          },
+          "then": {
+            "required": [
+              "exception"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "additionalProperties": false,
+  "examples": [
+    {
+      "schemaVersion": "1",
+      "generatedAt": "2026-03-04T09:00:00Z",
+      "claims": [
+        {
+          "claimId": "CLM-20260001",
+          "claimText": "Durable harness context reduces repetitive architecture re-litigation across long-running agent sessions.",
+          "status": "verified",
+          "sourceTier": "primary",
+          "sources": [
+            {
+              "title": "Unlocking the Codex harness",
+              "url": "https://openai.com/index/unlocking-the-codex-harness/",
+              "publishedAt": "2026-02-23"
+            }
+          ],
+          "verifiedAt": "2026-03-04",
+          "reviewBy": "2026-06-30",
+          "owner": "@platform-governance",
+          "blockingUse": true
+        }
+      ]
+    }
+  ]
+}

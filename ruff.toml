@@ -1,0 +1,69 @@
+# ruff — fast Python linter & formatter
+# https://docs.astral.sh/ruff/configuration/
+
+# ── Target ───────────────────────────────────────────────────────────────────
+
+target-version = "py312"    # matches CI: actions/setup-python python-version: '3.12'
+line-length    = 100
+
+# ── File discovery ───────────────────────────────────────────────────────────
+
+include = ["**/*.py", "**/*.pyi"]
+exclude = [
+    ".git",
+    ".venv",
+    "__pycache__",
+    "*.egg-info",
+]
+
+# ── Linting ───────────────────────────────────────────────────────────────────
+
+[lint]
+select = [
+    "E",    # pycodestyle errors
+    "W",    # pycodestyle warnings
+    "F",    # Pyflakes
+    "I",    # isort (import order)
+    "N",    # pep8-naming
+    "UP",   # pyupgrade — modernise syntax
+    "B",    # flake8-bugbear
+    "C4",   # flake8-comprehensions
+    "SIM",  # flake8-simplify
+    "TID",  # flake8-tidy-imports
+    "RUF",  # Ruff-specific rules
+]
+
+ignore = [
+    "E501",  # line-too-long          — handled by line-length setting
+    "E221",  # multiple spaces before op  — required for separator-column alignment
+    "E241",  # multiple spaces after ','  — required for separator-column alignment
+    "E251",  # spaces around kw default   — required for aligned keyword arguments
+    "E203",  # whitespace before ':'      — required for type-annotation alignment
+]
+
+# Allow fixing everything that is auto-fixable
+fixable = ["ALL"]
+unfixable = []
+
+# ── Formatting ────────────────────────────────────────────────────────────────
+#
+# `ruff format` is DISABLED for this project.
+#
+# Reason: our code-quality standard (formatting-alignment.md) mandates
+# separator-column alignment — e.g.
+#
+#   name  : str      = Field(...)
+#   email : EmailStr
+#   role  : UserRole = UserRole.VIEWER
+#
+# ruff format (Black-based) unconditionally strips extra whitespace and
+# has no configuration flag to preserve column alignment.
+#
+# Use `ruff check --fix` for auto-fixable lint/import issues only.
+# Do NOT run `ruff format` on this project.
+
+# ── isort ────────────────────────────────────────────────────────────────────
+
+[lint.isort]
+force-sort-within-sections = true
+known-first-party          = []

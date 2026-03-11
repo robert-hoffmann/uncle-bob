@@ -1,0 +1,32 @@
+# EditorConfig is awesome: https://EditorConfig.org
+
+# top-most EditorConfig file
+root = true
+
+[*]
+indent_style             = space
+indent_size              = 4
+end_of_line              = lf
+charset                  = utf-8
+trim_trailing_whitespace = true
+insert_final_newline     = true
+
+# Web: JS / TS / Vue / CSS / HTML / JSON / YAML
+[*.{js,cjs,mjs,ts,cts,mts,vue,css,scss,less,html,json,jsonc,yaml,yml}]
+indent_size = 2
+
+# Markdown — trailing spaces are significant (line-break syntax)
+[*.{md,mdx}]
+trim_trailing_whitespace = false
+
+# Python — PEP 8
+[*.py]
+indent_size = 4
+
+# Makefiles require hard tabs
+[Makefile]
+indent_style = tab
+
+# Shell scripts
+[*.{sh,bash,zsh}]
+indent_size = 2

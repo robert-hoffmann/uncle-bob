@@ -1,0 +1,124 @@
+name: decision-governance
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+
+permissions:
+  contents: read
+
+jobs:
+  decision-gate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Prepare changed file list
+        id: changes
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/decision-governance
+          git diff --name-only "${{ github.event.pull_request.base.sha }}" "${{ github.sha }}" > artifacts/decision-governance/changed-files.txt
+          cat artifacts/decision-governance/changed-files.txt
+
+          if grep -Eq '(^docs/adr/claim-register\.json$|^docs/adr/|^\.agents/skills/governance/references/|^\.agents/skills/governance/scripts/)' artifacts/decision-governance/changed-files.txt; then
+            echo "run_claim_check=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "run_claim_check=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Rebuild ADR registry
+        id: registry
+        shell: bash
+        run: |
+          set +e
+          python3 .agents/skills/governance/scripts/build_adr_registry.py --strict --output docs/adr/registry.json > artifacts/decision-governance/registry-build.json
+          exit_code=$?
+          if [ "$exit_code" = "0" ]; then
+            git diff --quiet -- docs/adr/registry.json
+            diff_code=$?
+            if [ "$diff_code" != "0" ]; then
+              echo "docs/adr/registry.json is out of date. Regenerate and commit it."
+              exit_code=1
+            fi
+          fi
+          echo "registry_exit_code=$exit_code" >> "$GITHUB_OUTPUT"
+          exit 0
+
+      - name: Run ADR gate
+        id: adr_gate
+        shell: bash
+        run: |
+          set +e
+          python3 .agents/skills/governance/scripts/check_adr_gate.py \
+            --gate merge \
+            --changed-files-file artifacts/decision-governance/changed-files.txt \
+            --adr-registry docs/adr/registry.json \
+            --waivers docs/adr/waivers.json \
+            --output artifacts/decision-governance/adr-gate.json
+          exit_code=$?
+          echo "adr_exit_code=$exit_code" >> "$GITHUB_OUTPUT"
+          exit 0
+
+      - name: Run claim gate when governance/reference files changed
+        id: claim_gate
+        if: steps.changes.outputs.run_claim_check == 'true'
+        shell: bash
+        run: |
+          set +e
+          python3 .agents/skills/governance/scripts/check_claim_register.py \
+            --claim-register docs/adr/claim-register.json \
+            --output artifacts/decision-governance/claim-gate.json
+          exit_code=$?
+          echo "claim_exit_code=$exit_code" >> "$GITHUB_OUTPUT"
+          exit 0
+
+      - name: Upload decision-governance artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: decision-governance-artifacts
+          path: artifacts/decision-governance
+          if-no-files-found: ignore
+
+      - name: Enforce decision-governance outcomes
+        if: always()
+        shell: bash
+        env:
+          REGISTRY_EXIT: ${{ steps.registry.outputs.registry_exit_code }}
+          ADR_EXIT: ${{ steps.adr_gate.outputs.adr_exit_code }}
+          CLAIM_EXIT: ${{ steps.claim_gate.outputs.claim_exit_code }}
+          RUN_CLAIM_CHECK: ${{ steps.changes.outputs.run_claim_check }}
+        run: |
+          set -euo pipefail
+
+          reg_code="${REGISTRY_EXIT:-0}"
+          adr_code="${ADR_EXIT:-0}"
+          claim_code="${CLAIM_EXIT:-0}"
+
+          if [ "$reg_code" != "0" ]; then
+            echo "Registry build failed with exit code $reg_code"
+            exit "$reg_code"
+          fi
+
+          if [ "$adr_code" != "0" ]; then
+            echo "ADR gate failed/blocked with exit code $adr_code"
+            exit "$adr_code"
+          fi
+
+          if [ "$RUN_CLAIM_CHECK" = "true" ] && [ "$claim_code" != "0" ]; then
+            echo "Claim gate failed/blocked with exit code $claim_code"
+            exit "$claim_code"
+          fi
+
+          echo "Decision governance gates passed."
+
+

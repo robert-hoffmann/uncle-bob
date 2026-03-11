@@ -1,0 +1,4 @@
+interface:
+  display_name: "Dev VueJS"
+  short_description: "Modern Vue 3.5+ TypeScript guardrails"
+  default_prompt: "Use $dev-vuejs to implement and review Vue 3.5.x component/composable code with script setup, strict TypeScript, and modern Vue APIs."

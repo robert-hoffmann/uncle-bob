@@ -1,0 +1,47 @@
+# yamllint configuration — https://yamllint.readthedocs.io/en/stable/configuration.html
+---
+extends: default
+
+rules:
+  # ── Indentation ─────────────────────────────────────────────────────────────
+  indentation:
+    spaces: 2 # matches .editorconfig web indent_size = 2
+    indent-sequences: true
+    check-multi-line-strings: false
+
+  # ── Line length ─────────────────────────────────────────────────────────────
+  line-length:
+    max: 120 # pragmatic; GitHub Actions steps can be verbose
+    allow-non-breakable-words: true
+    allow-non-breakable-inline-mappings: true
+
+  # ── Whitespace ───────────────────────────────────────────────────────────────
+  trailing-spaces: enable
+  new-line-at-end-of-file: enable # matches .editorconfig insert_final_newline
+
+  # ── Braces / brackets ────────────────────────────────────────────────────────
+  braces:
+    min-spaces-inside: 0
+    max-spaces-inside: 1
+
+  brackets:
+    min-spaces-inside: 0
+    max-spaces-inside: 0
+
+  # ── Comments ─────────────────────────────────────────────────────────────────
+  comments:
+    min-spaces-from-content: 2
+
+  comments-indentation: enable
+
+  # ── Document markers ─────────────────────────────────────────────────────────
+  document-start:
+    present: false # optional "---" at top; GitHub Actions don't require it
+
+  document-end:
+    present: false
+
+  # ── Truthy values ────────────────────────────────────────────────────────────
+  truthy:
+    allowed-values: ["true", "false", "on", "off"] # GitHub Actions uses "on:"
+    check-keys: false

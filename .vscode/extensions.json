@@ -1,0 +1,17 @@
+{
+  "recommendations": [
+    // ── Editor baseline ───────────────────────────────────────────────────
+    "editorconfig.editorconfig",
+    // ── Markdown ──────────────────────────────────────────────────────────
+    "DavidAnson.vscode-markdownlint",
+    // ── YAML ──────────────────────────────────────────────────────────────
+    "redhat.vscode-yaml",
+    // ── Python ────────────────────────────────────────────────────────────
+    "charliermarsh.ruff",
+    "ms-python.python",
+    // ── JS / TS ───────────────────────────────────────────────────────────
+    "dbaeumer.vscode-eslint",
+    // ── CSS / SCSS ────────────────────────────────────────────────────────
+    "stylelint.vscode-stylelint"
+  ]
+}

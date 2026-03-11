@@ -1,0 +1,142 @@
+---
+name: governance
+description: Unified governance skill for repository governance, testing and TDD governance, evidence and ADR/claim governance, and shared governance contracts. Use when defining, auditing, or executing deterministic governance gates and bounded exception-aware controls.
+metadata:
+  desktop-portfolio-help-topics: "overview,evidence,testing,repository,core,glossary,combos,invoke"
+  desktop-portfolio-help-aliases: "repo=repository"
+  desktop-portfolio-help-default-topic: "overview"
+---
+
+# Governance
+
+## Overview
+
+Use this skill as the single owner for governance in this repository.
+This skill is self-contained and merges repository, testing, evidence, and shared contract governance.
+
+## Operating Modes
+
+1. `repository mode`: repository hygiene, CI/release governance, branch/ruleset policy, deterministic tooling
+2. `testing mode`: testing policy, TG001-TG005 signal controls, behavior-first TDD execution
+3. `evidence mode`: evidence lifecycle, ADR alignment, claim verification, gate readiness
+4. `core-contract mode`: shared profile, gate semantics, exception metadata, report sections
+5. `full governance audit mode`: run repository + testing + evidence checks in one deterministic sequence
+
+## Mode Selection
+
+- Select exactly one mode for focused tasks.
+- Use `full governance audit mode` only for end-to-end governance assessment or release/merge readiness.
+- Default to `lean` profile unless the user explicitly requests `advanced`.
+
+## Load References On Demand
+
+### Core Contracts
+
+- Read `references/profile-model.md` for profile selection.
+- Read `references/gate-and-report-contract.md` for canonical gate/report semantics.
+- Read `references/exception-contract.md` for canonical exception metadata.
+- Read `references/vocabulary.md` for normalized governance vocabulary.
+- Read `references/governance-commands.md` for stable command entrypoints.
+
+### Repository Governance
+
+- Read `references/repository-baseline-2026-03.md` for repository defaults.
+- Read `references/github-implementation-playbook.md` for GitHub implementation patterns.
+- Read `references/release-please-playbook.md` for release automation policy.
+
+### Testing Governance
+
+- Read `references/testing-policy-and-signals.md` for TG001-TG005 and TDD policy.
+- Read `references/execution-playbook.md` for Red-Green-Refactor execution.
+- Read `references/ci-artifact-contract.md` for required test artifacts.
+- Read `references/stack-baseline-2026-03.md` for lean testing stack defaults.
+
+### Evidence Governance
+
+- Read `references/evidence-baseline-2026-03.md` for default evidence controls.
+- Read `references/evidence-lifecycle.md` for evidence freshness and retention.
+- Read `references/evidence-artifact-taxonomy.md` for risk-tiered artifact requirements.
+- Read `references/decision-memory-and-claims.md` for ADR/claim decision rules.
+- Read `references/high-risk-paths.yaml` for high-risk scope detection.
+- Read `references/agent-validation-record.schema.json` for validation-record schema.
+- Read `references/adr-registry.schema.json` for ADR registry schema.
+- Read `references/claim-register.schema.json` for claim-register schema.
+- Read `references/adr-template-madr.md` for ADR authoring structure.
+
+## Core Workflow
+
+1. Detect requested mode and evaluated scope from repository truth.
+2. Select profile (`lean` default, `advanced` only with explicit rationale).
+3. Propose at least two implementation paths for non-trivial governance decisions with concise pros/cons.
+4. Run mode-specific controls and keep outputs deterministic.
+5. Apply bounded exceptions only through `references/exception-contract.md`.
+6. Emit gate outcome (`pass`, `fail`, `blocked`) with traceable artifact paths.
+
+## Mode Workflows
+
+### Repository Mode
+
+1. verify repository baseline artifacts and deterministic tooling policy
+2. verify CI, permissions, and merge-gate controls
+3. verify release policy with Conventional Commits and `release-please`
+
+### Testing Mode
+
+1. detect stack and test runner
+2. enforce TG001-TG004 as blocking and TG005 as warning
+3. require behavior-first TDD flow for behavior-changing work
+4. ensure deterministic artifact paths for blocking checks
+
+### Evidence Mode
+
+1. classify `changeType`, `evidenceLevel`, and `profile`
+2. detect high-risk path impact
+3. validate required artifacts and freshness
+4. validate ADR alignment or active waiver
+5. validate claim confidence before blocking policy usage
+
+### Core-Contract Mode
+
+1. apply canonical profile, gate, exception, and report semantics
+2. normalize status language and report contract usage
+3. reject duplicate or conflicting schema definitions
+
+### Full Governance Audit Mode
+
+1. execute `repository mode`
+2. execute `testing mode`
+3. execute `evidence mode`
+4. consolidate output under canonical report sections
+
+## Rules
+
+- Keep this skill self-contained and do not require other governance skills.
+- Keep defaults lean and activate advanced controls explicitly.
+- Blocking governance decisions must rely on deterministic artifacts.
+- Exception metadata must include owner, expiry, and follow-up.
+- Do not duplicate canonical contract definitions across files.
+
+## Output Requirements
+
+When producing governance output, include:
+
+1. `environment_note`
+2. `scope_note`
+3. `decision_note` (chosen path plus one alternative with pros/cons)
+4. `gate_note`
+5. `exception_note`
+6. `validation_note`
+
+Add mode-specific sections when applicable:
+
+1. `quality_gate_note` for testing mode
+2. `evidence_inventory`, decision-note extensions, and `claim_note` for evidence mode
+
+## Completion Checklist
+
+- Selected mode is explicit.
+- Profile choice is explicit (`lean` or `advanced`).
+- Required deterministic artifacts are present or explicitly missing.
+- Gate result is traceable and reproducible.
+- Exceptions use canonical contract and remain bounded.
+- Governance guidance stays self-contained and internally consistent.

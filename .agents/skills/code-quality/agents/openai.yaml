@@ -1,0 +1,4 @@
+interface:
+  display_name: "Code Quality"
+  short_description: "Cross-language quality guardrails"
+  default_prompt: "Use $code-quality to apply design, formatting, documentation, and refactoring standards while keeping changes minimal and maintainable."

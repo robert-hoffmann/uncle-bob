@@ -1,0 +1,104 @@
+# ──────────────────────────────────────────────────────────────────────────────
+# .gitattributes — normalise line endings and set diff/merge drivers
+# https://git-scm.com/docs/gitattributes
+# ──────────────────────────────────────────────────────────────────────────────
+
+# Default: normalise all text files to LF in the repo; checkout as LF on all
+# platforms (consistent with .editorconfig end_of_line = lf)
+* text=auto eol=lf
+
+# ── Source code ───────────────────────────────────────────────────────────────
+
+# JavaScript / TypeScript
+*.js        text eol=lf
+*.cjs       text eol=lf
+*.mjs       text eol=lf
+*.ts        text eol=lf
+*.cts       text eol=lf
+*.mts       text eol=lf
+*.d.ts      text eol=lf
+
+# Vue / HTML / CSS / preprocessors
+*.vue       text eol=lf
+*.html      text eol=lf
+*.css       text eol=lf
+*.scss      text eol=lf
+*.less      text eol=lf
+
+# Python
+*.py        text eol=lf
+*.pyi       text eol=lf
+*.pyw       text eol=lf
+
+# Shell
+*.sh        text eol=lf
+*.bash      text eol=lf
+*.zsh       text eol=lf
+
+# ── Data / config ─────────────────────────────────────────────────────────────
+
+*.json      text eol=lf
+*.jsonc     text eol=lf
+*.yaml      text eol=lf
+*.yml       text eol=lf
+*.toml      text eol=lf
+*.ini       text eol=lf
+*.env       text eol=lf
+*.env.*     text eol=lf
+
+# ── Docs / markup ─────────────────────────────────────────────────────────────
+
+*.md        text eol=lf diff=markdown
+*.mdx       text eol=lf diff=markdown
+*.txt       text eol=lf
+*.rst       text eol=lf
+
+# ── Build / tooling ───────────────────────────────────────────────────────────
+
+Makefile    text eol=lf
+Dockerfile  text eol=lf
+*.dockerfile text eol=lf
+*.mk        text eol=lf
+*.lock      text eol=lf -diff    # lockfiles: store as text, skip diffs
+
+# ── Git housekeeping ──────────────────────────────────────────────────────────
+
+.gitignore      text eol=lf
+.gitattributes  text eol=lf
+.editorconfig   text eol=lf
+
+# ── Binary — never diff or merge ──────────────────────────────────────────────
+
+# Images
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.gif   binary
+*.ico   binary
+*.svg   text eol=lf   # SVG is XML — treat as text
+*.webp  binary
+*.avif  binary
+
+# Fonts
+*.woff  binary
+*.woff2 binary
+*.ttf   binary
+*.otf   binary
+*.eot   binary
+
+# Archives / compiled
+*.zip   binary
+*.tar   binary
+*.gz    binary
+*.tgz   binary
+*.br    binary
+*.7z    binary
+*.jar   binary
+*.pyc   binary
+
+# ── Export-ignore (exclude from `git archive` / release tarballs) ─────────────
+
+.editorconfig    export-ignore
+.gitattributes   export-ignore
+.gitignore       export-ignore
+.github/         export-ignore

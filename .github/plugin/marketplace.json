@@ -1,0 +1,20 @@
+{
+  "name": "copilot-showcase",
+  "owner": {
+    "name": "jrubiosainz",
+    "email": "jrubiosainz@users.noreply.github.com"
+  },
+  "metadata": {
+    "description": "Demo marketplace for the Copilot CLI Showcase — featuring code review, security scanning, and MCP-powered agents.",
+    "version": "1.0.0",
+    "homepage": "https://github.com/jrubiosainz/copilot-showcase"
+  },
+  "plugins": [
+    {
+      "name": "code-reviewer",
+      "description": "AI-powered code review agent with security scanning skill and GitHub MCP integration. Demonstrates the full Copilot CLI plugin stack.",
+      "version": "1.0.0",
+      "source": "./plugins/code-reviewer"
+    }
+  ]
+}
