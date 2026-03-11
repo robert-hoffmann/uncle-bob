@@ -44,6 +44,9 @@ Use this skill to enforce Vue 3.5.x core best practices with strict TypeScript a
 - Use reactive props destructure in script setup where it improves clarity.
 - Watch destructured props with getter sources, never pass the value directly as a watch source.
 - Use `MaybeRefOrGetter<T>` and `toValue()` for composables that accept value, ref, or getter inputs.
+- Consider `VueUse` (`vueuse.org`, especially `@vueuse/core`) before writing
+	bespoke generic composables for browser APIs, events, timers, storage,
+	sensors, or async state helpers.
 - Register `onWatcherCleanup()` synchronously before any `await` boundary in watcher callbacks.
 - Prefer precise getters for watch sources; use numeric `deep` only when necessary.
 

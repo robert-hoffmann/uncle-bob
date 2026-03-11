@@ -110,6 +110,15 @@ export function useNormalizedQuery(input: MaybeRefOrGetter<string>) {
 }
 ```
 
+Before creating a generic composable for browser APIs, events, timers,
+storage, sensors, or async state behavior, consider whether `VueUse`
+(`vueuse.org`, especially `@vueuse/core`) already provides a clear,
+well-maintained solution.
+
+Prefer VueUse when it reduces custom glue code and fits the project's
+dependency policy. Prefer local composables when the logic is domain-specific
+or when a tiny inline Vue primitive is clearer than an added abstraction.
+
 ## SSR and Hydration Primitives
 
 - Use `useId()` for SSR-safe unique IDs.
