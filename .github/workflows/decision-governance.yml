@@ -1,3 +1,7 @@
+# PR-only governance gate.
+# Uses PR base/head SHAs to detect changed files, rebuild the ADR registry,
+# run ADR and claim checks when relevant, upload governance artifacts,
+# and enforce the combined final decision from collected step exit codes.
 name: decision-governance
 
 on:
