@@ -55,11 +55,10 @@ Skills are domain-specific instruction sets that Copilot loads on demand.
 
 | Workflow | Purpose |
 | -------- | ------- |
-| lint | Linting gates |
-| deploy | Deployment pipeline |
-| release-please | Automated release management |
+| quality | Linting and governance integrity checks |
 | decision-governance | Governance decision checks |
-| governance-skill-integrity | Skill integrity validation |
+
+Detailed workflow documentation lives in `.github/workflows/README.md`.
 
 ## Getting Started
 

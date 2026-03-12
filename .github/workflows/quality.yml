@@ -1,0 +1,56 @@
+name: quality
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+
+permissions:
+  contents: read
+
+jobs:
+  markdownlint:
+    name: Markdown (markdownlint)
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Lint Markdown files
+        run: make lint-md
+
+  python-quality:
+    name: ${{ matrix.name }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Python (ruff)
+            target: lint-py
+          - name: YAML (yamllint)
+            target: lint-yaml
+          - name: Governance Integrity
+            target: test-integrity
+          - name: Governance Regression
+            target: test-governance
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - uses: astral-sh/setup-uv@v5
+
+      - name: Sync Python tooling
+        run: uv sync
+
+      - name: Run ${{ matrix.target }}
+        run: make ${{ matrix.target }}
