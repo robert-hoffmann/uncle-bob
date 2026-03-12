@@ -14,12 +14,8 @@
   },
   // ── Copilot & Chat ────────────────────────────────────────────────────────
   "chat.useNestedAgentsMdFiles": true,
-  "chat.mcp.gallery.enabled": true,
   "chat.useAgentSkills": true,
   "chat.customAgentInSubagent.enabled": true,
-  "chat.plugins.marketplaces": [
-    "i-technology/itech-agents"
-  ],
   "github.copilot.chat.cli.customAgents.enabled": true,
   "github.copilot.chat.copilotMemory.enabled": true,
   "github.copilot.chat.languageContext.inline.typescript.enabled": true,
@@ -28,16 +24,16 @@
   "github.copilot.chat.notebook.enhancedNextEditSuggestions.enabled": true,
   "inlineChat.enableV2": true,
   // ── Python: Interpreter & Environment ────────────────────────────────────
-  "python.defaultInterpreterPath.osx": "${workspaceFolder}/.venv/bin/python",
-  "python.defaultInterpreterPath.linux": "${workspaceFolder}/.venv/bin/python",
-  "python.defaultInterpreterPath.windows": "${workspaceFolder}/.venv/Scripts/python.exe",
+  // "python.defaultInterpreterPath.osx": "${workspaceFolder}/.venv/bin/python",
+  // "python.defaultInterpreterPath.linux": "${workspaceFolder}/.venv/bin/python",
+  // "python.defaultInterpreterPath.windows": "${workspaceFolder}/.venv/Scripts/python.exe",
   "python.languageServer": "Pylance",
   "python.missingPackage.severity": "Information",
   "python.experiments.optInto": [],
   // ── Python: Analysis (Pylance) ────────────────────────────────────────────
   // ⚠ CONFLICT: settings.old.json had "standard" — keeping current value "basic".
   // Change to "standard" if stricter type-checking is desired project-wide.
-  "python.analysis.typeCheckingMode": "basic",
+  "python.analysis.typeCheckingMode": "standard",
   "python.analysis.languageServerMode": "full",
   "python.analysis.aiHoverSummaries": true,
   "python.analysis.autoFormatStrings": true,
