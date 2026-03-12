@@ -1,6 +1,10 @@
 # yamllint configuration — https://yamllint.readthedocs.io/en/stable/configuration.html
----
 extends: default
+
+# Generated agent manifests keep single-line prompt text by design.
+ignore: |
+  .venv/
+  .agents/skills/*/agents/openai.yaml
 
 rules:
   # ── Indentation ─────────────────────────────────────────────────────────────

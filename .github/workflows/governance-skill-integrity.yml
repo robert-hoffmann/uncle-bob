@@ -35,4 +35,3 @@ jobs:
         shell: bash
         run: |
           python3 -m unittest discover -s .agents/skills/governance/tests/governance_scripts -p 'test_*.py' -v
-

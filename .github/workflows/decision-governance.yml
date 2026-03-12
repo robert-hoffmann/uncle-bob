@@ -26,10 +26,15 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p artifacts/decision-governance
-          git diff --name-only "${{ github.event.pull_request.base.sha }}" "${{ github.sha }}" > artifacts/decision-governance/changed-files.txt
+          git diff --name-only \
+            "${{ github.event.pull_request.base.sha }}" \
+            "${{ github.sha }}" \
+            > artifacts/decision-governance/changed-files.txt
           cat artifacts/decision-governance/changed-files.txt
 
-          if grep -Eq '(^docs/adr/claim-register\.json$|^docs/adr/|^\.agents/skills/governance/references/|^\.agents/skills/governance/scripts/)' artifacts/decision-governance/changed-files.txt; then
+          if grep -Eq \
+            '(^docs/adr/|^\.agents/skills/governance/(references|scripts/))' \
+            artifacts/decision-governance/changed-files.txt; then
             echo "run_claim_check=true" >> "$GITHUB_OUTPUT"
           else
             echo "run_claim_check=false" >> "$GITHUB_OUTPUT"
@@ -40,7 +45,10 @@ jobs:
         shell: bash
         run: |
           set +e
-          python3 .agents/skills/governance/scripts/build_adr_registry.py --strict --output docs/adr/registry.json > artifacts/decision-governance/registry-build.json
+          python3 .agents/skills/governance/scripts/build_adr_registry.py \
+            --strict \
+            --output docs/adr/registry.json \
+            > artifacts/decision-governance/registry-build.json
           exit_code=$?
           if [ "$exit_code" = "0" ]; then
             git diff --quiet -- docs/adr/registry.json
@@ -120,5 +128,3 @@ jobs:
           fi
 
           echo "Decision governance gates passed."
-
-
