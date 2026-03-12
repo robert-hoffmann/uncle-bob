@@ -66,7 +66,7 @@ Do not align when:
 
 ### The Pattern
 
-```
+```text
 <left>   <sep> <right>
 <longer> <sep> <right>
 <short>  <sep> <right>

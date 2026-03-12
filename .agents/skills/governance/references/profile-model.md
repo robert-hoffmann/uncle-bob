@@ -5,7 +5,7 @@ Use this model to choose governance strictness.
 ## 1) Profiles
 
 | Profile | Default Use | Intent |
-|---|---|---|
+| ------- | ----------- | ------ |
 | `lean` | small to medium projects | minimum deterministic controls with low process overhead |
 | `advanced` | complex or high-risk projects | expanded controls for risk, scale, and audit depth |
 

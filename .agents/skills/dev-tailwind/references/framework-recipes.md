@@ -53,28 +53,28 @@ Use this exact official sequence for modern Nuxt setup:
 
 1. Install Tailwind module via Nuxt tooling:
 
-```bash
-npx nuxi@latest module add tailwindcss
-```
+   ```bash
+   npx nuxi@latest module add tailwindcss
+   ```
 
 2. Wire the Tailwind Vite plugin in `nuxt.config.ts`:
 
-```ts
-import tailwindcss from "@tailwindcss/vite";
+   ```ts
+   import tailwindcss from "@tailwindcss/vite";
 
-export default defineNuxtConfig({
-  css: ["~/assets/css/main.css"],
-  vite: {
-    plugins: [tailwindcss()],
-  },
-});
-```
+   export default defineNuxtConfig({
+     css: ["~/assets/css/main.css"],
+     vite: {
+       plugins: [tailwindcss()],
+     },
+   });
+   ```
 
 3. Create `app/assets/css/main.css` with:
 
-```css
-@import "tailwindcss";
-```
+   ```css
+   @import "tailwindcss";
+   ```
 
 4. Keep token and utility extensions in CSS-first v4 style (`@theme`, `@utility`, `@variant`, `@custom-variant`).
 

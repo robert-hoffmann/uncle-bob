@@ -10,6 +10,7 @@
 ## VueUse-First Areas
 
 Prefer VueUse for:
+
 - Browser API wrappers (storage, media query, clipboard, device/sensors).
 - Reactive timing/control helpers (debounce/throttle, interval/timeout wrappers).
 - Async utility composables.
@@ -35,6 +36,7 @@ Prefer VueUse for:
 ## Tailwind Handling
 
 For Tailwind v4 setup and migration details, defer to:
+
 - `.agents/skills/dev-tailwind/SKILL.md`
 - `.agents/skills/dev-tailwind/references/tailwind-v4-guardrails.md`
 - `.agents/skills/dev-tailwind/references/framework-recipes.md`

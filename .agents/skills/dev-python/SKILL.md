@@ -95,6 +95,7 @@ Generate modern patterns for new code and refactor legacy patterns incrementally
 - Do not add untyped dict-heavy contracts when typed models are practical.
 
 Migration-aware exception policy:
+
 - Allow temporary legacy retention only for explicit compatibility constraints in existing code.
 - Document exactly what is retained, why it is retained, and the next modernization step.
 

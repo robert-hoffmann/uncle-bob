@@ -18,7 +18,7 @@ Artifacts are selected by:
 ## 2) Baseline by Evidence Level
 
 | Level | Required Blocking Artifacts |
-|---|---|
+| ----- | --------------------------- |
 | `L0` | command log, static/lint signal, build/syntax check (if applicable), validation record |
 | `L1` | `L0` + unit/component outputs, coverage outputs, targeted smoke evidence when touched |
 | `L2` | `L1` + expanded integration/contract/e2e evidence, security evidence, rollback plan, decision object |

@@ -7,7 +7,7 @@ Map legacy TypeScript patterns to modern 5.9.3 alternatives and define bounded m
 ## Replacement Map
 
 | Legacy pattern | Modern replacement | Why replace |
-|---|---|---|
+| -------------- | ------------------ | ----------- |
 | Implicit type-only imports | `import type` and `export type` with `verbatimModuleSyntax` | Avoid runtime import confusion and preserve emit intent. |
 | Loose module detection | `moduleDetection: force` in module-based repos | Prevent accidental script-mode behavior and phantom globals. |
 | Broad assertion chains (`as any as ...`) | Narrowing with guards, discriminated unions, and `unknown` boundaries | Improve soundness and reviewability. |

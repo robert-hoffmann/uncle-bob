@@ -79,6 +79,7 @@ Use this skill to enforce TypeScript 5.9.3 modern defaults and patterns across a
 - Do not introduce legacy module ambiguity between ESM and CJS.
 
 Migration-aware exception policy:
+
 - Allow temporary legacy retention only for explicit compatibility constraints in existing code.
 - Document exactly what is retained, why it is retained, and the concrete follow-up modernization step.
 - Scope each exception narrowly and avoid introducing new dependency on retained legacy behavior.

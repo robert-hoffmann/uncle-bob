@@ -45,8 +45,8 @@ Use this skill to enforce Vue 3.5.x core best practices with strict TypeScript a
 - Watch destructured props with getter sources, never pass the value directly as a watch source.
 - Use `MaybeRefOrGetter<T>` and `toValue()` for composables that accept value, ref, or getter inputs.
 - Consider `VueUse` (`vueuse.org`, especially `@vueuse/core`) before writing
-	bespoke generic composables for browser APIs, events, timers, storage,
-	sensors, or async state helpers.
+  bespoke generic composables for browser APIs, events, timers, storage,
+  sensors, or async state helpers.
 - Register `onWatcherCleanup()` synchronously before any `await` boundary in watcher callbacks.
 - Prefer precise getters for watch sources; use numeric `deep` only when necessary.
 
@@ -72,10 +72,12 @@ Use this skill to enforce Vue 3.5.x core best practices with strict TypeScript a
 - Do not generate watcher code that registers cleanup after an async boundary.
 
 Migration-aware exception policy:
+
 - Allow temporary legacy retention only when required for bounded compatibility in existing codebases.
 - Document each retained legacy pattern, why it is retained, and the exact follow-up modernization path.
 
 Non-goals:
+
 - Do not encode Nuxt-specific directory/runtime policy in this skill; defer to `dev-nuxt`.
 - Do not provide deep Tailwind implementation guidance in this skill; defer to `dev-tailwind`.
 

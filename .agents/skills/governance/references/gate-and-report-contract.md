@@ -5,7 +5,7 @@ This file defines shared gate semantics and shared governance report sections.
 ## 1) Canonical Gate Types
 
 | Gate | Trigger | Blocking |
-|---|---|---|
+| ---- | ------- | -------- |
 | `merge` | pull request validation | yes |
 | `confidence` | scheduled or pre-release validation | yes |
 | `release` | release readiness validation | yes |

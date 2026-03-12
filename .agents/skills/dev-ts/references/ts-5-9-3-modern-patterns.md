@@ -7,7 +7,7 @@ Provide portable, modern defaults for TypeScript 5.9.3 across Node apps, bundler
 ## Archetype Matrix
 
 | Archetype | Runtime authority | Recommended module settings | Emit posture | Notes |
-|---|---|---|---|---|
+| --------- | ----------------- | --------------------------- | ------------ | ----- |
 | Node app | Node runtime | `module: node20` (or `nodenext` when future Node tracking is required) | `tsc` emit or noEmit | Prefer stable Node semantics for production behavior. |
 | Bundler app | Bundler resolver and bundler runtime graph | `module: esnext`, `moduleResolution: bundler` | Usually `noEmit: true` | Keep TypeScript focused on typechecking while bundler emits JS. |
 | npm library | Consumer runtimes (Node and bundlers) | Prefer `nodenext` or `node20` for compatibility verification | Often declaration-focused emit | Avoid bundler-only assumptions in published packages. |

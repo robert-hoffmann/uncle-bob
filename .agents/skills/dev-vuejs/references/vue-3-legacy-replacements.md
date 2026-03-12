@@ -5,7 +5,7 @@ Use this reference when modernizing existing codebases. Never emit legacy patter
 ## Legacy to Modern Replacement Matrix
 
 | Legacy pattern | Modern replacement | Notes |
-|---|---|---|
+| -------------- | ------------------ | ----- |
 | Options API for new features | Composition API with script setup and TypeScript | Keep Options API only as temporary compatibility in existing modules |
 | `modelValue` + `update:modelValue` boilerplate | `defineModel()` | Prefer macro-based model contracts in Vue 3.4+ |
 | `const el = ref(null)` for string template refs | `useTemplateRef()` | Prefer explicit template-ref helper in Vue 3.5+ |

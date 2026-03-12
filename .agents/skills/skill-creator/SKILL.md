@@ -49,7 +49,7 @@ Think of Codex as exploring a path: a narrow bridge with cliffs needs specific g
 
 Every skill consists of a required SKILL.md file and optional bundled resources:
 
-```
+```text
 skill-name/
 ├── SKILL.md (required)
 │   ├── YAML frontmatter metadata (required)
@@ -138,7 +138,7 @@ Keep SKILL.md body to the essentials and under 500 lines to minimize context blo
 
 **Key principle:** When a skill supports multiple variations, frameworks, or options, keep only the core workflow and selection guidance in SKILL.md. Move variant-specific details (patterns, examples, configuration) into separate reference files.
 
-**Pattern 1: High-level guide with references**
+#### Pattern 1: High-level guide with references
 
 ```markdown
 # PDF Processing
@@ -157,11 +157,11 @@ Extract text with pdfplumber:
 
 Codex loads FORMS.md, REFERENCE.md, or EXAMPLES.md only when needed.
 
-**Pattern 2: Domain-specific organization**
+#### Pattern 2: Domain-specific organization
 
 For Skills with multiple domains, organize content by domain to avoid loading irrelevant context:
 
-```
+```text
 bigquery-skill/
 ├── SKILL.md (overview and navigation)
 └── reference/
@@ -175,7 +175,7 @@ When a user asks about sales metrics, Codex only reads sales.md.
 
 Similarly, for skills supporting multiple frameworks or variants, organize by variant:
 
-```
+```text
 cloud-deploy/
 ├── SKILL.md (workflow + provider selection)
 └── references/
@@ -186,7 +186,7 @@ cloud-deploy/
 
 When the user chooses AWS, Codex only reads aws.md.
 
-**Pattern 3: Conditional details**
+#### Pattern 3: Conditional details
 
 Show basic content, link to advanced content:
 

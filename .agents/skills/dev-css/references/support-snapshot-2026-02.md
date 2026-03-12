@@ -7,7 +7,7 @@ Use this snapshot for fallback decisions. Re-check support for high-risk deliver
 ## Tier Matrix
 
 | Tier | Feature | Global usage snapshot | Notes |
-|---|---|---:|---|
+| ---- | ------- | --------------------: | ----- |
 | Safe default | CSS nesting | 90.71% | Mature in modern engines |
 | Safe default | Container queries (size) | 93.47% | Baseline for component responsiveness |
 | Safe default | `:has()` | 93.71% | Prefer targeted relationships for performance |

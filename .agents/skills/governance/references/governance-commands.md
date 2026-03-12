@@ -19,4 +19,3 @@ python .agents/skills/governance/scripts/check_claim_register.py --claim-registe
 python .agents/skills/governance/scripts/check_test_signal.py --path .agents/skills/governance/tests --language auto --strict
 python .agents/skills/governance/scripts/check_skill_integrity.py
 ```
-

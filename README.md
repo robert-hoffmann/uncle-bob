@@ -67,7 +67,8 @@ Skills are domain-specific instruction sets that Copilot loads on demand.
 2. Open the workspace in VS Code with [GitHub Copilot](https://github.com/features/copilot) enabled.
 3. Run `uv sync` from the repository root to create/update the local `.venv` and install the Python dev tools.
 4. Activate the environment with `source .venv/bin/activate` when you want direct shell access to the tools.
-5. Skills, agents, and prompts are auto-discovered from `AGENTS.MD` and the `.github/` directories.
+5. Run `make check` to execute the local lint and test workflow.
+6. Skills, agents, and prompts are auto-discovered from `AGENTS.MD` and the `.github/` directories.
 
 ### Local Python Tooling
 
@@ -75,6 +76,14 @@ Skills are domain-specific instruction sets that Copilot loads on demand.
 - Use `uv run ruff check .` for Python linting.
 - Use `uv run yamllint --strict .` for YAML linting.
 - Use `uv add --dev <package>` when adding new repo-local Python tooling.
+
+### Local Workflow
+
+- Use `make lint` to run Markdown, Python, and YAML lint checks.
+- Use `make test` to run the governance integrity and regression checks.
+- Use `make check` to run the full local workflow that most closely matches CI.
+- Use `make help` to list the available local commands.
+- Markdown lint runs via `npx markdownlint-cli2`, so local Markdown linting expects Node.js with `npx` available.
 
 ## Linting & Tooling
 

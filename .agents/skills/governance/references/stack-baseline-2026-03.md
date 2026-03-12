@@ -7,7 +7,7 @@ This baseline defines lean testing defaults and acceptable alternatives.
 ## 1) Lean Default Matrix
 
 | Area | Default | Alternatives | Pros | Cons |
-|---|---|---|---|---|
+| ---- | ------- | ------------ | ---- | ---- |
 | TS/Vite/Vue unit tests | Vitest + Vue Test Utils/Testing Library | Jest | Vite-native speed and TS ergonomics | migration cost from legacy stacks |
 | Nuxt tests | `@nuxt/test-utils` + Vitest projects | Playwright-heavy integration only | Nuxt-aware runtime behavior coverage | fixture discipline required |
 | Web E2E | Playwright Test | Cypress, WebdriverIO | cross-browser coverage + traces | setup overhead |

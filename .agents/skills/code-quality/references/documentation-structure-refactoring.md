@@ -18,7 +18,7 @@ Every function, method, or callable should include:
 4. **Exceptions/Errors** — What errors can be raised and when
 5. **Example**           — Usage example for non-trivial functions
 
-```
+```text
 <doc_block_start>
 Brief description of what this function does.
 
@@ -106,7 +106,7 @@ Keep section headers and grouping labels language-neutral.
 
 For larger files, use section headers to organize code:
 
-```
+```text
 <comment_marker> ============================================================
 <comment_marker> Section Name
 <comment_marker> ============================================================
@@ -114,7 +114,7 @@ For larger files, use section headers to organize code:
 
 Or with lighter separators:
 
-```
+```text
 <comment_marker> ------------------------------------------------------------
 <comment_marker> Subsection Name
 <comment_marker> ------------------------------------------------------------
@@ -144,15 +144,15 @@ Use fold-region markers to improve navigation in larger files where the language
 
 ### VS Code Canonical Marker Matrix
 
-| File Type                     | Preferred Marker Pair                                       | Notes                                                          |
-|------------------------------|--------------------------------------------------------------|----------------------------------------------------------------|
-| `*.py`, `*.pyi`              | `# region Name` / `# endregion Name`                        | Primary for Python modules and type stubs                      |
-| `*.ts`, `*.js`, `*.mjs`      | `// #region Name` / `// #endregion Name`                    | Primary for script blocks                                      |
-| `*.css`                      | `/* #region Name */` / `/* #endregion Name */`              | Keep inside stylesheet logic blocks                            |
-| `*.html`                     | `<!-- #region Name -->` / `<!-- #endregion Name -->`        | For large templates                                            |
-| `*.md`                       | `<!-- #region Name -->` / `<!-- #endregion Name -->`        | Useful in long Markdown docs                                   |
-| `*.vue`                      | Marker style by block (`<script>`, `<style>`, `<template>`) | Follow JS/CSS/HTML marker conventions for each block           |
-| `*.json`                     | No marker comments                                           | Use structural/object folding only; comments require JSONC     |
+| File Type | Preferred Marker Pair | Notes |
+| --------- | --------------------- | ----- |
+| `*.py`, `*.pyi` | `# region Name` / `# endregion Name` | Primary for Python modules and type stubs |
+| `*.ts`, `*.js`, `*.mjs` | `// #region Name` / `// #endregion Name` | Primary for script blocks |
+| `*.css` | `/* #region Name */` / `/* #endregion Name */` | Keep inside stylesheet logic blocks |
+| `*.html` | `<!-- #region Name -->` / `<!-- #endregion Name -->` | For large templates |
+| `*.md` | `<!-- #region Name -->` / `<!-- #endregion Name -->` | Useful in long Markdown docs |
+| `*.vue` | Marker style by block (`<script>`, `<style>`, `<template>`) | Follow JS/CSS/HTML marker conventions for each block |
+| `*.json` | No marker comments | Use structural/object folding only; comments require JSONC |
 
 ### Unsupported-Format Fallback
 
@@ -185,7 +185,7 @@ Ask yourself:
 
 ---
 
-# Code Structure Guidelines
+## Code Structure Guidelines
 >
 > **Applies to:** All files (`*.*`)
 
@@ -215,7 +215,7 @@ Use visual separators to divide code into logical sections:
 
 ### Major Sections (use `===`)
 
-```
+```text
 <comment> ============================================================================
 <comment> Configuration and Constants
 <comment> ============================================================================
@@ -223,7 +223,7 @@ Use visual separators to divide code into logical sections:
 
 ### Minor Sections (use `---`)
 
-```
+```text
 <comment> ----------------------------------------------------------------------------
 <comment> Helper Functions
 <comment> ----------------------------------------------------------------------------
@@ -272,7 +272,7 @@ Keep related elements together:
 
 ---
 
-# Refactoring Guidelines
+## Refactoring Guidelines
 >
 > **Applies to:** All files (`*.*`)
 

@@ -61,9 +61,8 @@
     // MD012 — no multiple consecutive blank lines (max 1)
     "MD012": { "maximum": 1 },
 
-    // MD013 — line length; set high to avoid flagging prose, still catches runaway lines
-    "MD013": { "line_length": 120, "heading_line_length": 80, "code_block_line_length": 120,
-                "tables": false, "headings": true },
+    // MD013 — line length disabled; skills/references intentionally keep some long instruction lines
+    "MD013": false,
 
     // MD047 — files must end with a single newline (matches .editorconfig insert_final_newline)
     "MD047": true,
