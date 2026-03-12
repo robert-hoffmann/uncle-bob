@@ -1,1 +1,8 @@
 mcp.json
+
+# Python environments and caches
+.venv/
+__pycache__/
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/

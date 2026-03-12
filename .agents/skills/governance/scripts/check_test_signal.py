@@ -4,13 +4,12 @@
 from __future__ import annotations
 
 import argparse
+from collections.abc import Iterable
+from dataclasses import dataclass, field
 import json
+from pathlib import Path
 import re
 import sys
-from dataclasses import dataclass, field
-from pathlib import Path
-from typing import Iterable
-
 
 SUPPORTED_EXTENSIONS = {
     ".ts": "ts",
@@ -312,17 +311,18 @@ def analyze_block(block: TestBlock, report: AnalysisReport) -> None:
     location = f"{block.file_path}:{block.name}"
     has_outcomes = has_outcome_assertions(block.body)
 
-    if block.language in {"ts", "js"}:
-        if any(keyword in lower_name for keyword in TS_RUNTIME_TYPE_KEYWORDS):
-            has_presence_only = any(token.lower() in lower_body for token in TS_PRESENCE_ASSERTIONS)
-            if has_presence_only and not has_outcomes:
-                report.violations.append(
-                    rule_message(
-                        RULE_TG001,
-                        "Runtime test appears to restate type-system guarantees.",
-                        location,
-                    )
+    if block.language in {"ts", "js"} and any(
+        keyword in lower_name for keyword in TS_RUNTIME_TYPE_KEYWORDS
+    ):
+        has_presence_only = any(token.lower() in lower_body for token in TS_PRESENCE_ASSERTIONS)
+        if has_presence_only and not has_outcomes:
+            report.violations.append(
+                rule_message(
+                    RULE_TG001,
+                    "Runtime test appears to restate type-system guarantees.",
+                    location,
                 )
+            )
 
     if "getter" in lower_name or "setter" in lower_name:
         report.violations.append(

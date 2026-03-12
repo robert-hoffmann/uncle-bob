@@ -3,9 +3,9 @@
 Quick validation script for skills - minimal version
 """
 
+from pathlib import Path
 import re
 import sys
-from pathlib import Path
 
 import yaml
 

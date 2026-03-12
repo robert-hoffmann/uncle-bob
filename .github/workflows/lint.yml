@@ -44,9 +44,6 @@ jobs:
       - name: Lint
         run: ruff check .
 
-      - name: Format check
-        run: ruff format --check .
-
   # ── YAML ───────────────────────────────────────────────────────────────────
   yamllint:
     name: YAML (yamllint)

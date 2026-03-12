@@ -7,8 +7,8 @@ import argparse
 import datetime as dt
 import fnmatch
 import json
-import subprocess
 from pathlib import Path
+import subprocess
 from typing import Any
 
 BLOCKED_EXIT = 2

@@ -1,13 +1,12 @@
 from __future__ import annotations
 
 import json
+from pathlib import Path
 import subprocess
 import sys
 import tempfile
 import textwrap
 import unittest
-from pathlib import Path
-
 
 SKILL_ROOT = Path(__file__).resolve().parents[2]
 PROJECT_ROOT = Path(__file__).resolve().parents[5]

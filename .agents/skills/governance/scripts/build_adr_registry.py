@@ -6,8 +6,8 @@ from __future__ import annotations
 import argparse
 import datetime as dt
 import json
-import re
 from pathlib import Path
+import re
 from typing import Any
 
 ADR_FILE_RE = re.compile(r"^(?P<num>[0-9]{4})-.*\.md$")

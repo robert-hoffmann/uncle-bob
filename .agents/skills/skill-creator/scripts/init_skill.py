@@ -14,9 +14,9 @@ Examples:
 """
 
 import argparse
+from pathlib import Path
 import re
 import sys
-from pathlib import Path
 
 from generate_openai_yaml import write_openai_yaml
 

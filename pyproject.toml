@@ -1,0 +1,21 @@
+[project]
+name            = "itech-agents"
+version         = "0.1.0"
+description     = "Curated GitHub Copilot skills, agents, prompts, and governance workflows."
+readme          = "README.md"
+requires-python = ">=3.12,<3.13"
+dependencies    = []
+
+[dependency-groups]
+dev = [
+  "pyyaml>=6.0.2,<7",
+  "ruff>=0.11,<0.12",
+  "yamllint>=1.37,<2",
+]
+
+[tool.uv]
+package = false
+
+[build-system]
+requires      = ["hatchling>=1.27,<2"]
+build-backend = "hatchling.build"
