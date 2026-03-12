@@ -1,6 +1,6 @@
 # Framework Recipes
 
-Use this document to choose the correct Tailwind v4 setup path for the target runtime.
+Use this document to choose the correct modern Tailwind setup path for the target runtime.
 
 ## 1) Standalone HTML (CDN)
 
@@ -28,7 +28,7 @@ Use this path for Vue projects using Vite bundling.
 
 ### Pattern
 
-- Add the Tailwind v4 Vite plugin (`@tailwindcss/vite`).
+- Add the Tailwind Vite plugin (`@tailwindcss/vite`).
 - Register the plugin in the Vite config plugin list.
 - Create or update a main stylesheet with `@import "tailwindcss"`.
 - Import that stylesheet from the app entry point.
@@ -76,7 +76,7 @@ Use this exact official sequence for modern Nuxt setup:
    @import "tailwindcss";
    ```
 
-4. Keep token and utility extensions in CSS-first v4 style (`@theme`, `@utility`, `@variant`, `@custom-variant`).
+4. Keep token and utility extensions in modern CSS-first style (`@theme`, `@utility`, `@variant`, `@custom-variant`).
 
 ### Known Differences vs Vue + Vite
 
@@ -87,7 +87,7 @@ Use this exact official sequence for modern Nuxt setup:
 ### Guardrails
 
 - Do not scaffold Vue-only `vite.config.*` plugin wiring for Nuxt projects.
-- Do not present `@nuxtjs/tailwindcss` as the default path for new Tailwind v4 Nuxt setup.
+- Do not present `@nuxtjs/tailwindcss` as the default path for new modern Tailwind Nuxt setup.
 - Do not mix Nuxt and Vue+Vite setup instructions in the same recipe unless compatibility constraints are explicitly requested.
 
 ## Quick Environment Detection

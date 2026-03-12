@@ -1,8 +1,8 @@
-# Browser Support Snapshot (February 2026)
+# Browser Support Baseline
 
-Validated on February 14, 2026 (using Can I use usage snapshots published for January 2026).
+> This snapshot was last validated in February 2026. Always verify current browser support data via web search (caniuse.com) before making fallback decisions.
 
-Use this snapshot for fallback decisions. Re-check support for high-risk deliverables or strict enterprise browser matrices.
+Use this baseline for initial fallback decisions. Re-check support for high-risk deliverables or strict enterprise browser matrices.
 
 ## Tier Matrix
 

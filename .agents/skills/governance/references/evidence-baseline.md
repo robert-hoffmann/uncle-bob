@@ -1,6 +1,8 @@
-# Evidence Baseline 2026-03
+# Evidence Baseline
 
-This baseline is date-stamped to `2026-03-04` and optimized for lean default governance.
+> Verify referenced frameworks and standards via web search for current versions.
+
+This baseline is optimized for lean default governance.
 
 ## 1) Default Evidence Controls
 

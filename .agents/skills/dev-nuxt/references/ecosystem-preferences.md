@@ -31,14 +31,14 @@ Prefer VueUse for:
 - Reject packages with stale maintenance signals.
 - Reject dependencies without TypeScript support or clear typing story.
 - Prefer composable and tree-shakeable APIs.
-- Reject workaround packages introduced only to preserve Nuxt 3 conventions when Nuxt 4 native structure/runtime behavior already covers the use case.
+- Reject workaround packages introduced only to preserve legacy Nuxt conventions when modern Nuxt native structure/runtime behavior already covers the use case.
 
 ## Tailwind Handling
 
-For Tailwind v4 setup and migration details, defer to:
+For Tailwind setup and migration details, defer to:
 
 - `.agents/skills/dev-tailwind/SKILL.md`
-- `.agents/skills/dev-tailwind/references/tailwind-v4-guardrails.md`
+- `.agents/skills/dev-tailwind/references/tailwind-guardrails.md`
 - `.agents/skills/dev-tailwind/references/framework-recipes.md`
 
 Keep Nuxt skill guidance focused on integration decisions, not Tailwind implementation internals.
@@ -49,4 +49,4 @@ Keep Nuxt skill guidance focused on integration decisions, not Tailwind implemen
 - Custom fetch wrapper without Nuxt integration -> `useFetch`/`useAsyncData` + typed helpers.
 - Untyped validation helpers -> schema-first typed validation.
 - Broad global singleton patterns -> focused composables or typed stores.
-- Alias/path workaround plugin for root-vs-app confusion -> explicit Nuxt 4 aliases (`~`, `@`, `~~`, `@@`) and `app/`-first structure.
+- Alias/path workaround plugin for root-vs-app confusion -> explicit modern Nuxt aliases (`~`, `@`, `~~`, `@@`) and `app/`-first structure.

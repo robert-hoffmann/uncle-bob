@@ -1,6 +1,6 @@
-# Stack Baseline 2026-03
+# Stack Baseline
 
-Last verified: **2026-03-04 (US)**
+> Verify tool versions and package availability via web search when setting up a new project.
 
 This baseline defines lean testing defaults and acceptable alternatives.
 

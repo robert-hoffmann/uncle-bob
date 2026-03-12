@@ -1,13 +1,15 @@
-# Nuxt 4 + Vue Patterns
+# Nuxt + Vue Patterns (Latest Stable)
+
+> Verify these patterns against the latest official Nuxt documentation via web search.
 
 ## Purpose
 
-Apply Nuxt 4-native architecture with modern Vue Composition API and explicit server/client boundaries.
+Apply modern Nuxt-native architecture with modern Vue Composition API and explicit server/client boundaries.
 
 ## Workflow
 
 1. Detect project mode and modules from `package.json`, `nuxt.config.*`, and lockfiles.
-2. Confirm Nuxt 4 structure assumptions:
+2. Confirm modern Nuxt structure assumptions:
    - app source is under `app/`
    - runtime roots (`server/`, `shared/`, `public/`, `modules/`) remain in project root
    - `srcDir` / `dir.app` overrides are intentional and understood
@@ -26,9 +28,9 @@ Apply Nuxt 4-native architecture with modern Vue Composition API and explicit se
 - Prefer Nitro server routes for API endpoints instead of separate ad-hoc servers.
 - Prefer route rules/config over custom runtime branching where possible.
 - Prefer composables for reuse instead of global mutable helpers.
-- Prefer app aliases that match Nuxt 4 defaults (`~`/`@` map to the app source directory).
+- Prefer app aliases that match modern Nuxt defaults (`~`/`@` map to the app source directory).
 
-## Nuxt 4 Async Data and Fetch Semantics
+## Modern Nuxt Async Data and Fetch Semantics
 
 These defaults and behaviors are mandatory guardrails for generated/reviewed code:
 
@@ -36,7 +38,7 @@ These defaults and behaviors are mandatory guardrails for generated/reviewed cod
   - implication: do not assume deep reactivity for nested object mutation; prefer immutable updates or set `deep: true` intentionally.
 - `dedupe` defaults to `cancel`.
   - implication: repeated requests with same key can cancel in-flight requests; set `dedupe: 'defer'` only when queueing behavior is required.
-- `pendingWhenIdle` is disabled by default in Nuxt 4 behavior.
+- `pendingWhenIdle` is disabled by default in modern Nuxt behavior.
   - implication: with `immediate: false`, `pending` stays `false` until first execution; use `status` (`idle` / `pending` / `success` / `error`) for UI state logic.
 - Keyed async data calls share refs (`data`, `error`, `status`, `pending`) and require option consistency.
   - options that must remain consistent for a shared key include handler, `deep`, `transform`, `pick`, `getCachedData`, and `default`.
@@ -85,4 +87,4 @@ These defaults and behaviors are mandatory guardrails for generated/reviewed cod
 - Options API for net-new implementation unless required by surrounding constraints.
 - Framework bypasses that duplicate existing Nuxt capabilities.
 - Hidden global side effects in plugins/composables.
-- Root-level v3 app directories (`pages/`, `components/`, `layouts/`, `middleware/`, `plugins/`) when generating Nuxt 4 file placements.
+- Root-level legacy app directories (`pages/`, `components/`, `layouts/`, `middleware/`, `plugins/`) when generating modern Nuxt file placements.

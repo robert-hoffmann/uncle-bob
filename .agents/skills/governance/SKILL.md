@@ -40,7 +40,7 @@ This skill is self-contained and merges repository, testing, evidence, and share
 
 ### Repository Governance
 
-- Read `references/repository-baseline-2026-03.md` for repository defaults.
+- Read `references/repository-baseline.md` for repository defaults.
 - Read `references/github-implementation-playbook.md` for GitHub implementation patterns.
 - Read `references/release-please-playbook.md` for release automation policy.
 
@@ -49,11 +49,11 @@ This skill is self-contained and merges repository, testing, evidence, and share
 - Read `references/testing-policy-and-signals.md` for TG001-TG005 and TDD policy.
 - Read `references/execution-playbook.md` for Red-Green-Refactor execution.
 - Read `references/ci-artifact-contract.md` for required test artifacts.
-- Read `references/stack-baseline-2026-03.md` for lean testing stack defaults.
+- Read `references/stack-baseline.md` for lean testing stack defaults.
 
 ### Evidence Governance
 
-- Read `references/evidence-baseline-2026-03.md` for default evidence controls.
+- Read `references/evidence-baseline.md` for default evidence controls.
 - Read `references/evidence-lifecycle.md` for evidence freshness and retention.
 - Read `references/evidence-artifact-taxonomy.md` for risk-tiered artifact requirements.
 - Read `references/decision-memory-and-claims.md` for ADR/claim decision rules.

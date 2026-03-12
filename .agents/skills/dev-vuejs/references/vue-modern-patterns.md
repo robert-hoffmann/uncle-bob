@@ -1,6 +1,8 @@
-# Vue 3.5 Modern Patterns (Stable Baseline)
+# Vue Modern Patterns (Latest Stable)
 
-Use this reference for modern Vue core patterns in Vue 3.5.x with strict TypeScript.
+> Verify these patterns against the latest official Vue documentation via web search before applying to new projects.
+
+Use this reference for modern Vue core patterns with strict TypeScript.
 
 ## Script Setup and TypeScript Baseline
 
@@ -19,7 +21,7 @@ const props = defineProps<{
 
 ## Reactive Props Destructure
 
-Reactive props destructure is modern in Vue 3.5+ and supports inline defaults.
+Reactive props destructure is available in modern Vue and supports inline defaults.
 
 ```ts
 const { page = 1, pageSize = 25 } = defineProps<{
@@ -145,5 +147,5 @@ const HeavyWidget = defineAsyncComponent({
 
 ## Stable vs Beta Policy
 
-- Baseline: Vue 3.5.x stable behavior.
-- Beta features: do not generate by default. Require explicit user request before introducing 3.6 beta-only behavior.
+- Baseline: latest stable Vue behavior.
+- Pre-release features: do not generate by default. Require explicit user request before introducing beta-only behavior.

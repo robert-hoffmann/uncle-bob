@@ -1,4 +1,4 @@
 interface:
   display_name: "Dev TS"
-  short_description: "Modern TypeScript 5.9.3 guardrails"
-  default_prompt: "Use $dev-ts to modernize TypeScript code and tsconfig settings with strict 5.9.3-safe patterns and migration-aware guardrails."
+  short_description: "Modern TypeScript guardrails (latest stable)"
+  default_prompt: "Use $dev-ts to modernize TypeScript code and tsconfig settings with strict modern patterns and migration-aware guardrails."

@@ -1,8 +1,10 @@
-# TypeScript 5.9.3 Modern Patterns
+# TypeScript Modern Patterns (Latest Stable)
+
+> Verify these patterns against the latest official TypeScript documentation via web search.
 
 ## Goal
 
-Provide portable, modern defaults for TypeScript 5.9.3 across Node apps, bundler apps, npm libraries, and type-stripping runtimes.
+Provide portable, modern defaults for the latest stable TypeScript across Node apps, bundler apps, npm libraries, and type-stripping runtimes.
 
 ## Archetype Matrix
 
@@ -32,7 +34,7 @@ Useful additions by context:
 
 ## tsconfig Starting Points
 
-### Node App (Node 20+)
+### Node App (LTS)
 
 ```jsonc
 {
@@ -176,8 +178,7 @@ function parseExternal(input: unknown): { id: string } {
 
 ## Primary Sources
 
-- TypeScript 5.9 release notes: <https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-9.html>
-- TypeScript 5.8 release notes: <https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-8.html>
+- TypeScript release notes: <https://www.typescriptlang.org/docs/handbook/release-notes/overview.html>
 - TSConfig module: <https://www.typescriptlang.org/tsconfig/module.html>
 - TSConfig moduleResolution: <https://www.typescriptlang.org/tsconfig/moduleResolution.html>
 - TSConfig verbatimModuleSyntax: <https://www.typescriptlang.org/tsconfig/verbatimModuleSyntax.html>

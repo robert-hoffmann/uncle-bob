@@ -1,19 +1,19 @@
 ---
 name: dev-python
-description: Design, review, refactor, and test repository Python code using typed Python 3.12.x patterns, boundary validation, and structured error handling. Use when tasks involve Python files, pytest/ruff/mypy workflows, packaging/tooling decisions, dataclass or Pydantic modeling, or Python service/repository logic.
+description: Design, review, refactor, and test repository Python code using typed Python (latest stable) patterns, boundary validation, and structured error handling. Use when tasks involve Python files, pytest/ruff/mypy workflows, packaging/tooling decisions, dataclass or Pydantic modeling, or Python service/repository logic.
 ---
 
 # Dev Python
 
 ## Overview
 
-Use this skill to enforce Python 3.12.x modern defaults, strict typing, boundary validation, and migration-aware legacy handling.
+Use this skill to enforce latest stable Python modern defaults, strict typing, boundary validation, and migration-aware legacy handling.
 
 Generate modern patterns for new code and refactor legacy patterns incrementally when touching existing code.
 
 ## Load References On Demand
 
-- Read `references/python-standards.md` for canonical Python 3.12.x rules and toolchain policy.
+- Read `references/python-standards.md` for canonical Python rules and toolchain policy.
 
 ## Core Workflow
 
@@ -25,11 +25,15 @@ Generate modern patterns for new code and refactor legacy patterns incrementally
 6. Implement minimal changes to pass tests, then refactor while preserving behavior and boundaries.
 7. Run available checks and report outcomes plus any bounded exceptions.
 
-## Version Contract
+## Version & Research Policy
 
-- Treat Python `3.12.x` as the default baseline.
-- Do not generate Python `3.13+`-only syntax or stdlib behavior unless the user explicitly requests a forward-compatibility experiment.
-- Keep default runtime guidance aligned with `>=3.12,<3.13`.
+- Target the latest stable release of Python.
+- Detect the project's actual Python version from `pyproject.toml`, `.python-version`, lockfiles, and CI configuration.
+- Use web search to verify current best practices, API availability, and migration guidance against official Python documentation.
+- Do not generate syntax or stdlib behavior only available in unreleased Python versions unless the user explicitly requests it.
+- When the project's installed version is behind latest stable, note the version gap and recommend an upgrade path.
+- Refer to AGENTS.MD for centralized version policy and default tooling.
+- Do not hardcode version numbers in generated guidance — keep recommendations evergreen.
 
 ## Implementation Rules
 
@@ -115,7 +119,7 @@ When generating or reviewing Python code, include:
 
 ## Completion Checklist
 
-- Python 3.12.x baseline is enforced intentionally.
+- Latest stable Python baseline is enforced intentionally.
 - Modern typing and boundary validation are applied where relevant.
 - Data model choice (dataclass vs Pydantic v2) is explicit.
 - Concurrency and error handling patterns are structured and observable.

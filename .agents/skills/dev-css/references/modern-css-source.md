@@ -1,6 +1,6 @@
 # Modern CSS Source (Web Applications)
 
-Quick reference for modern CSS authoring across HTML pages, Vue/Nuxt/Quasar SFC styles, and Tailwind v4 pipelines.
+Quick reference for modern CSS authoring across HTML pages, Vue/Nuxt/Quasar SFC styles, and Tailwind pipelines.
 
 ## DTCG Token Contract (Canonical -> Runtime)
 
@@ -30,7 +30,7 @@ Use DTCG-style JSON as the canonical token source, then map to runtime CSS varia
 }
 ```
 
-## Tailwind v4 Bridge (`@theme`)
+## Tailwind Bridge (`@theme`)
 
 Keep Tailwind theme variables aligned with runtime CSS variable naming so utilities and raw CSS stay in sync.
 
@@ -138,5 +138,5 @@ Use layers to make override order explicit and avoid specificity arms races.
 - DTCG home: <https://www.designtokens.org/>
 - DTCG 2025.10 technical reports: <https://www.designtokens.org/tr/2025.10/>
 - DTCG editor drafts (including format): <https://www.designtokens.org/tr/drafts/>
-- Tailwind v4 configuration and theme variables: <https://tailwindcss.com/docs/configuration>
+- Tailwind CSS configuration and theme variables: <https://tailwindcss.com/docs/configuration>
 - Vue SFC CSS features (`v-bind()` in style): <https://vuejs.org/api/sfc-css-features>

@@ -1,27 +1,27 @@
 ---
 name: dev-tailwind
-description: Set up, migrate, debug, and review Tailwind CSS v4 integrations across standalone HTML, Vue + Vite, and Nuxt projects. Use when tasks mention Tailwind directives/utilities, @import "tailwindcss", @theme tokens, v3-to-v4 migration, plugin wiring, or framework-specific Tailwind build issues, especially when utility-class workflow is the primary change surface.
+description: Set up, migrate, debug, and review Tailwind CSS (latest stable) integrations across standalone HTML, Vue + Vite, and Nuxt projects. Use when tasks mention Tailwind directives/utilities, @import "tailwindcss", @theme tokens, legacy-to-modern migration, plugin wiring, or framework-specific Tailwind build issues, especially when utility-class workflow is the primary change surface.
 ---
 
 # Dev Tailwind
 
 ## Overview
 
-Use this skill to keep Tailwind usage v4-correct across different environments and avoid outdated patterns. This skill is hard Tailwind v4-first: enforce CSS-first setup, apply official framework recipes, and replace legacy/v3-era defaults in generated guidance.
+Use this skill to keep Tailwind usage current and correct across different environments and avoid outdated patterns. This skill targets the latest stable Tailwind CSS: enforce CSS-first setup, apply official framework recipes, and replace legacy defaults in generated guidance.
 
 ## Load References On Demand
 
-- Read `references/tailwind-v4-guardrails.md` for strict do/don't rules, deprecated syntax traps, and review checklists.
+- Read `references/tailwind-guardrails.md` for strict do/don't rules, deprecated syntax traps, and review checklists.
 - Read `references/framework-recipes.md` for environment-specific setup paths (standalone HTML/CDN, Vue + Vite, Nuxt).
-- Read `references/tailwind-v3-to-v4-deltas.md` for migration matrix, upgrade replacements, and compatibility caveats.
+- Read `references/tailwind-legacy-to-modern-migration.md` for migration matrix, upgrade replacements, and compatibility caveats.
 
 ## Core Workflow
 
 1. Identify the target environment before writing any Tailwind setup.
-2. Run required detection checks: `nuxt.config.*`, `vite.config.*`, `package.json` dependencies, CSS entrypoints, and Nuxt app stylesheet placement (for Nuxt v4-style docs, expect `app/assets/css/main.css`).
+2. Run required detection checks: `nuxt.config.*`, `vite.config.*`, `package.json` dependencies, CSS entrypoints, and Nuxt app stylesheet placement (for modern Nuxt, expect `app/assets/css/main.css`).
 3. Choose the matching recipe from `references/framework-recipes.md`.
-4. Apply Tailwind v4 CSS-first rules from `references/tailwind-v4-guardrails.md`.
-5. Apply upgrade-safe replacements from `references/tailwind-v3-to-v4-deltas.md`.
+4. Apply modern Tailwind CSS-first rules from `references/tailwind-guardrails.md`.
+5. Apply upgrade-safe replacements from `references/tailwind-legacy-to-modern-migration.md`.
 6. Run the environment-specific validation checklist.
 7. Reject and replace deprecated or legacy syntax.
 
@@ -38,7 +38,7 @@ If the environment is unclear, inspect project markers first (`package.json`, fr
 
 ### Tailwind Version and Syntax
 
-- Use Tailwind v4-first patterns and current docs semantics.
+- Use modern Tailwind CSS-first patterns and current docs semantics.
 - Prefer CSS entrypoint `@import "tailwindcss"`.
 - Prefer CSS directives like `@theme`, `@utility`, `@variant`, `@custom-variant`, `@source`, and `@reference` as needed.
 - Treat `@config` and `@plugin` as legacy paths unless explicitly required for compatibility.
@@ -46,7 +46,7 @@ If the environment is unclear, inspect project markers first (`package.json`, fr
 
 ### Build Strategy
 
-- Do not assume PostCSS is required for Tailwind v4.
+- Do not assume PostCSS is required for modern Tailwind.
 - Use Vite plugin integration where applicable (`@tailwindcss/vite`) for Vue + Vite workflows.
 - For Nuxt, use the official Nuxt framework-guide flow and configure the Vite plugin under Nuxt config instead of creating Vue-only `vite.config.*` instructions.
 - Keep setup minimal and environment-native.
@@ -64,7 +64,7 @@ If the environment is unclear, inspect project markers first (`package.json`, fr
 ### Do Not Generate
 
 - Do not generate `@tailwind base;`, `@tailwind components;`, `@tailwind utilities;` as the default modern entrypoint.
-- Do not assume PostCSS setup is mandatory for Tailwind v4.
+- Do not assume PostCSS setup is mandatory for modern Tailwind.
 - Do not default to `@nuxtjs/tailwindcss` as the first-line setup for fresh Nuxt guidance.
 
 ## Output Requirements
@@ -74,13 +74,22 @@ When generating or modifying code, always provide:
 1. A short environment detection note.
 2. The selected setup path (CDN, Vue + Vite, or Nuxt).
 3. Exact deprecated-to-modern replacements applied (syntax/tooling/utility changes).
-4. A quick validation checklist confirming v4-safe setup.
+4. A quick validation checklist confirming modern Tailwind setup.
 5. Compatibility notes when legacy directives (`@config`/`@plugin`) are retained.
+
+## Version & Research Policy
+
+- Target the latest stable release of Tailwind CSS.
+- Detect the project's actual Tailwind version from `package.json` and lockfiles.
+- Use web search to verify current best practices, directive availability, and migration guidance against official Tailwind CSS documentation.
+- When the project's installed version is behind latest stable, note the version gap and recommend an upgrade path.
+- Refer to AGENTS.MD for centralized version policy and default tooling.
+- Do not hardcode version numbers in generated guidance — keep recommendations evergreen.
 
 ## Completion Checklist
 
 - Environment explicitly identified before setup.
-- Tailwind entrypoint and directives align with v4 guidance.
+- Tailwind entrypoint and directives align with modern guidance.
 - No deprecated/legacy syntax remains without explicit compatibility reason.
 - Framework-specific differences are handled (CDN vs Vite vs Nuxt).
 - Nuxt guidance uses the official framework path and does not drift into Vue-only `vite.config.*` steps.

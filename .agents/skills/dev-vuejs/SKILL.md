@@ -1,33 +1,37 @@
 ---
 name: dev-vuejs
-description: Build, review, migrate, and debug Vue 3.5.x application code with strict TypeScript, focusing on SFCs, composables, reactivity, watchers, SSR/hydration primitives, and component contracts. Use when tasks are Vue core/component architecture in Vite or framework-agnostic Vue apps, especially when Nuxt runtime or app-directory policy is not the main concern.
+description: Build, review, migrate, and debug Vue (latest stable) application code with strict TypeScript, focusing on SFCs, composables, reactivity, watchers, SSR/hydration primitives, and component contracts. Use when tasks are Vue core/component architecture in Vite or framework-agnostic Vue apps, especially when Nuxt runtime or app-directory policy is not the main concern.
 ---
 
 # Dev VueJS
 
 ## Overview
 
-Use this skill to enforce Vue 3.5.x core best practices with strict TypeScript and migration-aware legacy handling. Generate only modern patterns for new code and refactor existing legacy patterns incrementally.
+Use this skill to enforce Vue core best practices for the latest stable release with strict TypeScript and migration-aware legacy handling. Generate only modern patterns for new code and refactor existing legacy patterns incrementally.
 
 ## Load References On Demand
 
-- Read `references/vue-3-5-modern-patterns.md` for the canonical Vue 3.5+ recipes and API usage patterns.
-- Read `references/vue-3-legacy-replacements.md` for migration mapping, compatibility exceptions, and modernization sequence.
+- Read `references/vue-modern-patterns.md` for the canonical modern Vue recipes and API usage patterns.
+- Read `references/vue-legacy-to-modern-migration.md` for migration mapping, compatibility exceptions, and modernization sequence.
 
 ## Core Workflow
 
 1. Detect Vue version family and tooling from `package.json`, lockfiles, `vite.config.*`, `vue.config.*`, and TypeScript config.
 2. Confirm the task is Vue core scope (SFCs, reactivity, watchers, SSR and hydration, component contracts). If the task is Nuxt-specific, defer framework rules to `.agents/skills/dev-nuxt/SKILL.md`.
 3. Implement with strict TypeScript and SFC default `script setup` plus `lang="ts"`.
-4. Apply Vue 3.5 patterns from `references/vue-3-5-modern-patterns.md`.
-5. Reject legacy output and apply migration mapping from `references/vue-3-legacy-replacements.md` when updating existing code.
+4. Apply modern Vue patterns from `references/vue-modern-patterns.md`.
+5. Reject legacy output and apply migration mapping from `references/vue-legacy-to-modern-migration.md` when updating existing code.
 6. Validate behavior with typecheck, lint, and tests available in the target project.
 
-## Version Contract
+## Version & Research Policy
 
-- Treat Vue `3.5.x` stable as the default baseline.
-- Treat Vue `3.6` beta features as non-default and do not generate them unless the user explicitly requests beta usage.
-- Keep guidance compatible with Vue 3.5 patch-level updates, including current bugfix behavior.
+- Target the latest stable release of Vue.
+- Detect the project's actual Vue version from `package.json` and lockfiles.
+- Use web search to verify current best practices, API availability, and migration guidance against official Vue documentation.
+- When the project's installed version is behind latest stable, note the version gap and recommend an upgrade path.
+- Do not use pre-release or beta features unless explicitly requested.
+- Refer to AGENTS.MD for centralized version policy and default tooling.
+- Do not hardcode version numbers in generated guidance — keep recommendations evergreen.
 
 ## Implementation Rules
 
@@ -71,7 +75,7 @@ Use this skill to enforce Vue 3.5.x core best practices with strict TypeScript a
 - Do not generate `ref(null)` template-ref patterns when `useTemplateRef()` is available and suitable.
 - Do not generate watcher code that registers cleanup after an async boundary.
 
-Migration-aware exception policy:
+Migration-aware exception policy (see `references/vue-legacy-to-modern-migration.md`):
 
 - Allow temporary legacy retention only when required for bounded compatibility in existing codebases.
 - Document each retained legacy pattern, why it is retained, and the exact follow-up modernization path.
@@ -86,14 +90,14 @@ Non-goals:
 When generating or reviewing code, always include:
 
 1. Environment note: Vue version family, TypeScript state, and key tooling detected.
-2. Version note: baseline 3.5.x used, and whether any beta-only behavior is intentionally excluded.
+2. Version note: detected Vue version and whether any pre-release behavior is intentionally excluded.
 3. Pattern note: which modern APIs were selected and why.
 4. Legacy note: what legacy patterns were removed or intentionally retained with compatibility rationale.
 5. Validation note: what checks were run (typecheck, lint, tests, build) and outcomes.
 
 ## Completion Checklist
 
-- Vue 3.5.x baseline and TypeScript requirement are enforced.
+- Latest stable Vue baseline and TypeScript requirement are enforced.
 - New code uses Composition API and script setup with lang ts.
 - `defineModel`, `useTemplateRef`, and modern watcher patterns are used where relevant.
 - SSR and hydration primitives are used correctly when SSR is in scope.

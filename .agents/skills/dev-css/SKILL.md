@@ -12,7 +12,7 @@ Apply modern CSS platform features with predictable cascade control, token-drive
 ## Load References On Demand
 
 - Read `references/modern-css-source.md` for copy-ready patterns and framework bridges (Vue/Nuxt/Quasar/Tailwind).
-- Read `references/support-snapshot-2026-02.md` when deciding fallback policy or feature gating.
+- Read `references/browser-support-baseline.md` when deciding fallback policy or feature gating.
 
 ## Core Workflow
 
@@ -58,7 +58,7 @@ Apply modern CSS platform features with predictable cascade control, token-drive
 ### 2. Bridge Tokens Into Framework CSS Pipelines
 
 - Vue/Nuxt/Quasar: consume CSS vars directly in SFC style blocks; use `v-bind()` only for component-reactive values.
-- Tailwind v4: keep tokens in `@theme` and align naming with CSS vars so utilities and raw CSS share the same source values.
+- Tailwind (latest stable): keep tokens in `@theme` and align naming with CSS vars so utilities and raw CSS share the same source values.
 - Keep token mapping deterministic so design, app CSS, and utility classes stay synchronized.
 
 ```css
@@ -165,3 +165,9 @@ Apply modern CSS platform features with predictable cascade control, token-drive
 - Accessibility states include `:focus-visible` and motion preferences are respected.
 - Enhancement and limited features are gated with fallbacks.
 - Comments are concise and intent-focused.
+
+## Version & Research Policy
+
+- Use web search to verify current browser support data before recommending or gating CSS features.
+- Refer to AGENTS.MD for centralized version policy and default tooling.
+- Do not hardcode snapshot dates or version numbers in generated guidance — keep recommendations evergreen.

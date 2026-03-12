@@ -1,4 +1,6 @@
-# Vue 3 Legacy Replacements and Migration Guardrails
+# Vue Legacy-to-Modern Migration
+
+> Verify migration paths against the latest official Vue documentation via web search.
 
 Use this reference when modernizing existing codebases. Never emit legacy patterns for new code.
 
@@ -7,8 +9,8 @@ Use this reference when modernizing existing codebases. Never emit legacy patter
 | Legacy pattern | Modern replacement | Notes |
 | -------------- | ------------------ | ----- |
 | Options API for new features | Composition API with script setup and TypeScript | Keep Options API only as temporary compatibility in existing modules |
-| `modelValue` + `update:modelValue` boilerplate | `defineModel()` | Prefer macro-based model contracts in Vue 3.4+ |
-| `const el = ref(null)` for string template refs | `useTemplateRef()` | Prefer explicit template-ref helper in Vue 3.5+ |
+| `modelValue` + `update:modelValue` boilerplate | `defineModel()` | Prefer macro-based model contracts in modern Vue |
+| `const el = ref(null)` for string template refs | `useTemplateRef()` | Prefer explicit template-ref helper in modern Vue |
 | Watching destructured props directly | Watch getter (`() => prop`) | Destructured props are reactive reads, not direct watch sources |
 | Cleanup after `await` in watcher | Register `onWatcherCleanup()` before `await` | Cleanup must be synchronous with active watcher context |
 | Deep watch with `deep: true` everywhere | Narrow getter watch, or numeric `deep` | Use depth limits only where required |
@@ -64,4 +66,4 @@ When retaining compatibility code, annotate:
 - Is this PR adding any new legacy pattern? If yes, block or request rewrite.
 - Is retained legacy explicitly justified and bounded?
 - Is there a clear next step that reduces legacy surface area?
-- Are watcher, model, and template-ref patterns aligned with Vue 3.5 guidance?
+- Are watcher, model, and template-ref patterns aligned with current stable Vue guidance?

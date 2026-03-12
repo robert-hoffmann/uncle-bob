@@ -1,8 +1,10 @@
-# TypeScript 5.9.3 Legacy Replacements
+# TypeScript Legacy-to-Modern Migration
+
+> Verify migration paths against the latest official TypeScript documentation via web search.
 
 ## Purpose
 
-Map legacy TypeScript patterns to modern 5.9.3 alternatives and define bounded migration exception policy.
+Map legacy TypeScript patterns to modern alternatives and define bounded migration exception policy.
 
 ## Replacement Map
 

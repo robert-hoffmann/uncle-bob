@@ -1,4 +1,4 @@
 interface:
   display_name: "Dev Nuxt"
-  short_description: "Modern Nuxt 4 + Vue + TypeScript workflows"
-  default_prompt: "Use $dev-nuxt for Nuxt 4 app/runtime work including nuxt.config.*, modules, SSR/SSG/hybrid behavior, server routes, and Nuxt 3->4 migration."
+  short_description: "Modern Nuxt + Vue + TypeScript workflows (latest stable)"
+  default_prompt: "Use $dev-nuxt for Nuxt app/runtime work including nuxt.config.*, modules, SSR/SSG/hybrid behavior, server routes, and legacy-to-modern Nuxt migration."

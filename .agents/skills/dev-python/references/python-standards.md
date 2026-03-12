@@ -1,11 +1,13 @@
-# Python Standards (Project-Specific, Non-Formatting, Python 3.12.x)
+# Python Standards (Project-Specific, Non-Formatting, Latest Stable)
+
+> Verify these standards against the latest official Python documentation via web search.
 
 This reference codifies Python standards for this repository and is aligned to
-official Python and tooling guidance current as of 2026-02-14.
+official Python and tooling guidance.
 
 ## 1. Platform and Environment
 
-- Runtime baseline: Python `3.12.x` only (default policy: `>=3.12,<3.13`).
+- Runtime baseline: latest stable Python (detect from project files and verify via web search).
 - Use a project-local virtual environment and interpreter-explicit commands.
 - Prefer `python -m ...` or `uv run ...` for command consistency.
 - Prefer `pathlib.Path` for filesystem paths, and keep Windows portability in mind.
@@ -18,7 +20,7 @@ official Python and tooling guidance current as of 2026-02-14.
 - Treat readability and maintainability as hard constraints.
 - For non-trivial work, explicitly compare at least two approaches with pros/cons.
 
-## 3. Typing Rules (Modern 3.12 Defaults)
+## 3. Typing Rules (Modern Python Defaults)
 
 - Annotate non-trivial function parameters and return types.
 - Use modern syntax: `list[str]`, `dict[str, int]`, `X | Y`.
@@ -77,7 +79,7 @@ Use v2 APIs only:
 - `model_dump()` / `model_dump_json()`
 - `TypeAdapter` for non-model validations
 
-## 5. Modern Python 3.12 Features to Prefer
+## 5. Modern Python Features to Prefer
 
 - `match`/`case` when it is clearer than chained conditionals.
 - `asyncio.TaskGroup` for structured concurrency.
@@ -89,8 +91,8 @@ Use v2 APIs only:
 
 Notes:
 
-- f-string behavior improvements from PEP 701 are available in 3.12; keep f-strings readable.
-- Comprehensions are faster in 3.12 (PEP 709), but readability still takes priority.
+- f-string behavior improvements (PEP 701) should be used; keep f-strings readable.
+- Comprehension inlining (PEP 709) is available, but readability still takes priority.
 
 ## 6. Concurrency Guidelines
 
@@ -112,7 +114,7 @@ Notes:
 
 - Use `pyproject.toml` as the source of truth for metadata and tool config.
 - Include `[build-system]` explicitly to avoid ambiguous builds.
-- Keep `requires-python` aligned with runtime policy (`>=3.12,<3.13`).
+- Keep `requires-python` aligned with project runtime policy (detect from existing configuration).
 - Avoid deprecated `python setup.py ...` command execution; use modern build/install commands.
 - Nuance: `setup.py` may still exist in some projects, but CLI invocation is no longer the recommended workflow.
 
@@ -183,10 +185,10 @@ Exception policy:
 
 ## 14. Source Map (Official References)
 
-- Python 3.12 release notes: <https://docs.python.org/3.12/whatsnew/3.12.html>
-- `typing` docs (`override`, aliases, modern typing): <https://docs.python.org/3.12/library/typing.html>
-- `pathlib` docs (`Path.walk`): <https://docs.python.org/3.12/library/pathlib.html>
-- `itertools` docs (`batched`): <https://docs.python.org/3.12/library/itertools.html>
+- Python release notes: <https://docs.python.org/3/whatsnew/index.html>
+- `typing` docs (`override`, aliases, modern typing): <https://docs.python.org/3/library/typing.html>
+- `pathlib` docs (`Path.walk`): <https://docs.python.org/3/library/pathlib.html>
+- `itertools` docs (`batched`): <https://docs.python.org/3/library/itertools.html>
 - PEP 695 (`type` statement, type params): <https://peps.python.org/pep-0695/>
 - PEP 698 (`@override`): <https://peps.python.org/pep-0698/>
 - PEP 701 (f-strings): <https://peps.python.org/pep-0701/>

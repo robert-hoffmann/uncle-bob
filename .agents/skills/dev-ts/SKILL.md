@@ -1,18 +1,18 @@
 ---
 name: dev-ts
-description: Design, review, migrate, and debug TypeScript 5.9.3 codebases and tsconfig strategy for Node, bundlers, and libraries. Use when tasks center on typing, module/moduleResolution, compiler flags, type errors, project-wide TS modernization, or tsconfig architecture, especially when framework-specific behavior is secondary.
+description: Design, review, migrate, and debug TypeScript (latest stable) codebases and tsconfig strategy for Node, bundlers, and libraries. Use when tasks center on typing, module/moduleResolution, compiler flags, type errors, project-wide TS modernization, or tsconfig architecture, especially when framework-specific behavior is secondary.
 ---
 
 # Dev TS
 
 ## Overview
 
-Use this skill to enforce TypeScript 5.9.3 modern defaults and patterns across app and library codebases. Generate modern-only output for new code, and allow legacy retention only as a bounded migration exception.
+Use this skill to enforce latest stable TypeScript modern defaults and patterns across app and library codebases. Generate modern-only output for new code, and allow legacy retention only as a bounded migration exception.
 
 ## Load References On Demand
 
-- Read `references/ts-5-9-3-modern-patterns.md` for archetype selection, tsconfig baselines, and modern typing patterns.
-- Read `references/ts-5-9-3-legacy-replacements.md` for old-to-new migrations, banned patterns, and exception handling.
+- Read `references/ts-modern-patterns.md` for archetype selection, tsconfig baselines, and modern typing patterns.
+- Read `references/ts-legacy-to-modern-migration.md` for old-to-new migrations, banned patterns, and exception handling.
 
 ## Core Workflow
 
@@ -22,16 +22,20 @@ Use this skill to enforce TypeScript 5.9.3 modern defaults and patterns across a
    - Bundler runtime: `moduleResolution` as `bundler` with `module` as `esnext`
    - Library publishing: prefer Node-faithful resolution for compatibility checks
    - Type-stripping runtime: enforce erasable TypeScript subset
-3. Apply strict safety baseline and module hygiene defaults from `references/ts-5-9-3-modern-patterns.md`.
+3. Apply strict safety baseline and module hygiene defaults from `references/ts-modern-patterns.md`.
 4. Implement modern type patterns first (`satisfies`, `const` type parameters, `NoInfer`, discriminated unions, explicit boundary typing).
-5. Reject legacy output for new code and apply migration mapping from `references/ts-5-9-3-legacy-replacements.md` when touching existing code.
+5. Reject legacy output for new code and apply migration mapping from `references/ts-legacy-to-modern-migration.md` when touching existing code.
 6. Validate with available typecheck, lint, tests, and build commands in the target project.
 
-## Version Contract
+## Version & Research Policy
 
-- Treat TypeScript `5.9.3` stable as the default baseline.
-- Do not emit TypeScript `6.x` or beta-only syntax unless the user explicitly requests it.
-- Keep recommendations aligned with current TypeScript 5.9 compiler and TSConfig guidance.
+- Target the latest stable release of TypeScript.
+- Detect the project's actual TypeScript version from `package.json` and lockfiles.
+- Use web search to verify current best practices, API availability, and migration guidance against official TypeScript documentation.
+- Do not emit beta-only syntax unless the user explicitly requests it.
+- When the project's installed version is behind latest stable, note the version gap and recommend an upgrade path.
+- Refer to AGENTS.MD for centralized version policy and default tooling.
+- Do not hardcode version numbers in generated guidance — keep recommendations evergreen.
 
 ## Implementation Rules
 
@@ -97,7 +101,7 @@ When generating or reviewing code, include:
 
 ## Completion Checklist
 
-- TypeScript 5.9.3 modern baseline is enforced.
+- Latest stable TypeScript modern baseline is enforced.
 - Project archetype was detected before config or code changes.
 - Module strategy matches runtime behavior.
 - Strict safety flags are enabled intentionally.

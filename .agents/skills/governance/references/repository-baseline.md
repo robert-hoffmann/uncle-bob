@@ -1,13 +1,15 @@
-# Repository Baseline 2026-03
+# Repository Baseline
 
-This baseline is date-stamped to `2026-03-04` and optimized for small to medium projects.
+> Verify runtime versions and tooling against current release channels via web search.
+
+This baseline is optimized for small to medium projects.
 
 ## 1) Lean Default Matrix
 
 | Area | Lean Default | Notes |
 | --- | --- | --- |
-| Node runtime | Active LTS (Node 20+) | Keep policy explicit if pinned |
-| Python runtime | Python 3.11+ | Keep `requires-python` explicit |
+| Node runtime | Latest LTS Node.js | Keep policy explicit if pinned |
+| Python runtime | Latest stable Python | Keep `requires-python` explicit |
 | Tooling policy | one package manager, one formatter, one lint entrypoint | Keep lockfile authoritative |
 | CI merge gate | lint + typecheck + tests + build | deterministic and reproducible |
 | Security baseline | dependency governance + secret scanning | least-privilege workflows |
