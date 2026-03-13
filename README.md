@@ -1,4 +1,4 @@
-# itech-agents
+# Uncle Bob's Copilot Repository
 
 A curated collection of GitHub Copilot skills, agents, prompts, and governance
 workflows for consistent, high-quality AI-assisted development.
