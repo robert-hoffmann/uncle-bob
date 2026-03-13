@@ -85,17 +85,17 @@ A prompt file can route to a custom agent via the `agent` field:
 
 ```markdown
 ---
-name: governance-help
+name: ub-governance
 description: Interactive governance help and topic routing.
 argument-hint: "overview | evidence | testing | repository"
-agent: governance-help
+agent: ub-governance
 ---
 
-Use the governance-help agent for this request.
-Interpret text after /governance-help as the topic.
+Use the ub-governance agent for this request.
+Interpret text after /ub-governance as the topic.
 ```
 
-This creates a quick entry point (`/governance-help`) that delegates to a richer agent persona.
+This creates a quick entry point (`/ub-governance`) that delegates to a richer agent persona.
 
 ## Generation Checklist
 

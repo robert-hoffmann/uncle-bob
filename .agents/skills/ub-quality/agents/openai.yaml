@@ -1,0 +1,4 @@
+interface:
+  display_name: "UB Quality"
+  short_description: "Cross-language quality guardrails"
+  default_prompt: "Use $ub-quality to apply design, formatting, documentation, and refactoring standards while keeping changes minimal and maintainable."

@@ -129,9 +129,9 @@ There is no single `make` target for this workflow because part of its behavior 
 
 The closest local commands are the underlying governance scripts:
 
-- `python3 .agents/skills/governance/scripts/build_adr_registry.py`
-- `python3 .agents/skills/governance/scripts/check_adr_gate.py`
-- `python3 .agents/skills/governance/scripts/check_claim_register.py`
+- `python3 .agents/skills/ub-governance/scripts/build_adr_registry.py`
+- `python3 .agents/skills/ub-governance/scripts/check_adr_gate.py`
+- `python3 .agents/skills/ub-governance/scripts/check_claim_register.py`
 
 Use `make check` for normal quality validation, and use the governance scripts directly when you need to reproduce decision-gate behavior outside GitHub Actions.
 

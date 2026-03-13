@@ -1,4 +1,0 @@
-interface:
-  display_name: "Governance"
-  short_description: "Unified repository, testing, evidence, and contract governance"
-  default_prompt: "Use $governance to define, audit, or execute repository, testing, evidence, and core governance contracts with deterministic gate decisions."

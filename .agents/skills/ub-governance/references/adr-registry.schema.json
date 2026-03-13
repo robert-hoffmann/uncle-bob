@@ -1,0 +1,155 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pulse-bi.local/schemas/adr-registry.schema.json",
+  "title": "ADR Registry",
+  "description": "Machine-readable index for canonical decision-memory records.",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "generatedAt",
+    "entries"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "1"
+    },
+    "generatedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "entries": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/entry"
+      },
+      "uniqueItems": true
+    }
+  },
+  "$defs": {
+    "entry": {
+      "type": "object",
+      "required": [
+        "id",
+        "title",
+        "status",
+        "date",
+        "supersedes",
+        "tags",
+        "paths",
+        "constraintsRefs",
+        "sourceClaims",
+        "reviewBy"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^ADR-[0-9]{4}$"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 3
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "proposed",
+            "accepted",
+            "deprecated",
+            "superseded"
+          ]
+        },
+        "date": {
+          "type": "string",
+          "format": "date"
+        },
+        "supersedes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^ADR-[0-9]{4}$"
+          },
+          "uniqueItems": true
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z0-9-]{2,40}$"
+          },
+          "uniqueItems": true,
+          "minItems": 1
+        },
+        "paths": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 2
+          },
+          "uniqueItems": true,
+          "minItems": 1
+        },
+        "constraintsRefs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 2
+          },
+          "uniqueItems": true,
+          "minItems": 1
+        },
+        "sourceClaims": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^CLM-[0-9]{4,}$"
+          },
+          "uniqueItems": true
+        },
+        "reviewBy": {
+          "type": "string",
+          "format": "date"
+        },
+        "adrPath": {
+          "type": "string",
+          "minLength": 5
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false,
+  "examples": [
+    {
+      "schemaVersion": "1",
+      "generatedAt": "2026-03-04T09:00:00Z",
+      "entries": [
+        {
+          "id": "ADR-0001",
+          "title": "Adopt governance decision-memory gate",
+          "status": "accepted",
+          "date": "2026-03-04",
+          "supersedes": [],
+          "tags": [
+            "governance",
+            "adr",
+            "agents"
+          ],
+          "paths": [
+            ".github/workflows/",
+            ".agents/skills/ub-governance/"
+          ],
+          "constraintsRefs": [
+            "docs/architecture/constraints.md#governance"
+          ],
+          "sourceClaims": [
+            "CLM-20260001"
+          ],
+          "reviewBy": "2026-06-30",
+          "adrPath": "docs/adr/0001-decision-memory-governance.md"
+        }
+      ]
+    }
+  ]
+}
+

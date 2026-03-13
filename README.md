@@ -10,7 +10,6 @@ workflows for consistent, high-quality AI-assisted development.
   skills/              # Copilot skills (SKILL.md per skill)
 .github/
   agents/              # Custom agent definitions (.agent.md)
-  prompts/             # Reusable prompt files (.prompt.md)
   plugin/              # Copilot agent plugin manifests
   workflows/           # GitHub Actions CI/CD workflows
 .vscode/               # Workspace settings, MCP config, extensions
@@ -27,29 +26,28 @@ Skills are domain-specific instruction sets that Copilot loads on demand.
 
 | Skill | Description |
 | ----- | ----------- |
-| **code-quality** *(mandatory)* | Cross-language code quality: design patterns, formatting, documentation, structure, refactoring. |
-| dev-css | Plain CSS and Vue/Nuxt style blocks with design tokens, cascade layers, and progressive enhancement. |
-| dev-nuxt | Nuxt 4: typed composables, SSR/SSG/hybrid rendering, Nitro/server routes, app-directory semantics. |
-| dev-python | Python 3.12.x: typed patterns, boundary validation, structured error handling, pytest/ruff/mypy. |
-| dev-tailwind | Tailwind CSS v4: setup, migration, and debugging across HTML, Vue + Vite, and Nuxt projects. |
-| dev-ts | TypeScript 5.9.3: typing, module resolution, compiler flags, tsconfig architecture. |
-| dev-vuejs | Vue 3.5.x: SFCs, composables, reactivity, SSR/hydration, component contracts with strict TypeScript. |
-| governance | Unified governance: repo gates, testing/TDD, evidence/ADR/claim governance, shared contracts. |
-| skill-creator | Guide for creating and updating skills that extend agent capabilities. |
+| **ub-quality** *(mandatory)* | Cross-language code quality: design patterns, formatting, documentation, structure, refactoring. |
+| ub-css | Plain CSS and Vue/Nuxt style blocks with design tokens, cascade layers, and progressive enhancement. |
+| ub-nuxt | Nuxt (latest stable): typed composables, SSR/SSG/hybrid rendering, runtime config, Nitro/server routes, app-directory semantics. |
+| ub-python | Python (latest stable): typed patterns, boundary validation, structured error handling, pytest/ruff/mypy. |
+| ub-tailwind | Tailwind CSS (latest stable): setup, migration, and debugging across HTML, Vue + Vite, and Nuxt projects. |
+| ub-ts | TypeScript (latest stable): typing, module resolution, compiler flags, tsconfig architecture. |
+| ub-vuejs | Vue (latest stable): SFCs, composables, reactivity, SSR/hydration, component contracts with strict TypeScript. |
+| ub-governance | Unified governance: repo gates, testing/TDD, evidence/ADR/claim governance, shared contracts. |
+| ub-customizations | VS Code Copilot customization builder for skills, agents, prompts, hooks, MCP configs, and bundles. |
 
 ## Agents
 
 | Agent | Location | Description |
 | ----- | -------- | ----------- |
 | Explore | Built-in subagent | Fast read-only codebase exploration and Q&A (quick / medium / thorough). |
-| governance-help | `.github/agents/governance-help.agent.md` | Governance assistance agent. |
-| teacher | `.github/agents/teacher.agent.md` | Teaching / explanation agent. |
+| ub-governance | `.github/agents/ub-governance.agent.md` | Governance assistance agent grounded in the ub-governance skill. |
+| ub-teacher | `.github/agents/ub-teacher.agent.md` | Teaching / explanation agent. |
+| ub-customizations | `.github/agents/ub-customizations.agent.md` | Interactive customization builder agent. |
 
 ## Prompts
 
-| Prompt | Location |
-| ------ | -------- |
-| governance-help | `.github/prompts/governance-help.prompt.md` |
+*No `.prompt.md` files defined yet.*
 
 ## CI / Workflows
 

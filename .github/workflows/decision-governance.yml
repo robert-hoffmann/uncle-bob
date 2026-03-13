@@ -37,7 +37,7 @@ jobs:
           cat artifacts/decision-governance/changed-files.txt
 
           if grep -Eq \
-            '(^docs/adr/|^\.agents/skills/governance/(references|scripts/))' \
+            '(^docs/adr/|^\.agents/skills/ub-governance/(references|scripts/))' \
             artifacts/decision-governance/changed-files.txt; then
             echo "run_claim_check=true" >> "$GITHUB_OUTPUT"
           else
@@ -49,7 +49,7 @@ jobs:
         shell: bash
         run: |
           set +e
-          python3 .agents/skills/governance/scripts/build_adr_registry.py \
+          python3 .agents/skills/ub-governance/scripts/build_adr_registry.py \
             --strict \
             --output docs/adr/registry.json \
             > artifacts/decision-governance/registry-build.json
@@ -70,7 +70,7 @@ jobs:
         shell: bash
         run: |
           set +e
-          python3 .agents/skills/governance/scripts/check_adr_gate.py \
+          python3 .agents/skills/ub-governance/scripts/check_adr_gate.py \
             --gate merge \
             --changed-files-file artifacts/decision-governance/changed-files.txt \
             --adr-registry docs/adr/registry.json \
@@ -86,7 +86,7 @@ jobs:
         shell: bash
         run: |
           set +e
-          python3 .agents/skills/governance/scripts/check_claim_register.py \
+          python3 .agents/skills/ub-governance/scripts/check_claim_register.py \
             --claim-register docs/adr/claim-register.json \
             --output artifacts/decision-governance/claim-gate.json
           exit_code=$?

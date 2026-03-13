@@ -1,4 +1,0 @@
-interface:
-  display_name: "Dev Tailwind"
-  short_description: "Tailwind CSS setup and migration guardrails (latest stable)"
-  default_prompt: "Use $dev-tailwind to implement Tailwind CSS v4 setup, migration, and framework-specific integration fixes across Vue, Nuxt, and standalone projects."

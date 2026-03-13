@@ -49,7 +49,7 @@ unfixable = []
 #
 # `ruff format` is DISABLED for this project.
 #
-# Reason: our code-quality standard (formatting-alignment.md) mandates
+# Reason: our ub-quality standard (formatting-alignment.md) mandates
 # separator-column alignment — e.g.
 #
 #   name  : str      = Field(...)

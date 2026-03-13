@@ -33,10 +33,10 @@ lint-yaml:
 lint: lint-md lint-py lint-yaml
 
 test-integrity:
-	$(UV) python .agents/skills/governance/scripts/check_skill_integrity.py
+	$(UV) python .agents/skills/ub-governance/scripts/check_skill_integrity.py
 
 test-governance:
-	$(UV) python -m unittest discover -s .agents/skills/governance/tests/governance_scripts -p 'test_*.py' -v
+	$(UV) python -m unittest discover -s .agents/skills/ub-governance/tests/governance_scripts -p 'test_*.py' -v
 
 test: test-integrity test-governance
 
