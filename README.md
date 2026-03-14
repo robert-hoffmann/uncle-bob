@@ -1,12 +1,23 @@
 # Uncle Bob — Copilot Skills & Agents
 
+<table>
+<tr>
+<td width="300">
+<img src="docs/assets/uncle-bob.png" alt="Uncle Bob" width="280" />
+</td>
+<td>
+
 A curated, production-grade collection of GitHub Copilot skills and custom agents, built by a developer with 27 years of full-stack experience. Every skill was co-written with AI using OpenAI GPT-5.4 Pro (extended thinking & research) to deliver the highest quality instructions possible.
+
+Drop them into any project and your Copilot immediately gets smarter about the technologies you use.
+
+</td>
+</tr>
+</table>
 
 ## What This Is
 
 Uncle Bob is a framework of reusable **skills** and **agents** for [GitHub Copilot](https://github.com/features/copilot) in VS Code. Skills give Copilot deep, domain-specific knowledge it can draw on while assisting you — covering everything from code quality and TypeScript to Nuxt, Tailwind, governance, and more. Agents provide interactive, task-focused workflows on top of those skills.
-
-Drop them into any project and your Copilot immediately gets smarter about the technologies you use.
 
 ## Skills
 
