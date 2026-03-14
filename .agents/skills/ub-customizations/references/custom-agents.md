@@ -38,9 +38,9 @@ Do NOT use custom agents for:
 
 Specify only the tools the agent needs. Common tool categories:
 
-- **Read-only**: `codebase`, `search`, `usages`, `read/readFile`, `read/problems`
-- **Editing**: `editFiles`, `createFile`
-- **Execution**: `runCommand`, `runTask`
+- **Read-only**: `search/codebase`, `search`, `search/usages`, `read/readFile`, `read/problems`
+- **Editing**: `edit/editFiles`, `edit/createFile`
+- **Execution**: `execute/runInTerminal`, `execute/createAndRunTask`
 - **VS Code**: `vscode` (askQuestions, openFile, etc.)
 - **Web**: `web`, `fetch`
 - **Subagents**: `agent`
@@ -109,19 +109,19 @@ For teams needing structured workflows, scaffold this common pattern:
 
 #### 1. Planner Agent
 
-- Read-only tools: `codebase`, `search`, `usages`, `fetch`
+- Read-only tools: `search/codebase`, `search`, `search/usages`, `web/fetch`
 - Creates implementation plan
 - Hands off to implementer
 
 #### 2. Implementer Agent
 
-- Editing tools: `editFiles`, `createFile`, `runCommand`
+- Editing tools: `edit/editFiles`, `edit/createFile`, `execute/runInTerminal`
 - Executes the plan
 - Hands off to reviewer
 
 #### 3. Reviewer Agent
 
-- Analysis tools: `search`, `problems`, `usages`
+- Analysis tools: `search`, `read/problems`, `search/usages`
 - Security and quality focus
 - Optionally hands back fix suggestions
 
@@ -141,7 +141,7 @@ Only list agents the parent actually needs to delegate to.
 ---
 name: Planner
 description: Create implementation plans without making code changes.
-tools: ["fetch", "search", "usages", "githubRepo"]
+tools: ["web/fetch", "search", "search/usages", "web/githubRepo"]
 handoffs:
   - label: Implement Plan
     agent: agent
@@ -162,7 +162,7 @@ handoffs:
 ---
 name: security-reviewer
 description: Review code for security vulnerabilities and risky patterns.
-tools: ["codebase", "search", "problems", "usages"]
+tools: ["search/codebase", "search", "read/problems", "search/usages"]
 user-invocable: true
 disable-model-invocation: true
 ---

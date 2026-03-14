@@ -73,7 +73,7 @@ VS Code supports 8 lifecycle events:
         "type": "command",
         "command": "./scripts/block-destructive.sh",
         "timeout": 5,
-        "toolNames": ["runCommand"]
+        "toolNames": ["execute/runInTerminal"]
       }
     ],
     "PostToolUse": [
@@ -81,7 +81,7 @@ VS Code supports 8 lifecycle events:
         "type": "command",
         "command": "./scripts/lint-after-edit.sh",
         "timeout": 30,
-        "toolNames": ["editFiles", "createFile"]
+        "toolNames": ["edit/editFiles", "edit/createFile"]
       }
     ]
   }
@@ -123,7 +123,7 @@ hooks:
         "type": "command",
         "command": "npx eslint --fix ${TOOL_OUTPUT_FILE:-}",
         "timeout": 30,
-        "toolNames": ["editFiles", "createFile"]
+        "toolNames": ["edit/editFiles", "edit/createFile"]
       }
     ]
   }
@@ -140,7 +140,7 @@ hooks:
         "type": "command",
         "command": "./scripts/block-destructive.sh",
         "timeout": 5,
-        "toolNames": ["runCommand"]
+        "toolNames": ["execute/runInTerminal"]
       }
     ]
   }

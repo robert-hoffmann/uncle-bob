@@ -40,7 +40,7 @@ name: review-security
 description: Review code for security issues and risky patterns.
 argument-hint: "[scope or files]"
 agent: agent
-tools: ["search", "problems", "changes"]
+tools: ["search", "read/problems", "search/changes"]
 ---
 
 Review the requested scope for:
