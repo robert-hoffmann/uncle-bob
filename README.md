@@ -1,28 +1,14 @@
-# Uncle Bob's Copilot Repository
+# Uncle Bob — Copilot Skills & Agents
 
-A curated collection of GitHub Copilot skills, agents, prompts, and governance
-workflows for consistent, high-quality AI-assisted development.
+A curated, production-grade collection of GitHub Copilot skills and custom agents, built by a developer with 27 years of full-stack experience. Every skill was co-written with AI using OpenAI GPT-5.4 Pro (extended thinking & research) to deliver the highest quality instructions possible.
 
-## Repository Structure
+## What This Is
 
-```text
-.agents/
-  skills/              # Copilot skills (SKILL.md per skill)
-.github/
-  agents/              # Custom agent definitions (.agent.md)
-  plugin/              # Copilot agent plugin manifests
-  workflows/           # GitHub Actions CI/CD workflows
-.vscode/               # Workspace settings, MCP config, extensions
-AGENTS.MD              # Skill & agent registry (auto-loaded by Copilot)
-TODO.md                # Roadmap & open items
-pyproject.toml         # uv project metadata and Python dev dependencies
-ruff.toml              # Python linter config
-uv.lock                # Locked Python development dependency set
-```
+Uncle Bob is a framework of reusable **skills** and **agents** for [GitHub Copilot](https://github.com/features/copilot) in VS Code. Skills give Copilot deep, domain-specific knowledge it can draw on while assisting you — covering everything from code quality and TypeScript to Nuxt, Tailwind, governance, and more. Agents provide interactive, task-focused workflows on top of those skills.
+
+Drop them into any project and your Copilot immediately gets smarter about the technologies you use.
 
 ## Skills
-
-Skills are domain-specific instruction sets that Copilot loads on demand.
 
 | Skill | Description |
 | ----- | ----------- |
@@ -38,56 +24,69 @@ Skills are domain-specific instruction sets that Copilot loads on demand.
 
 ## Agents
 
-| Agent | Location | Description |
-| ----- | -------- | ----------- |
-| Explore | Built-in subagent | Fast read-only codebase exploration and Q&A (quick / medium / thorough). |
-| ub-governance | `.github/agents/ub-governance.agent.md` | Governance assistance agent grounded in the ub-governance skill. |
-| ub-teacher | `.github/agents/ub-teacher.agent.md` | Teaching / explanation agent. |
-| ub-customizations | `.github/agents/ub-customizations.agent.md` | Interactive customization builder agent. |
-
-## Prompts
-
-*No `.prompt.md` files defined yet.*
-
-## CI / Workflows
-
-| Workflow | Purpose |
-| -------- | ------- |
-| quality | Linting and governance integrity checks |
-| decision-governance | Governance decision checks |
-
-Detailed workflow documentation lives in `.github/workflows/README.md`.
+| Agent | Description |
+| ----- | ----------- |
+| Explore | Fast read-only codebase exploration and Q&A (quick / medium / thorough). |
+| ub-governance | Governance assistance agent grounded in the ub-governance skill. |
+| ub-teacher | Teaching and explanation agent for readable, beginner-friendly walkthroughs. |
+| ub-customizations | Interactive Copilot customization builder with classify/generate/validate/iterate workflow. |
 
 ## Getting Started
 
-1. Clone the repository into your workspace (or add it as a submodule / symlink `.agents/` into another project).
-2. Open the workspace in VS Code with [GitHub Copilot](https://github.com/features/copilot) enabled.
-3. Run `uv sync` from the repository root to create/update the local `.venv` and install the Python dev tools.
-4. Activate the environment with `source .venv/bin/activate` when you want direct shell access to the tools.
-5. Run `make check` to execute the local lint and test workflow.
-6. Skills, agents, and prompts are auto-discovered from `AGENTS.MD` and the `.github/` directories.
+### 1. Clone the repository
 
-### Local Python Tooling
+```bash
+git clone https://github.com/robert-hoffmann/uncle-bob.git
+```
 
-- Use `uv sync` to install the default `dev` dependency group from `pyproject.toml`.
-- Use `uv run ruff check .` for Python linting.
-- Use `uv run yamllint --strict .` for YAML linting.
-- Use `uv add --dev <package>` when adding new repo-local Python tooling.
+### 2. Add skills and agents to your project
 
-### Local Workflow
+You have two options — **copy** or **symlink**. Symlinking is recommended so you always get the latest version by pulling the repo.
 
-- Use `make lint` to run Markdown, Python, and YAML lint checks.
-- Use `make test` to run the governance integrity and regression checks.
-- Use `make check` to run the full local workflow that most closely matches CI.
-- Use `make help` to list the available local commands.
-- Markdown lint runs via `npx markdownlint-cli2`, so local Markdown linting expects Node.js with `npx` available.
+#### Option A — Symlink (recommended)
 
-## Linting & Tooling
+From your project root, create symlinks pointing into the cloned repository:
 
-- **Python** — `uv`-managed local environment with [Ruff](https://docs.astral.sh/ruff/) configured via `ruff.toml`.
-- **Markdown** — markdownlint configured via `.markdownlint.jsonc`.
-- **YAML** — yamllint configured via `.yamllint.yaml`.
-- **Editor** — shared settings in `.editorconfig`.
+```bash
+# Symlink the skills directory
+ln -s /path/to/uncle-bob/.agents .agents
+
+# Symlink the agent definitions
+ln -s /path/to/uncle-bob/.github/agents .github/agents
+
+# Symlink the root registry file
+ln -s /path/to/uncle-bob/AGENTS.MD AGENTS.MD
+```
+
+To update, simply pull the latest changes:
+
+```bash
+cd /path/to/uncle-bob && git pull
+```
+
+#### Option B — Copy
+
+Copy the directories directly into your project:
+
+```bash
+cp -r /path/to/uncle-bob/.agents .agents
+cp -r /path/to/uncle-bob/.github/agents .github/agents
+cp /path/to/uncle-bob/AGENTS.MD AGENTS.MD
+```
+
+> With this approach you will need to re-copy files after upstream updates.
+
+### 3. Open your project in VS Code
+
+Make sure [GitHub Copilot](https://github.com/features/copilot) is installed and enabled. Skills, agents, and prompts are auto-discovered from `AGENTS.MD` and the `.github/` directory — no additional configuration required.
+
+## Repository Layout
+
+```text
+.agents/skills/        # Copilot skills (one SKILL.md per skill)
+.github/agents/        # Custom agent definitions (.agent.md)
+AGENTS.MD              # Skill & agent registry (auto-loaded by Copilot)
+```
 
 ## License
 

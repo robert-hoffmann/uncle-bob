@@ -1,4 +1,4 @@
-# itech-agents
+# uncle-bob
 
 > Repository-level agent instructions and skill registry.
 
