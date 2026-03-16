@@ -1,0 +1,52 @@
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+
+version: "3"
+
+vars:
+  UV: uv run
+  MARKDOWNLINT: npx --yes markdownlint-cli2
+  MARKDOWN_GLOB: '"**/*.md" "**/*.mdx"'
+
+tasks:
+  sync:
+    desc: Install or update local Python tooling via uv
+    cmd: uv sync
+
+  lint-md:
+    desc: Run markdownlint-cli2 via npx
+    cmd: "{{.MARKDOWNLINT}} {{.MARKDOWN_GLOB}}"
+
+  lint-py:
+    desc: Run Ruff
+    cmd: "{{.UV}} ruff check ."
+
+  lint-yaml:
+    desc: Run yamllint in strict mode
+    cmd: "{{.UV}} yamllint --strict ."
+
+  lint:
+    desc: Run all local lint checks
+    deps: [lint-md, lint-py, lint-yaml]
+
+  test-integrity:
+    desc: Run governance integrity checks
+    cmd: "{{.UV}} python .agents/skills/ub-governance/scripts/check_skill_integrity.py"
+
+  test-governance:
+    desc: Run governance script regression tests
+    cmd: >
+      {{.UV}} python -m unittest discover
+      -s .agents/skills/ub-governance/tests/governance_scripts
+      -p 'test_*.py' -v
+
+  test:
+    desc: Run local test checks
+    deps: [test-integrity, test-governance]
+
+  check:
+    desc: Run lint + test (closest local CI parity)
+    deps: [lint, test]
+
+  ci:
+    desc: Alias for check
+    deps: [check]

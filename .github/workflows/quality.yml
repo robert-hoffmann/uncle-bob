@@ -21,8 +21,10 @@ jobs:
         with:
           node-version: 22
 
+      - uses: arduino/setup-task@v2
+
       - name: Lint Markdown files
-        run: make lint-md
+        run: task lint-md
 
   python-quality:
     name: ${{ matrix.name }}
@@ -49,8 +51,10 @@ jobs:
 
       - uses: astral-sh/setup-uv@v5
 
+      - uses: arduino/setup-task@v2
+
       - name: Sync Python tooling
         run: uv sync
 
       - name: Run ${{ matrix.target }}
-        run: make ${{ matrix.target }}
+        run: task ${{ matrix.target }}

@@ -55,10 +55,9 @@
 
 # ── Build / tooling ───────────────────────────────────────────────────────────
 
-Makefile    text eol=lf
+Taskfile.yml text eol=lf
 Dockerfile  text eol=lf
 *.dockerfile text eol=lf
-*.mk        text eol=lf
 *.lock      text eol=lf -diff    # lockfiles: store as text, skip diffs
 
 # ── Git housekeeping ──────────────────────────────────────────────────────────

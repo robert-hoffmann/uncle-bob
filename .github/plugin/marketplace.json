@@ -1,20 +1,20 @@
 {
-  "name": "copilot-showcase",
+  "name": "uncle-bob",
   "owner": {
-    "name": "jrubiosainz",
-    "email": "jrubiosainz@users.noreply.github.com"
+    "name": "robert-hoffmann",
+    "email": "robert-hoffmann@users.noreply.github.com"
   },
   "metadata": {
-    "description": "Demo marketplace for the Copilot CLI Showcase — featuring code review, security scanning, and MCP-powered agents.",
+    "description": "Cross-language code quality, governance, and framework skills with specialized Copilot agents.",
     "version": "1.0.0",
-    "homepage": "https://github.com/jrubiosainz/copilot-showcase"
+    "homepage": "https://github.com/robert-hoffmann/uncle-bob"
   },
   "plugins": [
     {
-      "name": "code-reviewer",
-      "description": "AI-powered code review agent with security scanning skill and GitHub MCP integration. Demonstrates the full Copilot CLI plugin stack.",
+      "name": "uncle-bob",
+      "description": "9 domain skills (quality, governance, CSS, Tailwind, TypeScript, Python, Vue, Nuxt, customizations) and 3 agents (governance, teacher, customizations).",
       "version": "1.0.0",
-      "source": "./plugins/code-reviewer"
+      "source": "https://github.com/robert-hoffmann/uncle-bob"
     }
   ]
 }

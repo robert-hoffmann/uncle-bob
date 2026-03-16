@@ -23,10 +23,6 @@ trim_trailing_whitespace = false
 [*.py]
 indent_size = 4
 
-# Makefiles require hard tabs
-[Makefile]
-indent_style = tab
-
 # Shell scripts
 [*.{sh,bash,zsh}]
 indent_size = 2

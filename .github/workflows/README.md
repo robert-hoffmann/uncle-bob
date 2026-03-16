@@ -6,15 +6,15 @@ Use this file as the source of truth for:
 
 - what each workflow is responsible for
 - which events trigger it
-- which local Make targets correspond to CI behavior
-- where GitHub-specific orchestration still lives in YAML instead of Make
+- which local Taskfile tasks correspond to CI behavior
+- where GitHub-specific orchestration still lives in YAML instead of the Taskfile
 
 ## Workflow Inventory
 
 | Workflow File | Workflow Name | Purpose | Local Parity |
 | ------------- | ------------- | ------- | ------------ |
-| `quality.yml` | `quality` | Repository quality gates: Markdown, Python, YAML, governance integrity, and governance regression checks. | `make check` |
-| `decision-governance.yml` | `decision-governance` | Pull-request governance gate for ADR, claim-register, and decision-report enforcement. | Partial: individual governance scripts, not a single Make target |
+| `quality.yml` | `quality` | Repository quality gates: Markdown, Python, YAML, governance integrity, and governance regression checks. | `task check` |
+| `decision-governance.yml` | `decision-governance` | Pull-request governance gate for ADR, claim-register, and decision-report enforcement. | Partial: individual governance scripts, not a single Taskfile task |
 
 ## Quality Workflow
 
@@ -34,42 +34,44 @@ This workflow is the main fast-feedback quality gate for the repository. It is d
 The workflow uses multiple jobs instead of one large serial job.
 
 - `markdownlint`
-  Runs Markdown linting through `make lint-md`.
+  Runs Markdown linting through `task lint-md`.
 - `python-quality` matrix
   Runs four independent Python-backed checks:
-  - `make lint-py`
-  - `make lint-yaml`
-  - `make test-integrity`
-  - `make test-governance`
+  - `task lint-py`
+  - `task lint-yaml`
+  - `task test-integrity`
+  - `task test-governance`
 
-This keeps job output focused, preserves parallelism, and still centralizes the actual commands in the Makefile.
+This keeps job output focused, preserves parallelism, and still centralizes the actual commands in the Taskfile.
 
 ### Runtime Setup
 
 - Markdown job:
   - checks out the repo
   - installs Node 22
-  - runs `make lint-md`
+  - installs Task with `arduino/setup-task`
+  - runs `task lint-md`
 - Python-backed jobs:
   - check out the repo
   - install Python 3.12
   - install `uv` with `astral-sh/setup-uv`
+  - install Task with `arduino/setup-task`
   - run `uv sync`
-  - execute the relevant Make target
+  - execute the relevant Taskfile task
 
 ### Local Equivalent
 
-- Full parity check: `make check`
+- Full parity check: `task check`
 - Individual checks:
-  - `make lint-md`
-  - `make lint-py`
-  - `make lint-yaml`
-  - `make test-integrity`
-  - `make test-governance`
+  - `task lint-md`
+  - `task lint-py`
+  - `task lint-yaml`
+  - `task test-integrity`
+  - `task test-governance`
 
-### Why This Workflow Uses Make
+### Why This Workflow Uses Taskfile
 
-This workflow intentionally delegates shared command logic to the Makefile so local development and CI use the same entrypoints.
+This workflow intentionally delegates shared command logic to the Taskfile so local development and CI use the same entrypoints.
 
 Benefits:
 
@@ -101,7 +103,7 @@ It is kept separate because it needs to:
 - upload decision artifacts
 - enforce combined governance outcomes at the end of the workflow
 
-That behavior belongs in workflow YAML, or in dedicated scripts called by the workflow, rather than in the Makefile.
+That behavior belongs in workflow YAML, or in dedicated scripts called by the workflow, rather than in the Taskfile.
 
 ### Main Flow
 
@@ -125,7 +127,7 @@ This workflow uploads `decision-governance-artifacts`, which may include:
 
 ### Local Equivalent
 
-There is no single `make` target for this workflow because part of its behavior depends on GitHub PR context.
+There is no single `task` command for this workflow because part of its behavior depends on GitHub PR context.
 
 The closest local commands are the underlying governance scripts:
 
@@ -133,13 +135,13 @@ The closest local commands are the underlying governance scripts:
 - `python3 .agents/skills/ub-governance/scripts/check_adr_gate.py`
 - `python3 .agents/skills/ub-governance/scripts/check_claim_register.py`
 
-Use `make check` for normal quality validation, and use the governance scripts directly when you need to reproduce decision-gate behavior outside GitHub Actions.
+Use `task check` for normal quality validation, and use the governance scripts directly when you need to reproduce decision-gate behavior outside GitHub Actions.
 
 ## Editing Guidelines
 
 When changing workflows in this directory:
 
-- prefer Make targets for shared repo commands used both locally and in CI
+- prefer Taskfile tasks for shared repo commands used both locally and in CI
 - keep GitHub event handling, artifacts, matrix strategy, and conditional orchestration in workflow YAML
 - update this file whenever workflow names, triggers, or responsibilities change
 - keep the root README workflow list aligned with the actual files in this directory
