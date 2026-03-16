@@ -35,11 +35,7 @@
       ],
       "license": "MIT",
       "repository": "https://github.com/robert-hoffmann/uncle-bob",
-      "source": {
-        "source": "github",
-        "repo": "robert-hoffmann/uncle-bob",
-        "path": "."
-      }
+      "source": "."
     }
   ]
 }
