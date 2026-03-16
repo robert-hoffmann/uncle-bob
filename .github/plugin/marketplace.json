@@ -7,14 +7,39 @@
   "metadata": {
     "description": "Cross-language code quality, governance, and framework skills with specialized Copilot agents.",
     "version": "1.0.0",
-    "homepage": "https://github.com/robert-hoffmann/uncle-bob"
+    "pluginRoot": "."
   },
   "plugins": [
     {
       "name": "uncle-bob",
-      "description": "9 domain skills (quality, governance, CSS, Tailwind, TypeScript, Python, Vue, Nuxt, customizations) and 3 agents (governance, teacher, customizations).",
+      "description": "9 domain skills (quality, governance, CSS, Tailwind, TypeScript, Python, Vue, Nuxt, customizations) and 4 agents (explore, governance, teacher, customizations) built by a 27-year full-stack veteran.",
       "version": "1.0.0",
-      "source": "https://github.com/robert-hoffmann/uncle-bob"
+      "author": {
+        "name": "robert-hoffmann",
+        "url": "https://github.com/robert-hoffmann"
+      },
+      "homepage": "https://github.com/robert-hoffmann/uncle-bob",
+      "keywords": [
+        "quality",
+        "governance",
+        "typescript",
+        "python",
+        "vue",
+        "nuxt",
+        "tailwind",
+        "css",
+        "skills",
+        "agents",
+        "code-review",
+        "best-practices"
+      ],
+      "license": "MIT",
+      "repository": "https://github.com/robert-hoffmann/uncle-bob",
+      "source": {
+        "source": "github",
+        "repo": "robert-hoffmann/uncle-bob",
+        "path": "."
+      }
     }
   ]
 }
