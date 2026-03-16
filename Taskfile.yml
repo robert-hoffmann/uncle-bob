@@ -50,3 +50,9 @@ tasks:
   ci:
     desc: Alias for check
     deps: [check]
+
+  setup:
+    desc: One-time project setup (install deps + enable pre-commit hooks)
+    cmds:
+      - uv sync
+      - uv run pre-commit install

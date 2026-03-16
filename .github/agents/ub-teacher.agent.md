@@ -124,14 +124,14 @@ Scale depth to the size and complexity of the input. Not every section is needed
 
 When explaining code, detect the language and load the matching skill to make explanations **framework-accurate**:
 
-| Language / Framework | Skill to Load                            |
-| -------------------- | ---------------------------------------- |
-| Python               | `.agents/skills/ub-python/SKILL.md`     |
-| TypeScript           | `.agents/skills/ub-ts/SKILL.md`         |
-| Vue SFCs             | `.agents/skills/ub-vuejs/SKILL.md`      |
-| Nuxt                 | `.agents/skills/ub-nuxt/SKILL.md`       |
-| CSS / style blocks   | `.agents/skills/ub-css/SKILL.md`        |
-| Tailwind             | `.agents/skills/ub-tailwind/SKILL.md`   |
+| Language / Framework | Skill to Load                          |
+| -------------------- | -------------------------------------- |
+| Python               | `.agents/skills/ub-python/SKILL.md`    |
+| TypeScript           | `.agents/skills/ub-ts/SKILL.md`        |
+| Vue SFCs             | `.agents/skills/ub-vuejs/SKILL.md`     |
+| Nuxt                 | `.agents/skills/ub-nuxt/SKILL.md`      |
+| CSS / style blocks   | `.agents/skills/ub-css/SKILL.md`       |
+| Tailwind             | `.agents/skills/ub-tailwind/SKILL.md`  |
 
 Load at most one language skill per explanation. Use it to ensure your explanation reflects correct idiomatic patterns, not just generic advice.
 

@@ -118,7 +118,7 @@
     // ── Misc ──────────────────────────────────────────────────────────────────
 
     // MD033 — allow a small set of HTML tags commonly needed in docs
-    "MD033": { "allowed_elements": ["br", "details", "summary", "kbd", "sup", "sub"] },
+    "MD033": { "allowed_elements": ["br", "details", "summary", "kbd", "sup", "sub", "table", "tr", "td", "img"] },
 
     // MD035 — horizontal rule style: consistent dashes
     "MD035": { "style": "---" }

@@ -1,0 +1,40 @@
+# See https://pre-commit.com for docs
+# Install with: task setup
+
+repos:
+  - repo: https://github.com/DavidAnson/markdownlint-cli2
+    rev: v0.21.0
+    hooks:
+      - id: markdownlint-cli2
+        args: []
+        types_or: [markdown]
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.11.12
+    hooks:
+      - id: ruff
+
+  - repo: https://github.com/adrienverge/yamllint
+    rev: v1.37.1
+    hooks:
+      - id: yamllint
+        args: [--strict]
+
+  - repo: local
+    hooks:
+      - id: governance-integrity
+        name: Governance integrity checks
+        language: system
+        entry: uv run python .agents/skills/ub-governance/scripts/check_skill_integrity.py
+        pass_filenames: false
+        always_run: true
+
+      - id: governance-regression
+        name: Governance script regression tests
+        language: system
+        entry: >
+          uv run python -m unittest discover
+          -s .agents/skills/ub-governance/tests/governance_scripts
+          -p 'test_*.py' -v
+        pass_filenames: false
+        always_run: true
