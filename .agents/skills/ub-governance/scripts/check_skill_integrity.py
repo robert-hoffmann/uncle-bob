@@ -54,9 +54,11 @@ def iter_files(path: Path) -> list[Path]:
 
 
 def check_required_paths(violations: list[Violation]) -> None:
-    for required in REQUIRED_PATHS:
-        if not required.exists():
-            violations.append(Violation(f"Missing required governance asset: {required.as_posix()}"))
+    violations.extend(
+        Violation(f"Missing required governance asset: {required.as_posix()}")
+        for required in REQUIRED_PATHS
+        if not required.exists()
+    )
 
 
 def check_legacy_dirs(violations: list[Violation]) -> None:

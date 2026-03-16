@@ -3,7 +3,7 @@
 
 # ── Target ───────────────────────────────────────────────────────────────────
 
-target-version = "py312"    # matches CI: actions/setup-python python-version: '3.12'
+target-version = "py310"    # minimum supported Python version
 line-length    = 100
 
 # ── File discovery ───────────────────────────────────────────────────────────
@@ -31,6 +31,21 @@ select = [
     "SIM",  # flake8-simplify
     "TID",  # flake8-tidy-imports
     "RUF",  # Ruff-specific rules
+    # ── Hardening ─────────────────────────
+    "S",    # flake8-bandit — security
+    "A",    # flake8-builtins — no shadowing builtins
+    "DTZ",  # flake8-datetimez — timezone-aware datetimes
+    "PGH",  # pygrep-hooks — no blanket type: ignore / noqa
+    "FA",   # flake8-future-annotations
+    "PERF", # perflint — performance anti-patterns
+    "PLE",  # pylint errors
+    "PLW",  # pylint warnings
+    # ── Quality ───────────────────────────
+    "PIE",  # flake8-pie — misc lint
+    "RSE",  # flake8-raise
+    "ISC",  # implicit-string-concat
+    "FLY",  # flynt — f-string conversion
+    "FURB", # refurb — modern Python
 ]
 
 ignore = [
@@ -44,6 +59,15 @@ ignore = [
 # Allow fixing everything that is auto-fixable
 fixable = ["ALL"]
 unfixable = []
+
+# ── Per-file ignores ──────────────────────────────────────────────────────────
+
+[lint.per-file-ignores]
+"**/tests/**/*.py" = [
+    "S101",  # assert is expected in tests
+    "S603",  # subprocess calls are safe in test harness
+    "S607",  # partial executable paths OK in tests
+]
 
 # ── Formatting ────────────────────────────────────────────────────────────────
 #

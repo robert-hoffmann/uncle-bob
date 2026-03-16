@@ -3,8 +3,10 @@ name            = "uncle-bob"
 version         = "0.1.0"
 description     = "Curated GitHub Copilot skills, agents, prompts, and governance workflows."
 readme          = "README.md"
-requires-python = ">=3.12,<3.13"
-dependencies    = []
+requires-python = ">=3.10,<4"
+dependencies    = [
+  "typing-extensions>=4.12,<5",
+]
 
 [dependency-groups]
 dev = [

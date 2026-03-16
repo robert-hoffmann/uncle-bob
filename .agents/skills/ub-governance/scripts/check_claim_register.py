@@ -136,7 +136,7 @@ def main() -> int:
     parser.add_argument("--today", help="Override ISO date for deterministic checks")
     args = parser.parse_args()
 
-    today = dt.date.fromisoformat(args.today) if args.today else dt.date.today()
+    today = dt.date.fromisoformat(args.today) if args.today else dt.datetime.now(dt.timezone.utc).date()
     claim_path = Path(args.claim_register)
 
     if not claim_path.exists():
@@ -190,7 +190,7 @@ def main() -> int:
         "errors": errors,
         "blockedReasons": blocked_reasons,
         "warnings": warnings,
-        "generatedAt": dt.datetime.now(dt.UTC).replace(microsecond=0).isoformat().replace("+00:00", "Z"),
+        "generatedAt": dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z"),
     }
 
     write_output(Path(args.output) if args.output else None, output)

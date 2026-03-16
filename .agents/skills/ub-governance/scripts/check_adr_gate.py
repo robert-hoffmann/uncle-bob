@@ -43,7 +43,7 @@ def load_changed_files(changed_file_args: list[str], changed_file_list: str | No
 
 def load_changed_files_from_git(base_ref: str, head_ref: str) -> list[str]:
     cmd = ["git", "diff", "--name-only", f"{base_ref}...{head_ref}"]
-    output = subprocess.check_output(cmd, text=True)
+    output = subprocess.check_output(cmd, text=True)  # noqa: S603 — hardcoded git command, no user input
     items = [_normalize(line) for line in output.splitlines() if line.strip()]
     return sorted(set(items))
 
@@ -109,14 +109,14 @@ def entry_matches_file(entry: dict[str, Any], file_path: str) -> bool:
     for pattern in entry.get("paths", []):
         if not isinstance(pattern, str):
             continue
-        pattern = _normalize(pattern)
-        if not pattern:
+        norm = _normalize(pattern)
+        if not norm:
             continue
-        if fnmatch.fnmatch(file_path, pattern):
+        if fnmatch.fnmatch(file_path, norm):
             return True
-        if pattern.endswith("/") and file_path.startswith(pattern):
+        if norm.endswith("/") and file_path.startswith(norm):
             return True
-        if file_path.startswith(pattern.rstrip("/") + "/"):
+        if file_path.startswith(norm.rstrip("/") + "/"):
             return True
     return False
 
@@ -190,7 +190,7 @@ def main() -> int:
     parser.add_argument("--today", help="Override ISO date for deterministic tests")
     args = parser.parse_args()
 
-    today = dt.date.fromisoformat(args.today) if args.today else dt.date.today()
+    today = dt.date.fromisoformat(args.today) if args.today else dt.datetime.now(dt.timezone.utc).date()
 
     changed_files = load_changed_files(args.changed_file, args.changed_files_file)
     if not changed_files and args.base_ref and args.head_ref:
@@ -217,10 +217,7 @@ def main() -> int:
 
     structural_matches: dict[str, list[str]] = {}
     for changed in high_risk_files:
-        ids: list[str] = []
-        for entry in entries:
-            if entry_matches_file(entry, changed):
-                ids.append(str(entry.get("id", "")))
+        ids = [str(entry.get("id", "")) for entry in entries if entry_matches_file(entry, changed)]
         if ids:
             structural_matches[changed] = sorted(set(ids))
 
@@ -282,7 +279,7 @@ def main() -> int:
             "notes": waiver_notes,
         },
         "reasons": reasons,
-        "generatedAt": dt.datetime.now(dt.UTC).replace(microsecond=0).isoformat().replace("+00:00", "Z"),
+        "generatedAt": dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z"),
     }
 
     output_path = Path(args.output) if args.output else None

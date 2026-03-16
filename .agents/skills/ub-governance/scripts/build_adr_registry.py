@@ -216,7 +216,7 @@ def main() -> int:
     entries.sort(key=lambda item: item["id"])
     registry = {
         "schemaVersion": "1",
-        "generatedAt": dt.datetime.now(dt.UTC).replace(microsecond=0).isoformat().replace("+00:00", "Z"),
+        "generatedAt": dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z"),
         "entries": entries,
     }
 
