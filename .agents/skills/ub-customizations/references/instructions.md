@@ -13,14 +13,14 @@ Do NOT use instructions for:
 
 ## Three Instruction Types
 
-### 1. Repo-Wide Instructions (`copilot-instructions.md`)
+### 1. Repo-Wide Instructions (`AGENTS.md`, optional `copilot-instructions.md`)
 
-**Location**: `.github/copilot-instructions.md`
+**Location**: `AGENTS.md` at repo root. Optionally add `.github/copilot-instructions.md` only as a Copilot compatibility shim.
 
-Automatically loaded in every Copilot chat for the workspace. Use for broad conventions that apply everywhere.
+Put the real always-on repo policy in `AGENTS.md`. Use `.github/copilot-instructions.md` only when you explicitly need a VS Code Copilot compatibility layer, and keep it as a tiny delta or forwarder.
 
 ```markdown
-# .github/copilot-instructions.md
+# AGENTS.md
 
 ## Project conventions
 - Use pnpm for package management.
@@ -38,6 +38,8 @@ Automatically loaded in every Copilot chat for the workspace. Use for broad conv
 
 **Rules:**
 
+- Keep `AGENTS.md` canonical for repo-wide guidance.
+- If `copilot-instructions.md` exists, keep it tiny and point back to `AGENTS.md`.
 - Keep concise — only non-obvious, project-specific, human-important rules.
 - Prefer examples over vague declarations.
 - Do not duplicate what linters or formatters already enforce.
@@ -81,9 +83,9 @@ applyTo: "src/**/*.ts,src/**/*.tsx"
 
 | File | Location | Scope | Auto-loaded |
 | --- | --- | --- | --- |
-| `copilot-instructions.md` | `.github/` | Repo-wide | Yes |
-| `*.instructions.md` | `.github/instructions/` or alongside code | File-pattern scoped | When `applyTo` matches |
 | `AGENTS.md` | Repo root or subdirectories | Repo-wide or subtree | Yes (by compatible agents) |
+| `copilot-instructions.md` | `.github/` | Repo-wide compatibility shim | Yes |
+| `*.instructions.md` | `.github/instructions/` or alongside code | File-pattern scoped | When `applyTo` matches |
 | `CLAUDE.md` | Repo root | Repo-wide | Yes (VS Code reads it) |
 
 ## Content Guidelines

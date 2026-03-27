@@ -73,8 +73,8 @@ def check_legacy_dirs(violations: list[Violation]) -> None:
 
 def check_stale_refs(violations: list[Violation]) -> None:
     scan_roots = (
-        REPO_ROOT / "AGENTS.MD",
-        REPO_ROOT / "README.md",
+        REPO_ROOT / "AGENTS.md",
+        REPO_ROOT / "apps" / "web" / "docs",
         REPO_ROOT / ".github" / "agents",
         REPO_ROOT / ".github" / "plugin",
         REPO_ROOT / ".github" / "workflows",

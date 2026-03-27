@@ -20,7 +20,7 @@ This baseline is optimized for small to medium projects.
 1. `.editorconfig`
 2. `.gitignore`
 3. `.gitattributes`
-4. `README.md`
+4. a primary project entry document (`README.md` or a repo-defined docs landing page such as `apps/web/docs/index.md`)
 5. `CONTRIBUTING.md`
 6. `SECURITY.md`
 7. `LICENSE`

@@ -31,7 +31,7 @@ Generate the VS Code target **plus** optional companion exports for:
 
 | Concept | VS Code / Copilot | Copilot CLI | Codex | Claude Code | Gemini CLI |
 | --- | --- | --- | --- | --- | --- |
-| Always-on guidance | `copilot-instructions.md`, `.instructions.md`, `AGENTS.md`, `CLAUDE.md` | `AGENTS.md`, `Copilot.md`, `GEMINI.md`, `CODEX.md` | `AGENTS.md` | `CLAUDE.md` / rules | `GEMINI.md` |
+| Always-on guidance | `AGENTS.md`, optional `copilot-instructions.md`, `.instructions.md`, `CLAUDE.md` | `AGENTS.md`, `Copilot.md`, `GEMINI.md`, `CODEX.md` | `AGENTS.md` | `CLAUDE.md` / rules | `GEMINI.md` |
 | User-invoked task | Prompt file (`.prompt.md`) | Slash commands | Slash commands, skills | Commands / skills | Custom commands |
 | Capability bundle | Skill (`SKILL.md`) | Skill | Skill | Skill | Skill |
 | Persona / role | Custom agent (`.agent.md`) | Custom agent | Multi-agent | Subagent | Subagent |
@@ -87,8 +87,8 @@ Always produce valid VS Code files as the primary output.
 Create vendor-specific files alongside (NOT instead of) the VS Code files:
 
 ```text
-.github/copilot-instructions.md    ← VS Code primary
-AGENTS.md                           ← Portable (Codex, Copilot CLI)
+AGENTS.md                           ← Primary + portable
+.github/copilot-instructions.md    ← Optional VS Code compatibility shim
 CLAUDE.md                           ← Claude Code compatibility
 ```
 
@@ -120,7 +120,7 @@ If a requested feature exists in another vendor but not VS Code:
 | `CLAUDE.md` | VS Code, Claude Code | Claude-compatible guidance |
 | `GEMINI.md` | Gemini CLI | Gemini-specific guidance |
 | `CODEX.md` | Codex | Codex-specific guidance |
-| `copilot-instructions.md` | VS Code | VS Code-specific guidance |
+| `copilot-instructions.md` | VS Code | Optional VS Code-specific compatibility guidance |
 
 **Note**: VS Code reads both `AGENTS.md` and `CLAUDE.md` natively. Other vendor files are not read by VS Code.
 

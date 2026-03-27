@@ -81,13 +81,13 @@ scripts/lint-after-edit.sh
 
 **Example scenario**: "Set up TypeScript strict mode rules for the whole repo, plus a skill for complex type migrations."
 
-- **Instructions**: `.github/copilot-instructions.md` for always-on TS conventions.
+- **Instructions**: `AGENTS.md` for always-on TS conventions.
 - **Skill**: `ts-migration` skill for on-demand migration workflows.
 
 **File structure**:
 
 ```text
-.github/copilot-instructions.md
+AGENTS.md
 .agents/skills/ts-migration/
 ├── SKILL.md
 └── references/
