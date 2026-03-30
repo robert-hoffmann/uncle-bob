@@ -107,6 +107,7 @@ Notes:
 ## 7. Imports and Dependency Hygiene
 
 - Group imports as stdlib -> third-party -> local.
+- If Ruff is configured, treat its active rules as the import/lint baseline, including import grouping and ordering.
 - Remove unused imports quickly.
 - Prefer stdlib-first solutions before adding dependencies.
 - Add dependencies only when they provide clear correctness/DX/maintenance value.

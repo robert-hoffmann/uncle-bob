@@ -89,6 +89,7 @@ Write against the project's currently supported Python version, but structure co
 
 ## Toolchain Strategy (Primary + Fallback)
 
+- Treat repository-configured tooling as the source of truth. If Ruff, mypy, pytest, pre-commit, or other checks are configured, generate code that satisfies their active rules instead of relying on generic defaults.
 - Primary stack: `uv`, `ruff`, `mypy`, `pytest`, `pre-commit`.
 - Fallback stack when constraints require it:
   - dependency management: `pip-tools`
