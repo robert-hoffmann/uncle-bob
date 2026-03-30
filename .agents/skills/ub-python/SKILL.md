@@ -32,7 +32,8 @@ Write against the project's currently supported Python version, but structure co
 4. Choose the simplest path that satisfies correctness, maintainability, and project constraints.
 5. Write or adjust tests first for behavior changes.
 6. Implement minimal changes to pass tests, then refactor while preserving behavior and boundaries.
-7. Run available checks and report outcomes plus any bounded exceptions.
+7. Run repository-configured validation after modifying Python code, starting with the smallest relevant scope.
+8. Report outcomes, bounded exceptions, and any missing tooling gaps that materially reduce confidence.
 
 ## Version & Research Policy
 
@@ -81,6 +82,20 @@ Write against the project's currently supported Python version, but structure co
 - Prefer modern build/install commands (`python -m pip`, `python -m build`) over deprecated `python setup.py ...` command execution.
 - Favor standard library first; add dependencies only when they materially improve correctness, maintainability, or DX.
 
+### Post-Edit Validation Contract
+
+- After generating or modifying Python code, run the repository-configured checks that are relevant to the touched scope.
+- Minimum expectation: run Ruff when Ruff is configured, run a type checker when mypy/pyright/basedpyright is configured, and run targeted pytest coverage when tests exist or behavior changed.
+- Start narrow (`ruff check` on touched files, targeted tests, scoped type checks) and widen only when failures indicate broader impact.
+- Fix newly introduced lint/type/test failures before finalizing when they are within the task scope.
+- If a configured check cannot be run, state exactly why it was skipped or blocked.
+
+### Tooling Gap Warning Policy
+
+- If repository Python tooling for linting, type checking, or testing is missing, weakly configured, or clearly not wired into normal workflows, warn the user explicitly.
+- Recommend concrete additions when relevant: Ruff for linting, mypy/pyright for type checking, pytest for tests, and pre-commit or CI wiring for automatic enforcement.
+- Treat missing quality gates as a reported risk, not as silent permission to skip validation.
+
 ### Error Handling, Logging, and Boundaries
 
 - Fail with specific exceptions and preserve causal chains (`raise ... from err`).
@@ -90,6 +105,7 @@ Write against the project's currently supported Python version, but structure co
 ## Toolchain Strategy (Primary + Fallback)
 
 - Treat repository-configured tooling as the source of truth. If Ruff, mypy, pytest, pre-commit, or other checks are configured, generate code that satisfies their active rules instead of relying on generic defaults.
+- If Ruff, mypy, pytest, pre-commit, or equivalent checks are configured, run the relevant ones after edits instead of stopping at code generation.
 - Primary stack: `uv`, `ruff`, `mypy`, `pytest`, `pre-commit`.
 - Fallback stack when constraints require it:
   - dependency management: `pip-tools`
@@ -126,6 +142,7 @@ When generating or reviewing Python code, include:
 3. Tradeoff note: concise pros/cons for chosen and rejected paths.
 4. Legacy note: removed legacy patterns or bounded exceptions with rationale.
 5. Validation note: checks run (lint/type/test/build) and outcomes.
+6. Tooling gap note: missing or weak lint/type/test enforcement that the user should consider adding or wiring in.
 
 ## References
 
@@ -137,5 +154,7 @@ When generating or reviewing Python code, include:
 - Modern typing and boundary validation are applied where relevant.
 - Data model choice (dataclass vs Pydantic v2) is explicit.
 - Concurrency and error handling patterns are structured and observable.
+- Repository-configured lint/type/test checks were run after edits, or an explicit reason was reported.
 - No new legacy output is introduced.
+- Missing lint/type/test enforcement was reported when relevant.
 - Any retained legacy behavior is documented with a migration path.

@@ -144,6 +144,11 @@ Operational guidance:
 - For Ruff, set `target-version` and keep it aligned with `project.requires-python`.
 - Keep repository-shared VS Code settings minimal and policy-oriented. Put personal UX preferences (hover summaries, inlay hint style, diagnostics language, UI ergonomics) in user settings.
 - If a `pyrightconfig.json` or `[tool.pyright]` exists, treat it as source of truth because it overrides some Pylance analysis settings.
+- After generating or modifying Python code, run the configured checks that apply to the touched scope instead of assuming code generation is sufficient.
+- Minimum expectation: Ruff when configured, a configured type checker when present, and targeted pytest coverage when tests exist or behavior changed.
+- Start with changed files or targeted tests, then widen only when failures indicate broader impact.
+- If configured tooling cannot be run, report the exact blocker.
+- If linting, type checking, or testing is missing or not wired into routine workflows, warn the user and recommend concrete additions rather than silently accepting the gap.
 
 ## 9. Function and API Design
 
@@ -174,6 +179,7 @@ Operational guidance:
 - Refactor in small, behavior-preserving steps.
 - Use guard clauses to reduce nesting and improve readability.
 - Use pre-commit hooks to keep routine quality checks automatic.
+- Treat missing tests, missing type checks, or missing lint wiring as explicit quality risks worth reporting.
 
 ## 13. Legacy Patterns to Avoid (Migration-Only Exceptions)
 
