@@ -33,6 +33,8 @@ When rules appear to conflict, apply this precedence order:
 
 Apply alignment rules by separator role, not by programming language.
 
+In mixed-language files, apply the rule by embedded language surface as well: `<style>` content uses CSS rules, `<script>` content uses JavaScript/TypeScript rules, and similar embedded blocks should be treated as their native language rather than as generic markup text.
+
 A touched block is eligible for alignment only when all of the following are true:
 
 1. **Detect a vertical block** — At least 2 adjacent lines with the same separator role (`:`, `=`, `=>`, `->`, `|`, attribute `=`, etc.)
@@ -52,11 +54,15 @@ A touched block is eligible for alignment only when all of the following are tru
 Align when:
 
 - Object/dictionary/hash entries
+- Dense multiline-capable literals, config/data structures, and argument lists after expanding them to one item per line
 - Variable/constant declaration runs
 - Function parameters in multiline signatures
+- Function-call arguments in multiline-capable syntaxes
 - Interface/type/class field lists
 - CSS/SCSS property declarations
+- CSS declarations inside embedded `<style>` blocks
 - HTML/Vue attribute lists in multiline tags
+- JavaScript/TypeScript declarations and object entries inside embedded `<script>` blocks
 - Import member lists with trailing comments
 - Table-like comment/doc blocks
 
@@ -74,6 +80,7 @@ Invalid exceptions:
 - Convenience or omission
 - Preference for a shorter or more familiar value-column style
 - The fact that the block is in documentation, comments, or config rather than source code
+- The fact that the block sits inside HTML rather than in a standalone CSS/JS file
 
 ### The Pattern
 
@@ -133,15 +140,32 @@ const colors = {
 }
 ```
 
-## Multiline Signatures and Attribute Lists
+## Multiline Signatures, Calls, and Attribute Lists
 
-When a callable or declaration has **2+ parameters/attributes** and spans multiple lines, format with one item per line and align separator roles inside that block when the guardrails allow it.
+When a callable signature, call site, or declaration has **2+ parameters, arguments, or attributes** and the language supports a readable multiline form, use one item per line and align separator roles inside that block when present and when the guardrails allow it.
 
 Why:
 
 - Easier to scan related inputs vertically
 - Cleaner diffs when adding/removing items
 - Consistent with the universal separator alignment rule
+
+## Dense Structure Expansion (Where Supported)
+
+Before deciding that a touched structure is "single-line" and therefore outside alignment scope, check whether the language supports expanding it to a clearer multiline form first.
+
+Expand a touched literal, call, argument list, or config/data structure to one item per line when any of the following are true:
+
+- It has 3 or more items, properties, or arguments.
+- Any item contains a nested structure, callback, or long expression.
+- The line is hard to scan without horizontal parsing.
+- The structure is a config/options/data or call surface where readers benefit from vertical comparison.
+
+After expansion, re-evaluate the block for separator-column alignment where separator roles exist, and apply one-item-per-line formatting where they do not.
+
+Do not keep dense single-line structures merely because they were initially emitted on one line if the language supports a clearer multiline form without violating the guardrails.
+
+Do not force expansion in syntaxes where a multiline one-item-per-line form would be unnatural, invalid, or clearly tool-hostile.
 
 ## Future Edits Contract
 
@@ -158,11 +182,12 @@ For all future edits, apply these defaults unless the task explicitly says other
 Before finalizing any edit, apply this protocol:
 
 1. **Group**     : Identify alignable vertical blocks in touched regions
-2. **Align**     : Apply column alignment using the longest-left-token rule
-3. **Constrain** : Enforce padding and line-length guardrails
-4. **Verify**    : Re-read for scanability and syntax safety
-5. **Exception** : If alignment is not applied, name the guardrail or verified tooling constraint that blocked it
-6. **Scope**     : Keep style normalization incremental unless broader migration was requested
+2. **Expand**    : Expand dense multiline-capable structures when they meet the expansion triggers
+3. **Align**     : Apply column alignment using the longest-left-token rule
+4. **Constrain** : Enforce padding and line-length guardrails
+5. **Verify**    : Re-read for scanability and syntax safety, including embedded language blocks
+6. **Exception** : If alignment is not applied, name the guardrail or verified tooling constraint that blocked it
+7. **Scope**     : Keep style normalization incremental unless broader migration was requested
 
 ## Alignment Quality Checklist
 

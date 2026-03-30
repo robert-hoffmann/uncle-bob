@@ -13,6 +13,8 @@ For every touched eligible vertical separator block, separators must align into 
 
 This applies across code, configs, comments, docstrings, markup attributes, and documentation blocks when the structure is eligible.
 
+Treat embedded language blocks such as `<style>` and `<script>` as native CSS and JavaScript formatting surfaces, not as generic HTML text.
+
 Only syntax breakage or a verified tooling or runtime constraint may justify leaving an eligible touched block unaligned.
 
 Compliant:
@@ -62,6 +64,7 @@ The following are non-compliant when a touched block is eligible for alignment:
 
 - An eligible vertical separator block whose separators do not form one column.
 - Value-column alignment in an eligible block.
+- Leaving embedded CSS/JS blocks unformatted as native language blocks when the touched content is eligible for alignment.
 - Skipping alignment because of convenience, omission, or surrounding local style.
 - Normalizing unrelated blocks outside the touched logical scope.
 
@@ -94,6 +97,8 @@ When generating or modifying code:
 Before finalizing:
 
 - Check every touched eligible separator block.
+- Treat touched `<style>` and `<script>` content as native CSS and JavaScript surfaces.
+- Expand dense multiline-capable structures (for example literals, argument lists, and config/data blocks) into one-item-per-line form when required by `references/formatting-alignment.md`, then align eligible entries.
 - Align separators into one column using the longest-left-token rule from `references/formatting-alignment.md`.
 - Confirm no unrelated blocks were normalized.
 - If any eligible block remains unaligned, the edit is incomplete unless a named exception from `references/formatting-alignment.md` applies.
