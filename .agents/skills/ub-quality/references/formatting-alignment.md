@@ -2,11 +2,15 @@
 
 These principles apply to **ALL** programming languages and file types.
 
+When an edited block is eligible for alignment under this document, these rules apply.
+
 ## The Universal Alignment Rule
 
 > **When you have a vertical list of related items with a separator, align the separators into a column.**
 
 This applies to ALL languages, ALL contexts—code, comments, docstrings, configs, everything.
+
+For eligible vertical separator blocks, separator-column alignment is required. Value-column alignment is non-compliant.
 
 ## Alignment Policy Precedence (Agent Contract)
 
@@ -22,12 +26,14 @@ When rules appear to conflict, apply this precedence order:
 
 - If "respect existing formatting" conflicts with the universal rule, align the touched block and leave unrelated blocks unchanged.
 - If separator-column and value-column alignment conflict, prefer separator-column alignment (`key : value`) for vertical separator blocks.
-- If alignment would require extreme spacing, keep compact formatting and add a short note in review/output.
+- If alignment would require extreme spacing, keep compact formatting and state that a guardrail blocked alignment.
 - If tooling rewrites spacing, preserve semantic structure first, then re-apply alignment where possible.
 
-## Universal Alignment Decision Framework
+## Eligibility and Decision Framework
 
-Use this decision tree for any language:
+Apply alignment rules by separator role, not by programming language.
+
+A touched block is eligible for alignment only when all of the following are true:
 
 1. **Detect a vertical block** — At least 2 adjacent lines with the same separator role (`:`, `=`, `=>`, `->`, `|`, attribute `=`, etc.)
 2. **Validate related intent** — Lines represent one logical group (config map, declaration list, params, imports, properties)
@@ -42,8 +48,6 @@ Use this decision tree for any language:
 - **Soft line length target**  : 100-120 characters (language dependent)
 - **Hard stop**                : If alignment causes wrapping/churn, prefer compact formatting
 - **Scope**                    : Align the edited group first; align neighboring groups only when tightly coupled
-
-### Eligible vs Non-Eligible Blocks
 
 Align when:
 
@@ -63,6 +67,13 @@ Do not align when:
 - Long expressions where alignment causes heavy wrapping
 - Generated/minified files
 - Mixed-semantic blocks that only look visually similar
+
+Invalid exceptions:
+
+- Nearby local style
+- Convenience or omission
+- Preference for a shorter or more familiar value-column style
+- The fact that the block is in documentation, comments, or config rather than source code
 
 ### The Pattern
 
@@ -122,38 +133,9 @@ const colors = {
 }
 ```
 
-### Universal Applicability
-
-Apply alignment rules by separator role, not by programming language. If a syntax supports vertical groups with a repeated separator role, the same alignment rule applies.
-
-Common separator roles include:
-
-- Assignment or binding
-- Key/value mapping
-- Type annotation
-- Function parameter defaults
-- Attributes/properties in multiline declarations
-- Table-like documentation rows
-
-### When to Apply
-
-1. **Logically related items** — Group declarations, config blocks, parameter lists
-2. **Vertical lists**          — 2+ items that share structure
-3. **Clear separators**        — `:`, `=`, `->`, `|`, or similar
-
-### When NOT to Apply
-
-- Single items (nothing to align with)
-- Unrelated declarations
-- Would require excessive padding (>20 spaces)
-
-### The Mindset
-
-> Imagine scanning the code quickly. Can your eye jump straight to what matters? If separators zigzag, alignment helps. If it's already clear, don't force it.
-
 ## Multiline Signatures and Attribute Lists
 
-When a callable or declaration has **2+ parameters/attributes** and spans multiple lines, format with one item per line and align separator roles inside that block when practical.
+When a callable or declaration has **2+ parameters/attributes** and spans multiple lines, format with one item per line and align separator roles inside that block when the guardrails allow it.
 
 Why:
 
@@ -171,15 +153,15 @@ For all future edits, apply these defaults unless the task explicitly says other
 4. Never restyle generated artifacts unless generation requirements changed.
 5. Remove transitional labels or migration markers before finalizing code.
 
-## Agent Execution Protocol (Mandatory)
+## Agent Finalization Gate (Mandatory)
 
-Before finalizing edits, agents should run this protocol mentally (or explicitly in reasoning):
+Before finalizing any edit, apply this protocol:
 
 1. **Group**     : Identify alignable vertical blocks in touched regions
 2. **Align**     : Apply column alignment using the longest-left-token rule
 3. **Constrain** : Enforce padding and line-length guardrails
 4. **Verify**    : Re-read for scanability and syntax safety
-5. **Report**    : Mention any intentional non-alignment and why
+5. **Exception** : If alignment is not applied, name the guardrail or verified tooling constraint that blocked it
 6. **Scope**     : Keep style normalization incremental unless broader migration was requested
 
 ## Alignment Quality Checklist

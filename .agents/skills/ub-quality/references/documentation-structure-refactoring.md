@@ -2,6 +2,8 @@
 
 These principles apply to **ALL** programming languages and file types.
 
+Use these requirements to decide what to document, how to organize files, and how to refactor without changing behavior.
+
 ## Core Documentation Principles
 
 Good documentation transcends language syntax. These principles apply to **ALL** programming languages.
@@ -186,7 +188,7 @@ Ask yourself:
 ---
 
 ## Code Structure Guidelines
->
+
 > **Applies to:** All files (`*.*`)
 
 ## Core Structure Principles
@@ -273,7 +275,7 @@ Keep related elements together:
 ---
 
 ## Refactoring Guidelines
->
+
 > **Applies to:** All files (`*.*`)
 
 ## Core Refactoring Principles
@@ -366,8 +368,8 @@ When reviewing code for refactoring opportunities, check for:
 
 ## Safe Refactoring
 
-1. **Make small, incremental changes** - to isolate issues
-2. **Verify behavior**                 - after each change
+1. **Make small, incremental changes** — to isolate issues
+2. **Verify behavior**                 — after each change
 3. **Keep commits focused**            — one refactoring per commit
 4. **Preserve fold structure**         — when moving code, preserve or rebalance region boundaries
 

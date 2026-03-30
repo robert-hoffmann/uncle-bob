@@ -1,5 +1,7 @@
 # Prompt & Instruction Engineering Reference
 
+Use this reference to generate prompts, instructions, skills, and agent bodies that trigger reliably, constrain behavior clearly, and avoid vague guidance.
+
 ## Canonical Structure for Generated Content
 
 Use this consistent structure when generating prompts, instructions, skills, or agent bodies:
@@ -27,19 +29,28 @@ Skill descriptions are **routing metadata**, not marketing copy. They control wh
 
 ### Rules
 
-- Use **imperative phrasing**.
+- Put the highest-signal **user intents first**.
 - Focus on **user intent**, not internal implementation.
-- Include **trigger keywords** and adjacent phrasings the user might say.
+- Include **trigger keywords, adjacent phrasings, and neighboring task language** the user might use.
 - Mention both **what it does** and **when to use it**.
-- Keep short enough to avoid context bloat (~2-4 sentences).
+- Include at least one **clear non-use boundary** so the skill does not over-trigger.
+- Keep short enough to avoid context bloat, but specific enough to route reliably (usually 2-4 sentences).
 
 ### Good Example
 
-> Use this skill when the user wants to create, run, debug, or organize browser-based tests with Playwright, especially when reusable templates, workflows, or troubleshooting steps are helpful.
+> Use this skill when the user wants to create, run, debug, review, or organize browser-based tests with Playwright; when the task involves selectors, fixtures, tracing, retries, or cross-browser behavior; or when they ask for related end-to-end browser automation outcomes even without naming Playwright directly. Do not use it for simple unit tests or generic front-end debugging that does not involve Playwright.
 
 ### Bad Example
 
 > This skill helps with testing. *(Too vague — won't trigger correctly.)*
+
+### Description Failure Modes to Avoid
+
+- Descriptions that say only what the artifact contains, not when to use it.
+- Descriptions with no exclusion boundary.
+- Descriptions that depend on internal jargon the user is unlikely to say.
+- Descriptions that are so broad they compete with built-in tools or unrelated skills.
+- Descriptions that are so narrow they miss common adjacent phrasings.
 
 ## Instruction-Writing Rules
 
@@ -51,6 +62,8 @@ Generated instructions should:
 - Include **examples where ambiguity is likely**.
 - Avoid duplicating what **linters/formatters already enforce**.
 - Use **imperative** form: "Use X", "Prefer Y".
+- Prefer **explicit acceptance boundaries** over soft wording like "when practical" or "best effort" unless a real exception boundary is intended.
+- State **defect states or non-compliant patterns** when failure modes are predictable.
 
 ### Good Pattern
 
@@ -87,6 +100,8 @@ Generated prompts should:
 - Avoid **vague verbs** like "improve" without defining what improvement means.
 - Tell the model **when to ask questions** vs proceed autonomously.
 - Prefer **concrete over abstract**: "Check for SQL injection in query builders" over "Review security."
+- Prefer **named boundaries and exclusions** over open-ended scope.
+- Replace soft requests like "make it better" with concrete criteria, defect classes, or measurable outcomes.
 
 ## Tool Guidance Rules
 
@@ -114,6 +129,7 @@ When generating any artifact, include:
 - **1-2 good examples** showing the desired behavior or output.
 - **Optional anti-examples** when misuse is likely.
 - Use concrete, minimal examples — not lengthy tutorials.
+- Keep examples close to the rule they clarify so the model does not need to infer the connection.
 
 ### Why This Matters
 

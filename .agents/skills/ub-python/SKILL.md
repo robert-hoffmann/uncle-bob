@@ -11,9 +11,18 @@ Use this skill to enforce latest stable Python modern defaults, strict typing, b
 
 Generate modern patterns for new code and refactor legacy patterns incrementally when touching existing code.
 
+Write against the project's currently supported Python version, but structure code so it can move cleanly toward newer stable releases instead of accumulating compatibility layers.
+
 ## Load References On Demand
 
-- Read `references/python-standards.md` for canonical Python rules and toolchain policy.
+- Load and apply `references/python-standards.md` for canonical Python rules and toolchain policy.
+
+## Forward-Compatibility Contract
+
+- Implement for the project's actual supported Python version, runtime, and library floor.
+- Bias design toward the next stable upgrade path rather than preserving older-version behavior by default.
+- Prefer `typing_extensions`, `collections.abc`, and `abc` as forward-compatible tools when they reduce future rewrite cost and avoid custom compatibility layers.
+- Add backward-compatibility shims, fallbacks, or bridge code only when an explicit support contract or staged migration plan requires them.
 
 ## Core Workflow
 
@@ -27,11 +36,11 @@ Generate modern patterns for new code and refactor legacy patterns incrementally
 
 ## Version & Research Policy
 
-- Target the latest stable release of Python.
+- Target the latest stable release of Python for guidance, but implement against the project's actual supported version contract.
 - Detect the project's actual Python version from `pyproject.toml`, `.python-version`, lockfiles, and CI configuration.
 - Use web search to verify current best practices, API availability, and migration guidance against official Python documentation.
 - Do not generate syntax or stdlib behavior only available in unreleased Python versions unless the user explicitly requests it.
-- When the project's installed version is behind latest stable, note the version gap and recommend an upgrade path.
+- When the project's installed version is behind latest stable, note the version gap, recommend an upgrade path, and prefer patterns that will survive that upgrade cleanly.
 - Refer to AGENTS.MD for centralized version policy and default tooling.
 - Do not hardcode version numbers in generated guidance — keep recommendations evergreen.
 
@@ -47,8 +56,10 @@ Generate modern patterns for new code and refactor legacy patterns incrementally
 
 - Type annotate non-trivial functions and all public interfaces.
 - Prefer modern syntax: `list[str]`, `dict[str, int]`, `X | Y`, `type Alias = ...`.
-- Prefer interface types from `collections.abc` (`Iterable`, `Sequence`, `Mapping`, `Callable`) when mutation is not required.
-- Use `Protocol`, `Self`, `typing.override`, `TypeGuard`, and `assert_never` when they improve correctness and refactor safety.
+- Prefer interface types from `collections.abc` (`Iterable`, `Sequence`, `Mapping`, `Callable`) and abstract contracts from `abc` or `Protocol` when concrete mutation behavior is not required.
+- Prefer `typing_extensions` for newer typing features when the project's supported version floor does not provide them, or when the backport gives cleaner cross-version semantics and future-upgrade safety.
+- Use `Protocol`, `Self`, `override`, `TypeGuard`, `TypeIs`, `Required`, `NotRequired`, `ReadOnly`, `TypeAliasType`, and `assert_never` when they improve correctness and refactor safety.
+- Do not invent custom typing compatibility shims when `typing_extensions` already provides the migration path.
 - Keep `Any` contained to boundaries and document why when unavoidable.
 
 ### Data Modeling and Validation
@@ -97,6 +108,8 @@ Generate modern patterns for new code and refactor legacy patterns incrementally
 - Do not generate Pydantic v1 validator/style APIs in new code.
 - Do not introduce new `python setup.py ...` command usage.
 - Do not add untyped dict-heavy contracts when typed models are practical.
+- Do not preserve support for older Python behavior "just in case" when the project no longer targets it.
+- Do not add custom backward-compatibility layers for typing features when `typing_extensions` or the standard library already covers the intended migration path.
 
 Migration-aware exception policy:
 

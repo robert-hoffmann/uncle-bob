@@ -1,5 +1,7 @@
 # Agent Skills Reference
 
+Use this reference to write skills that trigger reliably, stay lean in context, and communicate clear activation boundaries.
+
 ## When to Use Skills
 
 Use a skill when the workflow is **reusable, multi-step, and benefits from bundled resources** (scripts, references, assets). Skills are the right choice for on-demand domain workflows that need more than a simple prompt file can provide.
@@ -43,24 +45,51 @@ Skills follow the Agent Skills open standard (agentskills.io). They work across 
 | Field | Required | Description |
 | --- | --- | --- |
 | `name` | Yes | Skill name. Lowercase, hyphens, verb-led, under 64 characters. |
-| `description` | Yes | **Primary triggering mechanism.** Must include what the skill does AND when to use it. |
+| `description` | Yes | **Primary triggering mechanism.** Treat it as routing logic: state what the skill does, when to use it, adjacent phrasings the user may use, and when not to use it. |
 | `argument-hint` | No | Placeholder text shown when invoked explicitly. |
 | `user-invocable` | No | Set `true` to allow explicit invocation as a slash command. |
 | `disable-model-invocation` | No | Set `true` to prevent auto-activation — only user invocation works. |
 
 ## Description-Writing Formula
 
-The description is the most critical field — it controls when the skill activates. Follow this pattern:
+The description is the most critical field. It controls whether the skill activates at all, so write it like routing logic, not like marketing copy or an internal implementation note.
+
+Follow this pattern:
 
 > Use this skill when the user wants **X**, **Y**, or **Z**; when the task involves **A/B/C**; or when they ask for related outcomes even if they do not use exact terminology. Do not use it for simple one-step cases that built-in tools handle directly.
 
 **Rules:**
 
-- Use **imperative phrasing**.
-- Focus on **user intent**, not internal implementation.
-- Include **trigger keywords and adjacent phrasings** the user might say.
-- Mention both **what it does** and **when to use it**.
-- Keep short enough to avoid context bloat (~2-4 sentences).
+- Put the highest-signal **user intents first**.
+- Focus on **what the user is trying to achieve**, not internal implementation details.
+- Include **trigger keywords, adjacent phrasings, and neighboring task language** the user might use.
+- State both **what it does** and **when to use it**.
+- Include at least one **clear non-use boundary** so the skill does not over-trigger.
+- Keep it short enough to avoid context bloat, but specific enough to route reliably (usually 2-4 sentences).
+
+### Weak vs Strong Descriptions
+
+Weak:
+
+> Helps with BigQuery workflows and reusable resources.
+
+Why it fails:
+
+- It describes the implementation vaguely instead of the user intent.
+- It has no trigger phrases, adjacent phrasings, or exclusion boundary.
+- It gives the model almost no signal for when to activate the skill.
+
+Strong:
+
+> Use this skill when the user wants to create, review, debug, migrate, or explain BigQuery queries, datasets, schemas, jobs, or warehouse workflows; when the task involves BigQuery SQL, permissions, costs, or query optimization; or when they ask for related analytics outcomes even without saying BigQuery explicitly. Do not use it for generic SQL tasks that do not touch BigQuery.
+
+### Description Failure Modes to Avoid
+
+- Descriptions that say only what the skill contains, not when to use it.
+- Descriptions that rely on internal terms the user is unlikely to say.
+- Descriptions with no exclusion boundary.
+- Descriptions that are so broad they compete with built-in tools or unrelated skills.
+- Descriptions that are so narrow they miss common adjacent phrasings.
 
 ## Progressive Disclosure
 
@@ -165,9 +194,12 @@ Do not create auxiliary files that add clutter:
 ---
 name: playwright-testing
 description: >-
-  Use this skill when the user wants to create, run, debug, or organize
-  browser-based tests with Playwright, especially when reusable templates,
-  workflows, or troubleshooting steps are helpful.
+  Use this skill when the user wants to create, run, debug, review, or
+  organize browser-based tests with Playwright; when the task involves
+  selectors, fixtures, tracing, retries, or cross-browser behavior; or when
+  they ask for related end-to-end browser automation outcomes even without
+  naming Playwright directly. Do not use it for simple unit tests or generic
+  front-end debugging that does not involve Playwright.
 argument-hint: "[target page or test goal]"
 user-invocable: true
 disable-model-invocation: false
@@ -194,7 +226,7 @@ Use this skill for browser-based testing tasks, not for simple unit tests.
 
 - [ ] Skill directory at correct location (`.agents/skills/<name>/`)
 - [ ] SKILL.md has valid frontmatter: `name` and `description`
-- [ ] Description is trigger-optimized (what + when + keywords)
+- [ ] Description is trigger-optimized (what + when + adjacent phrasings + non-use boundary)
 - [ ] SKILL.md body is under 500 lines
 - [ ] References are one level deep and clearly linked from SKILL.md
 - [ ] No auxiliary documentation files (README, CHANGELOG, etc.)

@@ -16,6 +16,7 @@ official Python and tooling guidance.
 
 - Enforce strong static typing with clean runtime behavior.
 - Prefer modern language/stdlib patterns over legacy idioms.
+- Implement against the project's currently supported Python version, but bias design toward the next stable upgrade path instead of preserving older-version behavior by default.
 - Use streaming/generator-based processing for large datasets.
 - Treat readability and maintainability as hard constraints.
 - For non-trivial work, explicitly compare at least two approaches with pros/cons.
@@ -24,11 +25,13 @@ official Python and tooling guidance.
 
 - Annotate non-trivial function parameters and return types.
 - Use modern syntax: `list[str]`, `dict[str, int]`, `X | Y`.
-- Prefer `collections.abc` interface types (`Iterable`, `Sequence`, `Mapping`, `Callable`) when mutation is not required.
+- Prefer `collections.abc` interface types (`Iterable`, `Sequence`, `Mapping`, `Callable`) and `abc` or `Protocol` contracts when mutation or a concrete container type is not required.
+- Prefer `typing_extensions` for newer typing features and backports when the project's supported version floor needs them or when the backport gives cleaner cross-version semantics and future-upgrade safety.
 - Prefer modern typing tools where useful:
   - `type Alias = ...` and PEP 695 type parameter syntax in new code.
-  - `typing.override` for explicit override intent.
-  - `Self`, `Protocol`, `TypeGuard`, `assert_never` for correctness and safe refactors.
+  - `override` for explicit override intent.
+  - `Self`, `Protocol`, `TypeGuard`, `TypeIs`, `Required`, `NotRequired`, `ReadOnly`, and `assert_never` for correctness and safe refactors.
+- Do not build custom typing compatibility shims when `typing_extensions` already provides the forward-compatible path.
 - Keep `Any` out of public APIs unless unavoidable; if used, document why.
 - Legacy typing aliases (`Optional`, `Union`, `List`, `Dict`) are migration-only, not new-code defaults.
 
@@ -177,6 +180,8 @@ Operational guidance:
 - Pydantic v1 APIs (`@validator`, `@root_validator`, `.dict()`, `.json()`).
 - New `python setup.py ...` command usage.
 - Unstructured dict-heavy contracts where typed models are feasible.
+- Backward-compatibility layers for older Python behavior that the project no longer supports.
+- Custom shims for typing features already available through `typing_extensions`.
 
 Exception policy:
 
