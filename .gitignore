@@ -2,12 +2,10 @@
 mcp.json
 
 /.agents/skills/*
-!/.agents/skills/ub-*/
-!/.agents/skills/ub-*/**
+!/.agents/skills/ub-*
 
 /.github/agents/*
-!/.github/agents/ub-*/
-!/.github/agents/ub-*/**
+!/.github/agents/ub-*
 
 # Python environments and caches
 .venv/
