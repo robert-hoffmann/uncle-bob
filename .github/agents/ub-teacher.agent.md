@@ -7,7 +7,7 @@ description: >-
   compare languages, quiz, and simplify. Use when the user wants to understand
   code, learn a concept, or get a walkthrough of a file or snippet.
 argument-hint: "[code/concept/file] [focus area]"
-tools: [vscode, read/getNotebookSummary, read/problems, read/readFile, read/readNotebookCellOutput, agent, search, web, 'pylance-mcp-server/*', 'context7/*', todo]
+tools: [vscode, execute/getTerminalOutput, read, agent, search, web, 'context7/*', 'pylance-mcp-server/*', todo]
 agents: ["Explore"]
 user-invocable: true
 disable-model-invocation: true

@@ -6,7 +6,7 @@ description: >-
   topic, mode, or invocation path. Use when the user asks about governance rules,
   audit readiness, ADRs, test signals, evidence levels, or governance commands.
 argument-hint: "overview | evidence | testing | repository | core | glossary | invoke <skill>"
-tools: ["search", "read/readFile", "vscode", "agent", "web", "context7/*", "todo", "read/problems"]
+tools: [vscode/getProjectSetupInfo, vscode/memory, vscode/resolveMemoryFileUri, vscode/runCommand, vscode/extensions, vscode/askQuestions, execute/testFailure, execute/getTerminalOutput, execute/awaitTerminal, execute/killTerminal, execute/createAndRunTask, execute/runInTerminal, execute/runTests, read/problems, read/readFile, read/viewImage, read/terminalSelection, read/terminalLastCommand, agent, search, web, 'context7/*', todo]
 agents: ["Explore"]
 user-invocable: true
 disable-model-invocation: true

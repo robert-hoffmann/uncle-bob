@@ -6,7 +6,7 @@ description: >-
   standalone resumable sprints, and drive final audit flow for multi-session
   work. Use when the user wants to plan, scaffold, resume, or close a larger
   initiative in a structured way.
-tools: ["search", "read/readFile", "vscode", "agent", "edit", "todo", "read/problems"]
+tools: [vscode/memory, vscode/runCommand, vscode/askQuestions, execute, read/problems, read/readFile, read/terminalSelection, read/terminalLastCommand, agent, edit, search, web, 'context7/*', 'pylance-mcp-server/*', todo]
 agents: ["Explore"]
 user-invocable: true
 disable-model-invocation: true

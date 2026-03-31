@@ -6,7 +6,7 @@ description: >-
   configurations, plugin bundles, or multi-artifact combos. Interviews the user to
   classify needs, generates artifacts, validates output, and recommends companion
   artifacts.
-tools: ["search", "read/readFile", "read/problems", "vscode", "web", "agent", "edit", "todo"]
+tools: [vscode/getProjectSetupInfo, vscode/memory, vscode/resolveMemoryFileUri, vscode/runCommand, vscode/vscodeAPI, vscode/askQuestions, execute/getTerminalOutput, execute/awaitTerminal, execute/killTerminal, execute/createAndRunTask, execute/runInTerminal, read/problems, read/readFile, agent, edit, search, web, 'context7/*', todo]
 agents: ["Explore"]
 user-invocable: true
 disable-model-invocation: true
