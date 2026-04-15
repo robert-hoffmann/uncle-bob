@@ -37,6 +37,7 @@ Always load these skills for every task — no exceptions.
 | ub-vuejs          | Vue (latest stable): SFCs, composables, reactivity, watchers, SSR/hydration, component contracts with strict TypeScript.         | `.agents/skills/ub-vuejs/SKILL.md`                  |
 | ub-governance     | Unified governance: repo governance, testing/TDD, evidence/ADR/claim governance, shared contracts.                               | `.agents/skills/ub-governance/SKILL.md`             |
 | ub-customizations | VS Code Copilot customization builder: creates skills, prompts, agents, instructions, hooks, MCP configs, plugins, and bundles.  | `.agents/skills/ub-customizations/SKILL.md`         |
+| ub-workflow       | Initiative planning, roadmap generation, resumable sprint orchestration, and final-audit flow for larger multi-session work.     | `.agents/skills/ub-workflow/SKILL.md`               |
 
 ## Agents
 
@@ -46,6 +47,7 @@ Always load these skills for every task — no exceptions.
 | ub-governance     | Interactive governance guide grounded in the ub-governance skill and references.                |
 | ub-teacher        | Teaching and explanation agent for readable, beginner-friendly code walkthroughs.               |
 | ub-customizations | Interactive Copilot customization builder with classify/generate/validate/iterate workflow.     |
+| ub-workflow       | Interactive initiative planning and sprint-orchestration guide for larger multi-session work.   |
 
 ## Prompts
 

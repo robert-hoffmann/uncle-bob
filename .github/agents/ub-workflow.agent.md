@@ -143,7 +143,7 @@ Skip the interview when the request is already clear.
 
 ## Routing
 
-- `overview`: explain the initiative-flow lifecycle and what the agent can do.
+- `overview`: explain the workflow lifecycle and what the agent can do.
 - `scaffold` or new initiative setup: bootstrap the operations root if needed,
   scaffold the initiative root, and adapt the key placeholders.
 - `resume`: inspect the initiative in resume order and report the current state.

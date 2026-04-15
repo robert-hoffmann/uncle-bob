@@ -1,4 +1,4 @@
-# Uncle Bob — Copilot Skills & Agents
+# Uncle Bob
 
 <table>
 <tr>
@@ -7,9 +7,9 @@
 </td>
 <td>
 
-A curated, production-grade collection of GitHub Copilot skills and custom agents, built by a developer with 27 years of full-stack experience. Every skill was co-written with AI using OpenAI GPT-5.4 Pro (extended thinking & research) to deliver the highest quality instructions possible.
+Uncle Bob is a practical collection of skills and custom agents for GitHub Copilot in VS Code. It gives Copilot stronger defaults for code quality, framework work, governance, and planning without forcing a large setup or a new workflow.
 
-Drop them into any project and your Copilot immediately gets smarter about the technologies you use.
+I use these skills in an actual corporate production environment for supply-chain management in the aerospace industry.
 
 </td>
 </tr>
@@ -17,88 +17,93 @@ Drop them into any project and your Copilot immediately gets smarter about the t
 
 ## What This Is
 
-Uncle Bob is a framework of reusable **skills** and **agents** for [GitHub Copilot](https://github.com/features/copilot) in VS Code. Skills give Copilot deep, domain-specific knowledge it can draw on while assisting you — covering everything from code quality and TypeScript to Nuxt, Tailwind, governance, and more. Agents provide interactive, task-focused workflows on top of those skills.
+This repository packages reusable Copilot skills, agent definitions, and supporting project metadata. You can bring them into another repository to give Copilot better instructions for TypeScript, Python, Vue, Nuxt, Tailwind, CSS, governance, and multi-step delivery work.
 
-## Skills
+## Why Use It
 
-| Skill | Description |
-| ----- | ----------- |
-| **ub-quality** *(mandatory)* | Cross-language code quality: design patterns, formatting, documentation, structure, refactoring. |
-| ub-css | Plain CSS and Vue/Nuxt style blocks with design tokens, cascade layers, and progressive enhancement. |
-| ub-nuxt | Nuxt (latest stable): typed composables, SSR/SSG/hybrid rendering, runtime config, Nitro/server routes, app-directory semantics. |
-| ub-python | Python (latest stable): typed patterns, boundary validation, structured error handling, pytest/ruff/mypy. |
-| ub-tailwind | Tailwind CSS (latest stable): setup, migration, and debugging across HTML, Vue + Vite, and Nuxt projects. |
-| ub-ts | TypeScript (latest stable): typing, module resolution, compiler flags, tsconfig architecture. |
-| ub-vuejs | Vue (latest stable): SFCs, composables, reactivity, SSR/hydration, component contracts with strict TypeScript. |
-| ub-governance | Unified governance: repo gates, testing/TDD, evidence/ADR/claim governance, shared contracts. |
-| ub-customizations | VS Code Copilot customization builder for skills, agents, prompts, hooks, MCP configs, and bundles. |
+Use it when you want GitHub Copilot in VS Code to be more consistent, more opinionated, and more useful on real project work. The repo combines a mandatory quality baseline with targeted skills and focused agents, so Copilot can help with implementation, review, teaching, customization, and workflow orchestration from the same set of conventions.
 
-## Agents
+## What's Included
 
-| Agent | Description |
-| ----- | ----------- |
-| Explore | Fast read-only codebase exploration and Q&A (quick / medium / thorough). |
-| ub-governance | Governance assistance agent grounded in the ub-governance skill. |
-| ub-teacher | Teaching and explanation agent for readable, beginner-friendly walkthroughs. |
-| ub-customizations | Interactive Copilot customization builder with classify/generate/validate/iterate workflow. |
+| Skill             | Description                                                                                      |
+| ----------------- | ------------------------------------------------------------------------------------------------ |
+| ub-quality        | Mandatory baseline for code quality, formatting, documentation, and refactoring.                 |
+| ub-css            | CSS and Vue/Nuxt styling with design tokens, cascade layers, and progressive enhancement.        |
+| ub-nuxt           | Nuxt patterns for typed composables, rendering modes, runtime config, and server routes.         |
+| ub-python         | Typed Python patterns, boundary validation, and structured error handling.                       |
+| ub-tailwind       | Tailwind setup, migration, and debugging across HTML, Vue, and Nuxt.                             |
+| ub-ts             | TypeScript typing, module resolution, compiler flags, and tsconfig structure.                    |
+| ub-vuejs          | Vue SFCs, composables, reactivity, SSR and hydration, and strict TypeScript contracts.           |
+| ub-governance     | Repository, testing, and evidence governance with shared contracts.                              |
+| ub-customizations | Builder skill for Copilot skills, agents, prompts, instructions, hooks, MCP, and plugin bundles. |
+| ub-workflow       | Initiative planning, roadmaps, resumable sprints, and final audit flow.                          |
 
-## Getting Started
+| Agent             | Description                                                         |
+| ----------------- | ------------------------------------------------------------------- |
+| Explore           | Fast read-only codebase exploration and Q&A.                        |
+| ub-governance     | Interactive guide for repository, testing, and evidence governance. |
+| ub-teacher        | Beginner-friendly explanations and code walkthroughs.               |
+| ub-customizations | Interactive builder for Copilot customization artifacts.            |
+| ub-workflow       | Interactive planning and sprint orchestration for larger work.      |
 
-### 1. Clone the repository
+## Quick Start
 
 ```bash
 git clone https://github.com/robert-hoffmann/uncle-bob.git
 ```
 
-### 2. Add skills and agents to your project
+In the target project, either copy or symlink these paths from the clone:
 
-You have two options — **copy** or **symlink**. Symlinking is recommended so you always get the latest version by pulling the repo.
+- `.agents/`
+- `.github/agents/`
+- `AGENTS.MD`
 
-#### Option A — Symlink (recommended)
-
-From your project root, create symlinks pointing into the cloned repository:
+Symlink:
 
 ```bash
-# Symlink the skills directory
+mkdir -p .github
 ln -s /path/to/uncle-bob/.agents .agents
-
-# Symlink the agent definitions
 ln -s /path/to/uncle-bob/.github/agents .github/agents
-
-# Symlink the root registry file
 ln -s /path/to/uncle-bob/AGENTS.MD AGENTS.MD
 ```
 
-To update, simply pull the latest changes:
+Copy:
 
 ```bash
-cd /path/to/uncle-bob && git pull
-```
-
-#### Option B — Copy
-
-Copy the directories directly into your project:
-
-```bash
+mkdir -p .github
 cp -r /path/to/uncle-bob/.agents .agents
 cp -r /path/to/uncle-bob/.github/agents .github/agents
 cp /path/to/uncle-bob/AGENTS.MD AGENTS.MD
 ```
 
-> With this approach you will need to re-copy files after upstream updates.
+Open the target project in VS Code with GitHub Copilot enabled. Copilot will discover `AGENTS.MD` and `.github/agents` automatically.
 
-### 3. Open your project in VS Code
+Update with:
 
-Make sure [GitHub Copilot](https://github.com/features/copilot) is installed and enabled. Skills, agents, and prompts are auto-discovered from `AGENTS.MD` and the `.github/` directory — no additional configuration required.
+```bash
+git -C /path/to/uncle-bob pull
+```
+
+If you copied files, copy them again after pulling. If you symlinked them, the update is already in place.
 
 ## Repository Layout
 
-```text
-.agents/skills/        # Copilot skills (one SKILL.md per skill)
-.github/agents/        # Custom agent definitions (.agent.md)
-AGENTS.MD              # Skill & agent registry (auto-loaded by Copilot)
-```
+| Path                 | Purpose                                        |
+| -------------------- | ---------------------------------------------- |
+| `.agents/skills/`    | Skill definitions and supporting assets.       |
+| `.github/agents/`    | Custom agent definitions.                      |
+| `.github/plugin/`    | Plugin-related assets.                         |
+| `.github/workflows/` | GitHub workflow automation.                    |
+| `docs/`              | Documentation and images.                      |
+| `tmp/`               | Temporary workspace content and test material. |
+| `AGENTS.MD`          | Root registry and repository instructions.     |
+| `plugin.json`        | Plugin metadata.                               |
+| `Taskfile.yml`       | Common local lint and test commands.           |
+
+## Philosophy
+
+Keep Copilot practical. Start with strong quality defaults, add focused domain knowledge only where it helps, and prefer reusable instructions over one-off prompting. The goal is to make Copilot more dependable for day-to-day engineering work, not just better at generating snippets.
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE).
+MIT. See [LICENSE](LICENSE).

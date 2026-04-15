@@ -1,6 +1,6 @@
 {
   "name": "uncle-bob",
-  "description": "Cross-language code quality, governance, and framework skills for TypeScript, Python, Vue, Nuxt, Tailwind, and CSS — with specialized agents for governance, teaching, and Copilot customization building.",
+  "description": "Cross-language code quality, governance, workflow, and framework skills for TypeScript, Python, Vue, Nuxt, Tailwind, and CSS — with specialized agents for governance, teaching, customization building, and initiative orchestration.",
   "version": "1.0.0",
   "skills": ".agents/skills/",
   "agents": ".github/agents/"

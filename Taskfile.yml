@@ -39,9 +39,16 @@ tasks:
       -s .agents/skills/ub-governance/tests/governance_scripts
       -p 'test_*.py' -v
 
+  test-workflow:
+    desc: Run workflow scaffold regression tests
+    cmd: >
+      {{.UV}} python -m unittest discover
+      -s .agents/skills/ub-workflow/tests
+      -p 'test_*.py' -v
+
   test:
     desc: Run local test checks
-    deps: [test-integrity, test-governance]
+    deps: [test-integrity, test-governance, test-workflow]
 
   check:
     desc: Run lint + test (closest local CI parity)
