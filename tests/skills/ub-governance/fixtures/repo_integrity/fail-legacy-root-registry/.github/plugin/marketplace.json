@@ -1,0 +1,12 @@
+{
+  "metadata": {
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "fixture-plugin",
+      "version": "1.0.0",
+      "description": "2 domain skills and 2 custom agents for fixture validation."
+    }
+  ]
+}

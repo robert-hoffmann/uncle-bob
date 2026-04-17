@@ -50,39 +50,39 @@ The number of implementation sprints is PRD-driven.
 
 Repeat the implementation sprint entry shape below for Sprint 01 through Sprint NN-1 as needed, then keep the final audit as the last roadmap item.
 
-Do not run `init-sprints` until this roadmap is complete, reviewed, and the
-initiative `README.md` records `roadmap_ready: pass`.
+Do not run `prepare-sprints` or `init-sprints` until this roadmap is complete,
+reviewed, and the initiative `README.md` records `roadmap_ready: pass`.
 
 - [ ] Sprint 01 - Replace with sprint title
-   - Path: `./sprints/01-replace-me/sprint.md`
-   - Goal: Replace with sprint goal
-   - Depends on: `none`
-   - Validation focus: Replace with validation focus
-   - Subtasks:
-      - [ ] Replace with subtask
-      - [ ] Replace with subtask
-   - Evidence folder: `./sprints/01-replace-me/evidence/`
+  - Path: `./sprints/01-replace-me/sprint.md`
+  - Goal: Replace with sprint goal
+  - Depends on: `none`
+  - Validation focus: Replace with validation focus
+  - Subtasks:
+    - [ ] Replace with subtask
+    - [ ] Replace with subtask
+  - Evidence folder: `./sprints/01-replace-me/evidence/`
 
 - [ ] Sprint 02 through Sprint NN-1 - Repeat this entry shape as many times as the PRD requires
-   - Path: `./sprints/NN-replace-me/sprint.md`
-   - Goal: Replace with sprint goal
-   - Depends on: `Sprint NN-1 - Replace with prior sprint title` or `none` when parallel work is explicitly allowed
-   - Validation focus: Replace with validation focus
-   - Subtasks:
-      - [ ] Replace with subtask
-      - [ ] Replace with subtask
-   - Evidence folder: `./sprints/NN-replace-me/evidence/`
+  - Path: `./sprints/NN-replace-me/sprint.md`
+  - Goal: Replace with sprint goal
+  - Depends on: `Sprint NN-1 - Replace with prior sprint title` or `none` when parallel work is explicitly allowed
+  - Validation focus: Replace with validation focus
+  - Subtasks:
+    - [ ] Replace with subtask
+    - [ ] Replace with subtask
+  - Evidence folder: `./sprints/NN-replace-me/evidence/`
 
 - [ ] Final Audit - Replace with audit title
-   - Path: `./sprints/NN-final-audit/sprint.md`
-   - Goal: verify full implementation completeness, synchronization, and follow-up needs
-   - Depends on: `all prior implementation sprints`
-   - Validation focus: completeness review, documentation synchronization, final quality gates, and follow-up audit/refactor review
-   - Subtasks:
-      - [ ] Confirm no material roadmap scope was missed
-      - [ ] Confirm documentation and synchronized artifacts are current where applicable
-      - [ ] Ask whether follow-up audits or refactors are wanted and record the answer
-   - Evidence folder: `./sprints/NN-final-audit/evidence/`
+  - Path: `./sprints/NN-final-audit/sprint.md`
+  - Goal: verify full implementation completeness, synchronization, and follow-up needs
+  - Depends on: `all prior implementation sprints`
+  - Validation focus: completeness review, documentation synchronization, final quality gates, and follow-up audit/refactor review
+  - Subtasks:
+    - [ ] Confirm no material roadmap scope was missed
+    - [ ] Confirm documentation and synchronized artifacts are current where applicable
+    - [ ] Ask whether follow-up audits or refactors are wanted and record the answer
+  - Evidence folder: `./sprints/NN-final-audit/evidence/`
 
 ## Dependency Chain
 

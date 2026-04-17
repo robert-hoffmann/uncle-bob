@@ -5,7 +5,8 @@ from __future__ import annotations
 
 import argparse
 from collections.abc import Mapping, Sequence
-from datetime import date
+from dataclasses import dataclass
+from datetime import datetime, timezone
 from pathlib import Path
 import re
 import shutil
@@ -23,16 +24,215 @@ TEXT_FILE_SUFFIXES = {
     ".yml",
     ".json",
 }
-KNOWN_COMMANDS           = {"create", "init-sprints", "archive"}
+KNOWN_COMMANDS           = {"create", "prepare-sprints", "init-sprints", "archive"}
 ACTIVE_INITIATIVE_HEADING = "## Active Initiative Roots"
 OPERATIONS_INDEX_FILES   = {"AGENTS.md", "README.md", "operation-guide.md", "user-guide.md"}
-SPRINT_PATH_PATTERN      = re.compile(r"^\s*-\s+Path:\s+`?(.+?sprint\.md)`?\s*$")
-SPRINT_ENTRY_PATTERN     = re.compile(r"^\s*-\s+\[[ xX]\]\s+(.+?)\s*$")
+SPRINT_ENTRY_PATTERN     = re.compile(r"^-\s+\[[ xX]\]\s+(.+?)\s*$")
+SPRINT_SUBTASK_PATTERN   = re.compile(r"^\s+-\s+\[[ xX]\]\s+(.+?)\s*$")
+SPRINT_PATH_PATTERN      = re.compile(r"^\s+-\s+Path:\s+`?(.+?sprint\.md)`?\s*$")
+SPRINT_GOAL_PATTERN      = re.compile(r"^\s+-\s+Goal:\s+(.+?)\s*$")
+SPRINT_DEPENDS_PATTERN   = re.compile(r"^\s+-\s+Depends on:\s+(.+?)\s*$")
+SPRINT_VALIDATION_PATTERN = re.compile(r"^\s+-\s+Validation focus:\s+(.+?)\s*$")
+SPRINT_EVIDENCE_PATTERN  = re.compile(r"^\s+-\s+Evidence folder:\s+`?(.+?)`?\s*$")
+PENDING_HANDOFF_PREFIX   = "PENDING_HANDOFF:"
 
 # endregion Constants
 
 
+@dataclass(frozen=True)
+class RoadmapSprintEntry:
+    """Structured sprint metadata extracted from roadmap.md."""
+
+    title: str
+    sprint_root: Path
+    sprint_file: Path
+    goal: str
+    depends_on: str
+    validation_focus: str
+    evidence_folder: str
+    subtasks: tuple[str, ...]
+
+
+@dataclass(frozen=True)
+class PlaceholderFinding:
+    """One unresolved generated-artifact placeholder finding."""
+
+    initiative_root: Path
+    file_path: Path
+    line_number: int
+    category: str
+    severity: str
+    marker: str
+    line_text: str
+
+
 # region Path And Text Helpers
+
+MACHINE_PLACEHOLDER_PATTERN = re.compile(r"\bREPLACE_[A-Z0-9_]+\b")
+HUMAN_PLACEHOLDER_PATTERN = re.compile(r"Replace with\b")
+HUMAN_PLACEHOLDER_PROMPT_PATTERN = re.compile(r"^\s*(?:[-*+]\s+|\d+\.\s+)?(?:\[[ xX]\]\s+)?Replace with\b")
+CODE_FENCE_PATTERN = re.compile(r"^\s*(```|~~~)")
+
+
+def generated_artifact_role(initiative_root: Path, path: Path) -> str | None:
+    """Classify one generated initiative artifact path."""
+
+    try:
+        relative = path.resolve().relative_to(initiative_root.resolve())
+    except ValueError:
+        return None
+
+    if relative == Path("README.md"):
+        return "readme"
+    if relative == Path("roadmap.md"):
+        return "roadmap"
+    if relative == Path("prd.md"):
+        return "prd"
+    if relative == Path("retained-note.md"):
+        return "retained-note"
+    if len(relative.parts) == 3 and relative.parts[0] == "sprints" and relative.parts[2] == "sprint.md":
+        return "sprint"
+    if len(relative.parts) == 3 and relative.parts[0] == "sprints" and relative.parts[2] == "closeout.md":
+        return "closeout"
+    return None
+
+
+def generated_artifact_paths(initiative_root: Path) -> list[Path]:
+    """Return the generated initiative artifacts covered by placeholder checks."""
+
+    candidates = [
+        initiative_root / "README.md",
+        initiative_root / "roadmap.md",
+        initiative_root / "prd.md",
+        initiative_root / "retained-note.md",
+    ]
+    sprints_root = initiative_root / "sprints"
+    if sprints_root.exists():
+        for sprint_root in sorted(path for path in sprints_root.iterdir() if path.is_dir()):
+            candidates.append(sprint_root / "sprint.md")
+            candidates.append(sprint_root / "closeout.md")
+    return [path for path in candidates if path.exists() and path.is_file()]
+
+
+def human_placeholder_is_required(initiative_root: Path, path: Path) -> bool:
+    """Return True when a plain-language placeholder blocks this generated artifact."""
+
+    return generated_artifact_role(initiative_root, path) in {"roadmap", "sprint"}
+
+
+def required_placeholder_markers(text: str, path: Path, initiative_root: Path) -> tuple[str, ...]:
+    """Return required placeholder markers for one generated artifact."""
+
+    markers = list(dict.fromkeys(MACHINE_PLACEHOLDER_PATTERN.findall(text)))
+    if human_placeholder_is_required(initiative_root, path) and HUMAN_PLACEHOLDER_PATTERN.search(text):
+        markers.append("Replace with")
+    return tuple(markers)
+
+
+def collect_placeholder_findings(initiative_root: Path) -> list[PlaceholderFinding]:
+    """Collect required and advisory placeholder findings for one initiative root."""
+
+    findings: list[PlaceholderFinding] = []
+    for path in generated_artifact_paths(initiative_root):
+        text = path.read_text(encoding="utf-8")
+        is_required_human_prompt = human_placeholder_is_required(initiative_root, path)
+        in_code_fence = False
+        for line_number, line in enumerate(text.splitlines(), start=1):
+            if CODE_FENCE_PATTERN.match(line):
+                in_code_fence = not in_code_fence
+                continue
+            if in_code_fence:
+                continue
+            findings.extend(
+                PlaceholderFinding(
+                    initiative_root=initiative_root,
+                    file_path=path,
+                    line_number=line_number,
+                    category="machine-token",
+                    severity="required",
+                    marker=marker,
+                    line_text=line.strip(),
+                )
+                for marker in MACHINE_PLACEHOLDER_PATTERN.findall(line)
+            )
+            if HUMAN_PLACEHOLDER_PROMPT_PATTERN.search(line):
+                findings.append(
+                    PlaceholderFinding(
+                        initiative_root=initiative_root,
+                        file_path=path,
+                        line_number=line_number,
+                        category="human-prompt",
+                        severity=("required" if is_required_human_prompt else "advisory"),
+                        marker="Replace with",
+                        line_text=line.strip(),
+                    )
+                )
+            if PENDING_HANDOFF_PREFIX in line:
+                findings.append(
+                    PlaceholderFinding(
+                        initiative_root=initiative_root,
+                        file_path=path,
+                        line_number=line_number,
+                        category="pending-handoff",
+                        severity="advisory",
+                        marker=PENDING_HANDOFF_PREFIX,
+                        line_text=line.strip(),
+                    )
+                )
+    return findings
+
+
+def format_placeholder_summary(initiative_root: Path, findings: Sequence[PlaceholderFinding]) -> str:
+    """Return a deterministic text summary for generated-output placeholder findings."""
+
+    required_count = sum(1 for finding in findings if finding.severity == "required")
+    advisory_count = len(findings) - required_count
+    if not findings:
+        return f"placeholder summary: no unresolved generated-artifact placeholders under {initiative_root.as_posix()}"
+
+    lines = [
+        (
+            "placeholder summary: "
+            f"{required_count} required, {advisory_count} advisory finding(s) under {initiative_root.as_posix()}"
+        )
+    ]
+    for finding in findings:
+        relative = finding.file_path.resolve().relative_to(initiative_root.resolve()).as_posix()
+        lines.append(
+            f"- {finding.severity} {finding.category}: {relative}:{finding.line_number} -> {finding.marker}"
+        )
+    return "\n".join(lines)
+
+
+def report_generated_placeholder_state(initiative_root: Path, *, strict: bool) -> None:
+    """Print generated-output placeholder findings and optionally fail on required ones."""
+
+    findings = collect_placeholder_findings(initiative_root)
+    summary = format_placeholder_summary(initiative_root, findings)
+    print(summary)
+    if strict and any(finding.severity == "required" for finding in findings):
+        raise ValueError(
+            "Generated initiative output still contains required unresolved placeholders:\n"
+            f"{summary}"
+        )
+
+
+def discover_initiative_roots_for_placeholder_scan(scan_root: Path) -> list[Path]:
+    """Resolve one or more generated initiative roots from a scan target."""
+
+    resolved = scan_root.resolve()
+    if (resolved / "README.md").exists() and (resolved / "roadmap.md").exists():
+        return [resolved]
+    if resolved.name == "initiatives" and resolved.is_dir():
+        return sorted(path for path in resolved.iterdir() if path.is_dir())
+    if resolved.name == ".ub-workflows" and (resolved / "initiatives").is_dir():
+        return discover_initiative_roots_for_placeholder_scan(resolved / "initiatives")
+    if (resolved / ".ub-workflows" / "initiatives").is_dir():
+        return discover_initiative_roots_for_placeholder_scan(resolved / ".ub-workflows" / "initiatives")
+    raise ValueError(
+        "Placeholder scan target must be an initiative root, an initiatives directory, "
+        "a .ub-workflows root, or a repository root containing ./.ub-workflows/initiatives/."
+    )
 
 def derive_initiative_name(target_root: Path) -> str:
     """Derive a readable initiative name from a dated or plain directory name."""
@@ -78,6 +278,15 @@ def slug_source_name(source_path: Path) -> str:
     return source_path.stem
 
 
+def strip_wrapping_backticks(value: str) -> str:
+    """Return a field value without surrounding Markdown code ticks."""
+
+    stripped = value.strip()
+    if stripped.startswith("`") and stripped.endswith("`") and len(stripped) >= 2:
+        return stripped[1:-1].strip()
+    return stripped
+
+
 def replace_markdown_section(text: str, heading: str, body: str) -> str:
     """Replace or append a Markdown section body under a heading."""
 
@@ -89,7 +298,7 @@ def replace_markdown_section(text: str, heading: str, body: str) -> str:
 
 
 def update_markdown_table_value(text: str, field: str, value: str) -> str:
-    """Update a single Markdown table row by field name."""
+    """Update a single Markdown table or bullet-list status row by field name."""
 
     lines = text.splitlines()
     updated_lines: list[str] = []
@@ -98,17 +307,24 @@ def update_markdown_table_value(text: str, field: str, value: str) -> str:
         if match and match.group(1).strip() == field:
             updated_lines.append(f"| {field:<21} | {value} |")
             continue
+        bullet_match = re.match(r"^-\s+(.+?):\s+(.+?)\s*$", line)
+        if bullet_match and bullet_match.group(1).strip() == field:
+            updated_lines.append(f"- {field}: {value}")
+            continue
         updated_lines.append(line)
     return "\n".join(updated_lines) + ("\n" if text.endswith("\n") else "")
 
 
 def read_markdown_table_value(text: str, field: str) -> str | None:
-    """Return a Markdown table value by field name when present."""
+    """Return a Markdown table or bullet-list value by field name when present."""
 
     for line in text.splitlines():
         match = re.match(r"^\|\s*(.+?)\s*\|\s*(.+?)\s*\|$", line)
         if match and match.group(1).strip() == field:
             return match.group(2).strip()
+        bullet_match = re.match(r"^-\s+(.+?):\s+(.+?)\s*$", line)
+        if bullet_match and bullet_match.group(1).strip() == field:
+            return bullet_match.group(2).strip()
     return None
 
 
@@ -130,6 +346,43 @@ def render_placeholders(root: Path, replacements: Mapping[str, str]) -> None:
             updated = updated.replace(placeholder, value)
         if updated != text:
             path.write_text(updated, encoding="utf-8")
+
+
+def render_text_placeholders(text: str, replacements: Mapping[str, str]) -> str:
+    """Render a placeholder map against an in-memory template string."""
+
+    updated = text
+    for placeholder, value in replacements.items():
+        updated = updated.replace(placeholder, value)
+    return updated
+
+
+def find_blocking_placeholders(text: str) -> tuple[str, ...]:
+    """Return placeholder markers that still block execution readiness."""
+
+    markers: list[str] = []
+    markers.extend(dict.fromkeys(MACHINE_PLACEHOLDER_PATTERN.findall(text)))
+    if HUMAN_PLACEHOLDER_PATTERN.search(text):
+        markers.append("Replace with")
+    return tuple(markers)
+
+
+def find_pending_handoff_markers(text: str) -> tuple[str, ...]:
+    """Return allowed pending handoff markers from generated sprint text."""
+
+    return tuple(
+        line.strip()
+        for line in text.splitlines()
+        if PENDING_HANDOFF_PREFIX in line
+    )
+
+
+def sprint_document_has_blocking_placeholders(path: Path) -> bool:
+    """Return True when a sprint document still contains blocking placeholders."""
+
+    initiative_root = path.parents[2]
+    text = path.read_text(encoding="utf-8")
+    return bool(required_placeholder_markers(text, path, initiative_root))
 
 # endregion Path And Text Helpers
 
@@ -254,7 +507,7 @@ def build_initiative_placeholder_map(
         "The source PRD was copied into `./prd.md` as-is. Review or refine it until `prd_ready: pass`, then generate a durable `roadmap.md` before any sprint directories are initialized."
         if has_prd_source and not args.prd_imported
         else (
-            "The master PRD is imported and ready for roadmap planning. Generate the full ordered roadmap next, review it, and set `roadmap_ready: pass` before running `init-sprints`."
+            "The master PRD is imported and ready for roadmap planning. Generate the full ordered roadmap next, review it, and set `roadmap_ready: pass` before running `prepare-sprints` or `init-sprints`."
             if args.prd_imported
             else "This initiative has been scaffolded but `./prd.md` still needs the real master PRD before roadmap generation can begin."
         )
@@ -263,7 +516,7 @@ def build_initiative_placeholder_map(
         "Review or refine `./prd.md`, then generate `roadmap.md`. Do not initialize sprint directories until `roadmap_ready: pass`."
         if has_prd_source and not args.prd_imported
         else (
-            "Generate `roadmap.md` from `./prd.md`, review it, and set `roadmap_ready: pass` before initializing any sprint directories under `./sprints/`."
+            "Generate `roadmap.md` from `./prd.md`, review it, and set `roadmap_ready: pass` before preparing or initializing any sprint artifacts under `./sprints/`."
             if args.prd_imported
             else "Import the master PRD into `./prd.md`, then generate and approve `roadmap.md` before initializing any sprint directories under `./sprints/`."
         )
@@ -349,6 +602,7 @@ def command_create(args: argparse.Namespace) -> int:
     sync_ops_root_readme(ops_root, operations_template_root)
 
     print(f"scaffolded initiative at {target_root.as_posix()}")
+    report_generated_placeholder_state(target_root, strict=args.strict_placeholders)
     return 0
 
 # endregion Create Initiative
@@ -356,8 +610,8 @@ def command_create(args: argparse.Namespace) -> int:
 
 # region Initialize Sprints
 
-def roadmap_sprint_entries(roadmap_path: Path) -> list[tuple[str, Path]]:
-    """Extract sprint titles and folder paths from a roadmap document."""
+def roadmap_sprint_entries(roadmap_path: Path) -> list[RoadmapSprintEntry]:
+    """Extract structured sprint metadata from a roadmap document."""
 
     text = roadmap_path.read_text(encoding="utf-8")
     match = re.search(r"(?ms)^## Sprint Sequence\n\n(.*?)(?=^##\s|\Z)", text)
@@ -365,24 +619,129 @@ def roadmap_sprint_entries(roadmap_path: Path) -> list[tuple[str, Path]]:
         raise ValueError("roadmap.md is missing the Sprint Sequence section.")
 
     current_title: str | None = None
-    entries: list[tuple[str, Path]] = []
+    current_data: dict[str, object] = {}
+    in_subtasks = False
+    active_field: str | None = None
+    entries: list[RoadmapSprintEntry] = []
+
+    def finalize_current() -> None:
+        nonlocal current_title, current_data, in_subtasks, active_field
+        if current_title is None:
+            return
+
+        sprint_root = current_data.get("sprint_root")
+        if not isinstance(sprint_root, Path):
+            raise ValueError(f"Roadmap sprint entry is missing a valid path: {current_title}")
+
+        goal = str(current_data.get("goal", "No explicit roadmap goal recorded.")).strip()
+        depends_on = str(current_data.get("depends_on", "`none`")).strip()
+        validation_focus = str(
+            current_data.get("validation_focus", "No explicit validation focus recorded.")
+        ).strip()
+        evidence_folder = str(
+            current_data.get("evidence_folder", f"./{(sprint_root / 'evidence').as_posix()}")
+        ).strip()
+        subtasks = tuple(current_data.get("subtasks", []))
+        if not subtasks:
+            subtasks = ("No subtasks were listed in roadmap.md.",)
+
+        entries.append(
+            RoadmapSprintEntry(
+                title=current_title,
+                sprint_root=sprint_root,
+                sprint_file=sprint_root / "sprint.md",
+                goal=strip_wrapping_backticks(goal),
+                depends_on=strip_wrapping_backticks(depends_on),
+                validation_focus=strip_wrapping_backticks(validation_focus),
+                evidence_folder=strip_wrapping_backticks(evidence_folder),
+                subtasks=tuple(strip_wrapping_backticks(item) for item in subtasks),
+            )
+        )
+        current_title = None
+        current_data = {}
+        in_subtasks = False
+        active_field = None
+
     for line in match.group(1).splitlines():
         title_match = SPRINT_ENTRY_PATTERN.match(line)
         if title_match:
+            finalize_current()
             current_title = title_match.group(1).strip()
+            current_data = {"subtasks": []}
+            in_subtasks = False
+            active_field = None
+            continue
+
+        if current_title is None:
+            continue
+
+        stripped = line.strip()
+        if not stripped:
             continue
 
         path_match = SPRINT_PATH_PATTERN.match(line)
-        if not path_match or current_title is None:
+        if path_match:
+            raw_path = strip_wrapping_backticks(path_match.group(1))
+            relative = raw_path.removeprefix("./")
+            sprint_file = Path(relative)
+            if sprint_file.name == "sprint.md" and sprint_file.parts and sprint_file.parts[0] == "sprints":
+                current_data["sprint_root"] = Path(*sprint_file.parts[:-1])
+            in_subtasks = False
+            active_field = None
             continue
 
-        raw_path = path_match.group(1).strip().strip("`")
-        relative = raw_path[2:] if raw_path.startswith("./") else raw_path
-        sprint_file = Path(relative)
-        if sprint_file.name != "sprint.md" or not sprint_file.parts or sprint_file.parts[0] != "sprints":
+        goal_match = SPRINT_GOAL_PATTERN.match(line)
+        if goal_match:
+            current_data["goal"] = goal_match.group(1)
+            in_subtasks = False
+            active_field = "goal"
             continue
-        entries.append((current_title, Path(*sprint_file.parts[:-1])))
-        current_title = None
+
+        depends_match = SPRINT_DEPENDS_PATTERN.match(line)
+        if depends_match:
+            current_data["depends_on"] = depends_match.group(1)
+            in_subtasks = False
+            active_field = "depends_on"
+            continue
+
+        validation_match = SPRINT_VALIDATION_PATTERN.match(line)
+        if validation_match:
+            current_data["validation_focus"] = validation_match.group(1)
+            in_subtasks = False
+            active_field = "validation_focus"
+            continue
+
+        evidence_match = SPRINT_EVIDENCE_PATTERN.match(line)
+        if evidence_match:
+            current_data["evidence_folder"] = evidence_match.group(1)
+            in_subtasks = False
+            active_field = "evidence_folder"
+            continue
+
+        if stripped == "- Subtasks:":
+            in_subtasks = True
+            active_field = None
+            continue
+
+        if in_subtasks:
+            subtask_match = SPRINT_SUBTASK_PATTERN.match(line)
+            if subtask_match:
+                current_data.setdefault("subtasks", []).append(subtask_match.group(1).strip())
+                continue
+            subtasks = current_data.get("subtasks", [])
+            if isinstance(subtasks, list) and subtasks and not stripped.startswith("-"):
+                subtasks[-1] = f"{subtasks[-1]} {stripped}".strip()
+                continue
+            in_subtasks = False
+
+        if active_field is not None and not stripped.startswith("-"):
+            existing = str(current_data.get(active_field, "")).strip()
+            current_data[active_field] = f"{existing} {stripped}".strip()
+            continue
+
+        active_field = None
+
+    finalize_current()
 
     if not entries:
         raise ValueError(
@@ -415,13 +774,98 @@ def ensure_sprint_directory(template_root: Path, sprint_root: Path) -> str:
     )
 
 
-def refresh_initiative_readme_for_sprints(readme_path: Path, first_sprint_title: str, first_sprint_path: Path) -> None:
-    """Update the initiative README after the sprint set is initialized."""
+def format_checkbox_items(items: Sequence[str]) -> str:
+    """Return roadmap subtasks as Markdown checklist items."""
+
+    if not items:
+        return "- [ ] No roadmap subtasks were listed."
+    return "\n".join(f"- [ ] {item}" for item in items)
+
+
+def format_scope_items(entry: RoadmapSprintEntry) -> str:
+    """Return numbered scope items derived from the roadmap goal and subtasks."""
+
+    lines = [f"1. Deliver the roadmap goal: {entry.goal}."]
+    for index, subtask in enumerate(entry.subtasks, start=2):
+        lines.append(f"{index}. Complete roadmap subtask: {subtask}.")
+    lines.append(f"{len(lines) + 1}. Record any sprint-specific exclusions or constraints before execution begins.")
+    return "\n".join(lines)
+
+
+def previous_handoff_note(entry: RoadmapSprintEntry) -> str:
+    """Return the generated previous-sprint handoff note for a sprint."""
+
+    if entry.depends_on.lower() == "none":
+        return "No prior sprint closeout is required before this sprint begins."
+    return (
+        f"{PENDING_HANDOFF_PREFIX} Review `{entry.depends_on}` closeout and carry forward any blockers, "
+        "validation changes, or repository-truth updates before execution begins."
+    )
+
+
+def next_handoff_note(next_entry: RoadmapSprintEntry | None) -> str:
+    """Return the generated next-sprint handoff note for a sprint."""
+
+    if next_entry is None:
+        return (
+            "No next implementation sprint is planned after this one. Replace this line with final-audit "
+            "or archive-readiness carry-forward notes when this sprint closes."
+        )
+    return (
+        f"Roadmap next sprint: `{next_entry.title}` at `./{next_entry.sprint_file.as_posix()}`. "
+        "Replace this line with concrete carry-forward notes when this sprint closes."
+    )
+
+
+def build_prepare_sprint_placeholder_map(
+    entry: RoadmapSprintEntry,
+    next_entry: RoadmapSprintEntry | None,
+) -> dict[str, str]:
+    """Build the machine-derived placeholder map for one sprint PRD."""
+
+    return {
+        "REPLACE_SPRINT_TITLE": entry.title,
+        "REPLACE_SPRINT_GOAL": entry.goal,
+        "REPLACE_SPRINT_DEPENDS_ON": entry.depends_on,
+        "REPLACE_SPRINT_VALIDATION_FOCUS": entry.validation_focus,
+        "REPLACE_SPRINT_EVIDENCE_FOLDER": entry.evidence_folder,
+        "REPLACE_SPRINT_SUBTASKS": format_checkbox_items(entry.subtasks),
+        "REPLACE_SPRINT_SCOPE_ITEMS": format_scope_items(entry),
+        "REPLACE_PREVIOUS_HANDOFF_NOTE": previous_handoff_note(entry),
+        "REPLACE_NEXT_HANDOFF_NOTE": next_handoff_note(next_entry),
+    }
+
+
+def render_prepared_sprint(
+    template_path: Path,
+    entry: RoadmapSprintEntry,
+    next_entry: RoadmapSprintEntry | None,
+) -> str:
+    """Render one prepared sprint PRD from the template and roadmap entry."""
+
+    template_text = template_path.read_text(encoding="utf-8")
+    return render_text_placeholders(
+        template_text,
+        build_prepare_sprint_placeholder_map(entry, next_entry),
+    )
+
+
+def refresh_initiative_readme_for_sprints(
+    readme_path: Path,
+    first_sprint_title: str,
+    first_sprint_path: Path,
+    *,
+    phase: str,
+    gate: str,
+    validation_baseline: str,
+    documentation_status: str,
+) -> None:
+    """Update the initiative README after sprint preparation or initialization."""
 
     text = readme_path.read_text(encoding="utf-8")
     updates = {
-        "Current phase"        : "Roadmap approved, sprint initialization complete",
-        "Current gate"         : "`roadmap_ready: pass`",
+        "Current phase"        : phase,
+        "Current gate"         : gate,
         "Roadmap status"       : "`generated`",
         "Next step"            : (
             f"Start {first_sprint_title} by opening `{normalize_path(first_sprint_path)}` and creating the first evidence and closeout entries as execution begins"
@@ -435,7 +879,7 @@ def refresh_initiative_readme_for_sprints(readme_path: Path, first_sprint_title:
     text = replace_markdown_section(
         text,
         "## Validation Pointers",
-        "- Validation baseline: The master PRD, full ordered roadmap, and all planned sprint folders are now in place.\n- Documentation sync status: No sprint-specific documentation updates are required yet because execution has not started.\n- Exception records: `none`",
+        f"- Validation baseline: {validation_baseline}\n- Documentation sync status: {documentation_status}\n- Exception records: `none`",
     )
     readme_path.write_text(text, encoding="utf-8")
 
@@ -477,11 +921,69 @@ def validate_roadmap_ready(initiative_root: Path, roadmap_path: Path) -> list[st
     readme_text = readme_path.read_text(encoding="utf-8")
     current_gate = read_markdown_table_value(readme_text, "Current gate")
     normalized_gate = current_gate.strip("`") if current_gate else None
-    if normalized_gate != "roadmap_ready: pass":
-        errors.append("README.md must record `roadmap_ready: pass` before sprint initialization can start.")
+    if normalized_gate != "roadmap_ready: pass" and not roadmap_approval_recorded(roadmap_path):
+        errors.append(
+            "README.md or roadmap.md must preserve evidence that `roadmap_ready: pass` was approved before sprint preparation or initialization can start."
+        )
     if unresolved_placeholder_found(roadmap_path):
         errors.append("roadmap.md still contains unresolved scaffold placeholders.")
     return errors
+
+
+def resolve_resume_target(initiative_root: Path, roadmap_path: Path) -> Path | None:
+    """Resolve the active or next sprint path from roadmap.md when available."""
+
+    roadmap_text = roadmap_path.read_text(encoding="utf-8")
+    resume_from = read_markdown_table_value(roadmap_text, "Resume from")
+    if not resume_from:
+        return None
+    normalized = strip_wrapping_backticks(resume_from)
+    if normalized in {"none", "review or generate roadmap from ./prd.md"}:
+        return None
+    relative = normalized.removeprefix("./")
+    return initiative_root / Path(relative)
+
+
+def previous_closeout_for_sprint(initiative_root: Path, sprint_path: Path) -> Path | None:
+    """Return the previous sprint closeout path for a given sprint when one exists."""
+
+    roadmap_path = initiative_root / "roadmap.md"
+    entries = roadmap_sprint_entries(roadmap_path)
+    try:
+        relative = sprint_path.resolve().relative_to(initiative_root.resolve())
+    except ValueError:
+        relative = sprint_path
+    for index, entry in enumerate(entries):
+        if entry.sprint_file == relative:
+            if index == 0:
+                return None
+            previous = initiative_root / entries[index - 1].sprint_root / "closeout.md"
+            return previous if previous.exists() else None
+    return None
+
+
+def resolve_resume_file_order(initiative_root: Path, sprint_path: Path | None = None) -> list[Path]:
+    """Return the minimal file order needed to resume an initiative safely."""
+
+    roadmap_path = initiative_root / "roadmap.md"
+    readme_path = initiative_root / "README.md"
+    prd_path = initiative_root / "prd.md"
+    target_sprint = sprint_path or resolve_resume_target(initiative_root, roadmap_path)
+
+    ordered: list[Path] = [roadmap_path]
+    if target_sprint is not None:
+        previous_closeout = previous_closeout_for_sprint(initiative_root, target_sprint)
+        if previous_closeout is not None:
+            ordered.append(previous_closeout)
+        if target_sprint.exists():
+            ordered.append(target_sprint)
+    ordered.append(readme_path)
+    if (
+        prd_path.exists()
+        and (target_sprint is None or not target_sprint.exists() or sprint_document_has_blocking_placeholders(target_sprint))
+    ):
+        ordered.append(prd_path)
+    return ordered
 
 
 def command_init_sprints(args: argparse.Namespace) -> int:
@@ -506,24 +1008,116 @@ def command_init_sprints(args: argparse.Namespace) -> int:
         return 0
 
     created = 0
-    first_title, first_relative = entries[0]
-    for _, sprint_relative in entries:
-        status = ensure_sprint_directory(sprint_template_root, initiative_root / sprint_relative)
+    first_entry = entries[0]
+    for entry in entries:
+        status = ensure_sprint_directory(sprint_template_root, initiative_root / entry.sprint_root)
         if status == "created":
             created += 1
 
+    readme_text = (initiative_root / "README.md").read_text(encoding="utf-8")
+    current_gate = read_markdown_table_value(readme_text, "Current gate")
+    normalized_gate = current_gate.strip("`") if current_gate else ""
+    phase = "Roadmap approved, sprint initialization complete"
+    gate = "`roadmap_ready: pass`"
+    validation_baseline = "The master PRD, full ordered roadmap, and all planned sprint folders are now in place."
+    documentation_status = "No sprint-specific documentation updates are required yet because execution has not started."
+    if normalized_gate == "sprint_content_ready: pass":
+        phase = "Sprint set initialized, sprint pack ready for execution review"
+        gate = "`sprint_content_ready: pass`"
+        validation_baseline = "The sprint pack is prepared and all planned sprint folders are now in place."
+        documentation_status = "Sprint PRDs are prepared and execution has not started yet."
+
     refresh_initiative_readme_for_sprints(
         initiative_root / "README.md",
-        first_title,
-        initiative_root / first_relative / "sprint.md",
+        first_entry.title,
+        initiative_root / first_entry.sprint_file,
+        phase=phase,
+        gate=gate,
+        validation_baseline=validation_baseline,
+        documentation_status=documentation_status,
     )
     refresh_roadmap_after_sprint_init(
         roadmap_path,
-        first_title,
-        initiative_root / first_relative / "sprint.md",
+        first_entry.title,
+        initiative_root / first_entry.sprint_file,
     )
 
     print(f"initialized {len(entries)} sprint directories ({created} newly created)")
+    report_generated_placeholder_state(initiative_root, strict=args.strict_placeholders)
+    return 0
+
+
+def command_prepare_sprints(args: argparse.Namespace) -> int:
+    """Prepare sprint PRDs from roadmap metadata before execution begins."""
+
+    initiative_root = Path(args.initiative_root).resolve()
+    roadmap_path = initiative_root / "roadmap.md"
+    sprint_template_root = initiative_root / "sprint-template"
+    sprint_template_path = sprint_template_root / "sprint.md"
+    if not roadmap_path.exists():
+        raise ValueError(f"Initiative roadmap does not exist: {roadmap_path.as_posix()}")
+    if not sprint_template_path.exists():
+        raise ValueError(f"Sprint template does not exist: {sprint_template_path.as_posix()}")
+
+    readiness_errors = validate_roadmap_ready(initiative_root, roadmap_path)
+    if readiness_errors:
+        message = "Sprint preparation blocked because the roadmap is not ready:\n- " + "\n- ".join(readiness_errors)
+        raise ValueError(message)
+
+    entries = roadmap_sprint_entries(roadmap_path)
+    if args.dry_run:
+        print(f"dry-run: {len(entries)} sprint PRDs would be prepared under {initiative_root.as_posix()}")
+        for entry in entries:
+            print(
+                "dry-run: "
+                f"{entry.title} | goal={entry.goal} | depends_on={entry.depends_on} | "
+                f"validation_focus={entry.validation_focus} | subtasks={len(entry.subtasks)} | "
+                f"evidence={entry.evidence_folder}"
+            )
+        return 0
+
+    created = 0
+    rendered = 0
+    preserved = 0
+    first_entry = entries[0]
+    for index, entry in enumerate(entries):
+        sprint_root = initiative_root / entry.sprint_root
+        status = ensure_sprint_directory(sprint_template_root, sprint_root)
+        if status == "created":
+            created += 1
+
+        sprint_path = initiative_root / entry.sprint_file
+        if sprint_path.exists() and not sprint_document_has_blocking_placeholders(sprint_path):
+            preserved += 1
+            continue
+
+        next_entry = entries[index + 1] if index + 1 < len(entries) else None
+        sprint_path.write_text(
+            render_prepared_sprint(sprint_template_path, entry, next_entry),
+            encoding="utf-8",
+        )
+        rendered += 1
+
+    refresh_initiative_readme_for_sprints(
+        initiative_root / "README.md",
+        first_entry.title,
+        initiative_root / first_entry.sprint_file,
+        phase="Sprint pack prepared, awaiting Sprint 01 execution",
+        gate="`sprint_content_ready: pass`",
+        validation_baseline="The sprint pack now contains roadmap-derived sprint PRDs with explicit handoff markers and machine-derived context.",
+        documentation_status="Sprint PRDs are prepared for review before execution. Helper and template semantics should be validated before relying on them for new initiatives.",
+    )
+    refresh_roadmap_after_sprint_init(
+        roadmap_path,
+        first_entry.title,
+        initiative_root / first_entry.sprint_file,
+    )
+
+    print(
+        f"prepared {len(entries)} sprint PRDs "
+        f"({created} directories created, {rendered} rendered, {preserved} preserved)"
+    )
+    report_generated_placeholder_state(initiative_root, strict=args.strict_placeholders)
     return 0
 
 # endregion Initialize Sprints
@@ -535,7 +1129,8 @@ def unresolved_placeholder_found(path: Path) -> bool:
     """Return True when a control file still contains obvious scaffold placeholders."""
 
     text = path.read_text(encoding="utf-8")
-    return "REPLACE_" in text or "Replace with" in text
+    initiative_root = path.parent if path.name in {"README.md", "roadmap.md", "prd.md", "retained-note.md"} else path.parents[2]
+    return bool(required_placeholder_markers(text, path, initiative_root))
 
 
 def overall_checklist_is_complete(roadmap_path: Path) -> bool:
@@ -546,6 +1141,13 @@ def overall_checklist_is_complete(roadmap_path: Path) -> bool:
     if not match:
         return False
     return "- [ ]" not in match.group(1)
+
+
+def roadmap_approval_recorded(roadmap_path: Path) -> bool:
+    """Return True when roadmap approval is visibly recorded in roadmap.md."""
+
+    text = roadmap_path.read_text(encoding="utf-8")
+    return "- [x] Roadmap reviewed and approved with `roadmap_ready: pass`" in text
 
 
 def validate_archive_readiness(initiative_root: Path) -> list[str]:
@@ -563,6 +1165,14 @@ def validate_archive_readiness(initiative_root: Path) -> list[str]:
         errors.append("retained-note.md is missing.")
     if errors:
         return errors
+
+    readme_text = readme_path.read_text(encoding="utf-8")
+    current_gate = read_markdown_table_value(readme_text, "Current gate")
+    normalized_gate = current_gate.strip("`") if current_gate else None
+    if normalized_gate not in {"archive_ready: pass", "initiative_complete: pass"}:
+        errors.append(
+            "README.md must record `archive_ready: pass` or `initiative_complete: pass` before archive can start."
+        )
 
     if not overall_checklist_is_complete(roadmap_path):
         errors.append("roadmap.md still has unchecked items in the Overall Checklist section.")
@@ -638,7 +1248,11 @@ def build_parser() -> argparse.ArgumentParser:
     )
     create_parser.add_argument("--initiative-name", help="Display name written into the scaffold")
     create_parser.add_argument("--owner", help="Initiative owner")
-    create_parser.add_argument("--date", default=date.today().isoformat(), help="Date stamp used in generated paths and README state")
+    create_parser.add_argument(
+        "--date",
+        default=datetime.now(timezone.utc).date().isoformat(),
+        help="Date stamp used in generated paths and README state",
+    )
     create_parser.add_argument("--phase", help="Initial initiative phase")
     create_parser.add_argument(
         "--gate-state",
@@ -656,10 +1270,32 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Mark the PRD as already execution-ready after copy/import",
     )
+    create_parser.add_argument(
+        "--strict-placeholders",
+        action="store_true",
+        help="Fail after create when generated output still has required unresolved placeholders",
+    )
     create_parser.add_argument("--dry-run", action="store_true", help="Report the resolved create operation without writing files")
+
+    prepare_parser = subparsers.add_parser(
+        "prepare-sprints",
+        help="Prepare sprint PRDs from roadmap metadata before execution begins",
+    )
+    prepare_parser.add_argument("initiative_root", help="Initiative root containing roadmap.md and sprint-template/")
+    prepare_parser.add_argument(
+        "--strict-placeholders",
+        action="store_true",
+        help="Fail after sprint preparation when generated output still has required unresolved placeholders",
+    )
+    prepare_parser.add_argument("--dry-run", action="store_true", help="Report sprint preparation without writing files")
 
     init_parser = subparsers.add_parser("init-sprints", help="Initialize sprint directories from roadmap paths")
     init_parser.add_argument("initiative_root", help="Initiative root containing roadmap.md and sprint-template/")
+    init_parser.add_argument(
+        "--strict-placeholders",
+        action="store_true",
+        help="Fail after sprint initialization when generated output still has required unresolved placeholders",
+    )
     init_parser.add_argument("--dry-run", action="store_true", help="Report sprint initialization without writing files")
 
     archive_parser = subparsers.add_parser("archive", help="Archive a completed initiative root")
@@ -697,6 +1333,8 @@ def main(argv: Sequence[str] | None = None) -> int:
     try:
         if args.command == "create":
             return command_create(args)
+        if args.command == "prepare-sprints":
+            return command_prepare_sprints(args)
         if args.command == "init-sprints":
             return command_init_sprints(args)
         if args.command == "archive":

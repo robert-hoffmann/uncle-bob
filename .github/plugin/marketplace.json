@@ -12,7 +12,7 @@
   "plugins": [
     {
       "name": "uncle-bob",
-      "description": "10 domain skills (quality, governance, workflow, CSS, Tailwind, TypeScript, Python, Vue, Nuxt, customizations) and 5 agents (explore, governance, teacher, customizations, workflow) built by a 27-year full-stack veteran.",
+      "description": "10 domain skills (quality, governance, workflow, CSS, Tailwind, TypeScript, Python, Vue, Nuxt, customizations) and 4 custom agents (governance, teacher, customizations, workflow) built by a 27-year full-stack veteran.",
       "version": "1.0.0",
       "author": {
         "name": "robert-hoffmann",

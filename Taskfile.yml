@@ -5,7 +5,15 @@ version: "3"
 vars:
   UV: uv run
   MARKDOWNLINT: npx --yes markdownlint-cli2
-  MARKDOWN_GLOB: '"**/*.md" "**/*.mdx"'
+  MARKDOWN_TARGETS: >-
+    AGENTS.md README.md "docs/**/*.md" ".github/agents/**/*.md"
+    ".agents/skills/*/SKILL.md" ".agents/skills/*/references/**/*.md"
+    ".agents/skills/*/assets/**/*.md" ".ub-workflows/**/*.md"
+  YAML_TARGETS: >-
+    Taskfile.yml .pre-commit-config.yaml .yamllint.yaml .github/workflows/*.yml
+    .agents/skills/*/agents/openai.yaml
+    .agents/skills/ub-governance/references/high-risk-paths.yaml
+    .agents/skills/ub-workflow/assets/initiative-template/exceptions/exception-template.yaml
 
 tasks:
   sync:
@@ -14,7 +22,7 @@ tasks:
 
   lint-md:
     desc: Run markdownlint-cli2 via npx
-    cmd: "{{.MARKDOWNLINT}} {{.MARKDOWN_GLOB}}"
+    cmd: "{{.MARKDOWNLINT}} {{.MARKDOWN_TARGETS}}"
 
   lint-py:
     desc: Run Ruff
@@ -22,41 +30,77 @@ tasks:
 
   lint-yaml:
     desc: Run yamllint in strict mode
-    cmd: "{{.UV}} yamllint --strict ."
+    cmd: "{{.UV}} yamllint --strict {{.YAML_TARGETS}}"
 
   lint:
     desc: Run all local lint checks
-    deps: [lint-md, lint-py, lint-yaml]
+    deps:
+      - lint-md
+      - lint-py
+      - lint-yaml
+
+  test-repo-catalog:
+    desc: Run repository catalog integrity check
+    cmd: "{{.UV}} python .agents/skills/ub-governance/scripts/check_repo_catalog.py"
+
+  test-package-metadata:
+    desc: Run package metadata integrity check
+    cmd: "{{.UV}} python
+      .agents/skills/ub-governance/scripts/check_package_metadata.py"
+
+  test-repo-paths:
+    desc: Run repository path and case integrity check
+    cmd: "{{.UV}} python .agents/skills/ub-governance/scripts/check_repo_paths.py"
+
+  test-skill-schema:
+    desc: Run skill frontmatter and local-reference integrity check
+    cmd: "{{.UV}} python .agents/skills/ub-governance/scripts/check_skill_schema.py"
+
+  test-governance-integrity:
+    desc: Run governance skill integrity checks
+    cmd: "{{.UV}} python
+      .agents/skills/ub-governance/scripts/check_skill_integrity.py"
 
   test-integrity:
-    desc: Run governance integrity checks
-    cmd: "{{.UV}} python .agents/skills/ub-governance/scripts/check_skill_integrity.py"
+    desc: Run repository integrity baseline checks
+    deps:
+      [
+        test-repo-catalog,
+        test-package-metadata,
+        test-repo-paths,
+        test-skill-schema,
+        test-governance-integrity,
+      ]
 
   test-governance:
     desc: Run governance script regression tests
     cmd: >
-      {{.UV}} python -m unittest discover
-      -s .agents/skills/ub-governance/tests/governance_scripts
-      -p 'test_*.py' -v
+      {{.UV}} python -m unittest discover -s tests/skills/ub-governance -p
+      'test_*.py' -v
 
   test-workflow:
     desc: Run workflow scaffold regression tests
     cmd: >
-      {{.UV}} python -m unittest discover
-      -s .agents/skills/ub-workflow/tests
-      -p 'test_*.py' -v
+      {{.UV}} python -m unittest discover -s tests/skills/ub-workflow -p
+      'test_*.py' -v
 
   test:
     desc: Run local test checks
-    deps: [test-integrity, test-governance, test-workflow]
+    deps:
+      - test-integrity
+      - test-governance
+      - test-workflow
 
   check:
     desc: Run lint + test (closest local CI parity)
-    deps: [lint, test]
+    deps:
+      - lint
+      - test
 
   ci:
     desc: Alias for check
-    deps: [check]
+    deps:
+      - check
 
   setup:
     desc: One-time project setup (install deps + enable pre-commit hooks)

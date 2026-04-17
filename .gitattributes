@@ -55,10 +55,12 @@
 
 # ── Build / tooling ───────────────────────────────────────────────────────────
 
-Taskfile.yml text eol=lf
-Dockerfile  text eol=lf
+Taskfile.yml  text eol=lf
+Dockerfile   text eol=lf
 *.dockerfile text eol=lf
-*.lock      text eol=lf -diff    # lockfiles: store as text, skip diffs
+
+# lockfiles: store as text, skip diffs
+*.lock       text eol=lf -diff
 
 # ── Git housekeeping ──────────────────────────────────────────────────────────
 
@@ -74,7 +76,9 @@ Dockerfile  text eol=lf
 *.jpeg  binary
 *.gif   binary
 *.ico   binary
-*.svg   text eol=lf   # SVG is XML — treat as text
+
+# SVG is XML — treat as text
+*.svg   text eol=lf
 *.webp  binary
 *.avif  binary
 

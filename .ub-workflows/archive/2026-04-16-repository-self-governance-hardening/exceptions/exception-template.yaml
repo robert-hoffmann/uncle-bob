@@ -1,0 +1,9 @@
+# Copy this file to a dated name such as YYYY-MM-DD-governance-exception.yaml
+# when a governed initiative needs a bounded exception record.
+
+governance_exception:
+  owner: "@team-or-person"
+  rationale: "Why the baseline policy cannot be applied right now"
+  created_at: "YYYY-MM-DD"
+  expires_at: "YYYY-MM-DD"
+  follow_up: "https://tracker.example.com/ISSUE-123"

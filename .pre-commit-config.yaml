@@ -2,30 +2,34 @@
 # Install with: task setup
 
 repos:
-  - repo: https://github.com/DavidAnson/markdownlint-cli2
-    rev: v0.21.0
-    hooks:
-      - id: markdownlint-cli2
-        args: []
-        types_or: [markdown]
-
-  - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.11.12
-    hooks:
-      - id: ruff
-
-  - repo: https://github.com/adrienverge/yamllint
-    rev: v1.37.1
-    hooks:
-      - id: yamllint
-        args: [--strict]
-
   - repo: local
     hooks:
+      - id: lint-markdown
+        name: Markdown lint (authoritative Taskfile scope)
+        language: system
+        entry: task lint-md
+        pass_filenames: false
+        always_run: true
+
+      - id: lint-python
+        name: Python lint (authoritative Taskfile scope)
+        language: system
+        entry: task lint-py
+        pass_filenames: false
+        always_run: true
+
+      - id: lint-yaml
+        name: YAML lint (authoritative Taskfile scope)
+        language: system
+        entry: task lint-yaml
+        pass_filenames: false
+        always_run: true
+
       - id: governance-integrity
         name: Governance integrity checks
         language: system
-        entry: uv run python .agents/skills/ub-governance/scripts/check_skill_integrity.py
+        entry: uv run python
+          .agents/skills/ub-governance/scripts/check_skill_integrity.py
         pass_filenames: false
         always_run: true
 
@@ -33,8 +37,7 @@ repos:
         name: Governance script regression tests
         language: system
         entry: >
-          uv run python -m unittest discover
-          -s .agents/skills/ub-governance/tests/governance_scripts
-          -p 'test_*.py' -v
+          uv run python -m unittest discover -s tests/skills/ub-governance -p
+          'test_*.py' -v
         pass_filenames: false
         always_run: true

@@ -16,6 +16,7 @@ Write against the project's currently supported Python version, but structure co
 ## Load References On Demand
 
 - Load and apply `references/python-standards.md` for canonical Python rules and toolchain policy.
+- Load and apply `references/repository-python-workflows.md` for this repository's actual Python validation and packaging-tooling baseline.
 
 ## Forward-Compatibility Contract
 
@@ -42,8 +43,16 @@ Write against the project's currently supported Python version, but structure co
 - Use web search to verify current best practices, API availability, and migration guidance against official Python documentation.
 - Do not generate syntax or stdlib behavior only available in unreleased Python versions unless the user explicitly requests it.
 - When the project's installed version is behind latest stable, note the version gap, recommend an upgrade path, and prefer patterns that will survive that upgrade cleanly.
-- Refer to AGENTS.MD for centralized version policy and default tooling.
+- Refer to AGENTS.md for centralized version policy and default tooling.
 - Do not hardcode version numbers in generated guidance — keep recommendations evergreen.
+
+## Freshness Review
+
+- Volatility: high
+- Review recommendation: review on touch and during periodic maintenance, targeting a quarterly rhythm when practical.
+- Trigger signals: Python release changes, tooling maturity shifts, packaging guidance updates, or repository validation changes that alter the real enforced baseline.
+- Enforcement: advisory only; freshness should highlight review targets without pretending missing mypy or pytest wiring is a blocker in this repository.
+- Stable core: strong typing, boundary validation, structured errors, and repository-truth validation remain the durable baseline even when tooling preferences evolve.
 
 ## Implementation Rules
 
@@ -89,6 +98,12 @@ Write against the project's currently supported Python version, but structure co
 - Start narrow (`ruff check` on touched files, targeted tests, scoped type checks) and widen only when failures indicate broader impact.
 - Fix newly introduced lint/type/test failures before finalizing when they are within the task scope.
 - If a configured check cannot be run, state exactly why it was skipped or blocked.
+
+Repository truth note:
+
+- Current repository baseline is `uv` + `ruff` + stdlib `unittest` plus workflow-specific direct script checks.
+- `mypy` and `pytest` are preferred patterns for Python-heavy repos, but they are not currently repository-wired gates here.
+- When working in this repository, report that gap explicitly instead of pretending those checks are already part of the enforced baseline.
 
 ### Tooling Gap Warning Policy
 
@@ -147,6 +162,7 @@ When generating or reviewing Python code, include:
 ## References
 
 - Core rules and source-backed policy: `references/python-standards.md`
+- Repository-specific workflow and validation baseline: `references/repository-python-workflows.md`
 
 ## Completion Checklist
 

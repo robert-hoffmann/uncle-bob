@@ -40,7 +40,6 @@ Use it when you want GitHub Copilot in VS Code to be more consistent, more opini
 
 | Agent             | Description                                                         |
 | ----------------- | ------------------------------------------------------------------- |
-| Explore           | Fast read-only codebase exploration and Q&A.                        |
 | ub-governance     | Interactive guide for repository, testing, and evidence governance. |
 | ub-teacher        | Beginner-friendly explanations and code walkthroughs.               |
 | ub-customizations | Interactive builder for Copilot customization artifacts.            |
@@ -56,7 +55,10 @@ In the target project, either copy or symlink these paths from the clone:
 
 - `.agents/`
 - `.github/agents/`
-- `AGENTS.MD`
+- `AGENTS.md`
+
+Downstream users typically do not need repository-only validation content such
+as the top-level `tests/` tree when copying or symlinking the skill payload.
 
 Symlink:
 
@@ -64,7 +66,7 @@ Symlink:
 mkdir -p .github
 ln -s /path/to/uncle-bob/.agents .agents
 ln -s /path/to/uncle-bob/.github/agents .github/agents
-ln -s /path/to/uncle-bob/AGENTS.MD AGENTS.MD
+ln -s /path/to/uncle-bob/AGENTS.md AGENTS.md
 ```
 
 Copy:
@@ -73,10 +75,10 @@ Copy:
 mkdir -p .github
 cp -r /path/to/uncle-bob/.agents .agents
 cp -r /path/to/uncle-bob/.github/agents .github/agents
-cp /path/to/uncle-bob/AGENTS.MD AGENTS.MD
+cp /path/to/uncle-bob/AGENTS.md AGENTS.md
 ```
 
-Open the target project in VS Code with GitHub Copilot enabled. Copilot will discover `AGENTS.MD` and `.github/agents` automatically.
+Open the target project in VS Code with GitHub Copilot enabled. Copilot will discover `AGENTS.md` and `.github/agents` automatically.
 
 Update with:
 
@@ -88,17 +90,16 @@ If you copied files, copy them again after pulling. If you symlinked them, the u
 
 ## Repository Layout
 
-| Path                 | Purpose                                        |
-| -------------------- | ---------------------------------------------- |
-| `.agents/skills/`    | Skill definitions and supporting assets.       |
-| `.github/agents/`    | Custom agent definitions.                      |
-| `.github/plugin/`    | Plugin-related assets.                         |
-| `.github/workflows/` | GitHub workflow automation.                    |
-| `docs/`              | Documentation and images.                      |
-| `tmp/`               | Temporary workspace content and test material. |
-| `AGENTS.MD`          | Root registry and repository instructions.     |
-| `plugin.json`        | Plugin metadata.                               |
-| `Taskfile.yml`       | Common local lint and test commands.           |
+- `.agents/skills/`: Skill definitions and supporting assets.
+- `.github/agents/`: Custom agent definitions.
+- `.github/plugin/`: Plugin-related assets.
+- `.github/workflows/`: GitHub workflow automation.
+- `tests/`: Repository-only validation and regression suites.
+- `docs/`: Documentation and images.
+- `tmp/`: Temporary workspace content and test material.
+- `AGENTS.md`: Root registry and repository instructions.
+- `plugin.json`: Plugin metadata.
+- `Taskfile.yml`: Common local lint and test commands.
 
 ## Philosophy
 

@@ -30,8 +30,16 @@ Use this skill to enforce Vue core best practices for the latest stable release 
 - Use web search to verify current best practices, API availability, and migration guidance against official Vue documentation.
 - When the project's installed version is behind latest stable, note the version gap and recommend an upgrade path.
 - Do not use pre-release or beta features unless explicitly requested.
-- Refer to AGENTS.MD for centralized version policy and default tooling.
+- Refer to AGENTS.md for centralized version policy and default tooling.
 - Do not hardcode version numbers in generated guidance — keep recommendations evergreen.
+
+## Freshness Review
+
+- Volatility: high
+- Review recommendation: review on touch and during periodic maintenance, targeting a quarterly rhythm when practical.
+- Trigger signals: Vue core API additions, hydration or watcher semantics changes, new migration guidance, or repo toolchain changes affecting Vue authoring.
+- Enforcement: advisory only; stale Vue guidance should prompt review rather than create automatic blockers.
+- Stable core: Composition API, strict TypeScript, and disciplined watcher patterns remain the stable baseline even when ergonomic details change.
 
 ## Implementation Rules
 

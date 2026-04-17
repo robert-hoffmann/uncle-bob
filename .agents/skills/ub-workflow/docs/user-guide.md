@@ -25,10 +25,11 @@ The core lifecycle is:
 1. discovery and research
 2. self-contained PRD
 3. roadmap generated and approved in one pass
-4. all sprint folders initialized up front only after roadmap approval
-5. standalone resumable sprint execution, one sprint per explicit user request
-6. final audit
-7. retained note
+4. sprint pack prepared so each planned `sprint.md` is execution-ready
+5. sprint folders materialized when needed from the approved roadmap
+6. standalone resumable sprint execution, one sprint per explicit user request
+7. final audit
+8. retained note
 <!-- #endregion Mental Model -->
 
 <!-- #region Entry Points -->
@@ -127,6 +128,27 @@ Expected behavior:
 4. sprint folders are not initialized in this step
 5. the agent surfaces a review checklist and waits for explicit human approval before `roadmap_ready: pass`
 
+### Prepare The Sprint Pack
+
+Examples:
+
+```text
+The roadmap is approved. Prepare the sprint pack before we start Sprint 01.
+```
+
+```text
+Make each sprint PRD execution-ready, but do not start implementation yet.
+```
+
+Expected behavior:
+
+1. the agent prepares each planned sprint so `sprint.md` is no longer a
+ placeholder shell
+2. concrete scope, validation, and handoff expectations are written into each
+ sprint PRD
+3. the agent stops after sprint preparation so a human can review before sprint
+ execution or helper redesign work continues
+
 ### Initialize The Sprint Set
 
 Examples:
@@ -142,9 +164,12 @@ Use the approved roadmap to create the sprint folders.
 Expected behavior:
 
 1. the agent confirms the roadmap is ready first
-2. it initializes the numbered sprint folders from the roadmap
-3. it stops after initialization
-4. sprint execution remains a separate explicit user request
+2. it initializes the numbered sprint folders from the roadmap when directory
+ creation is still needed
+3. it preserves any prepared sprint content rather than reverting to placeholder
+ shells
+4. it stops after initialization
+5. sprint execution remains a separate explicit user request
 
 ### Resume An Initiative
 
@@ -181,7 +206,9 @@ Expected behavior:
 1. the agent keeps scope bounded to the active sprint
 2. it identifies the next implementation or validation step
 3. it preserves roadmap and closeout discipline
-4. it stops after the active sprint work and waits for human review before any next sprint work
+4. it does not treat placeholder-only sprint shells as executable state
+5. it stops after the active sprint work and waits for human review before any
+ next sprint work
 
 ### Run Final Audit
 
@@ -244,6 +271,12 @@ Expected recovery behavior:
 1. identify the missing prerequisite
 2. explain why it matters
 3. recommend the smallest correct next step
+
+Typical missing prerequisites now include:
+
+1. roadmap approval before sprint preparation
+2. sprint-pack preparation before sprint execution
+3. final audit review before archive
 <!-- #endregion Recovery -->
 
 <!-- #region Handoffs -->
@@ -255,22 +288,24 @@ The agent currently provides these handoffs:
 2. `Resume Initiative`
 3. `Shape PRD`
 4. `Generate Roadmap`
-5. `Initialize Sprint Set`
-6. `Operate Active Sprint`
-7. `What Next?`
-8. `Final Audit`
-9. `Archive Initiative`
-10. `Execute Active Sprint`
+5. `Prepare Sprint Pack`
+6. `Initialize Sprint Set`
+7. `Operate Active Sprint`
+8. `What Next?`
+9. `Final Audit`
+10. `Archive Initiative`
+11. `Execute Active Sprint`
 
 The intended sequence is:
 
 1. `Scaffold Initiative`
 2. `Shape PRD` when needed
 3. `Generate Roadmap`
-4. `Initialize Sprint Set`
-5. `Operate Active Sprint`
-6. `Final Audit`
-7. `Archive Initiative`
+4. `Prepare Sprint Pack`
+5. `Initialize Sprint Set`
+6. `Operate Active Sprint`
+7. `Final Audit`
+8. `Archive Initiative`
 
 Use handoffs when the next action is obvious and you want a fast transition.
 <!-- #endregion Handoffs -->
@@ -282,6 +317,7 @@ For repeatable setup, use:
 
 ```text
 python .agents/skills/ub-workflow/scripts/scaffold_initiative.py create --prd-source <path-to-prd>
+python .agents/skills/ub-workflow/scripts/scaffold_initiative.py prepare-sprints <initiative-root>
 python .agents/skills/ub-workflow/scripts/scaffold_initiative.py init-sprints <initiative-root>
 python .agents/skills/ub-workflow/scripts/scaffold_initiative.py archive <initiative-root>
 ```
@@ -291,9 +327,16 @@ The helper:
 1. bootstraps `./.ub-workflows/` when it is missing
 2. creates dated initiative roots under `./.ub-workflows/initiatives/`
 3. copies the source PRD into the initiative root as `./prd.md`
-4. materializes every planned sprint directory from the roadmap only after roadmap approval
-5. blocks unsafe reruns against populated initiative roots or incomplete sprint directories
-6. archives completed initiatives on explicit request only
+4. prepares roadmap-derived sprint PRDs when explicit sprint-pack preparation is requested
+5. materializes every planned sprint directory from the roadmap only after roadmap approval
+6. blocks unsafe reruns against populated initiative roots or incomplete sprint directories
+7. archives completed initiatives on explicit request only
+
+The helper currently handles deterministic directory and control-file
+operations.
+
+It does not, by itself, guarantee execution-ready sprint PRDs, so sprint-pack
+preparation remains a separate workflow step before any sprint begins.
 
 The agent should use the helper directly when tooling permits it.
 
@@ -312,13 +355,14 @@ Use these prompts later when iterating on the agent.
 2. `Use workflow to set up a new initiative at ./.ub-workflows/initiatives/2026-04-02-parser-performance for the Platform Team.`
 3. `I already have the idea, but I need help turning it into a self-contained PRD another engineer could execute later.`
 4. `The PRD is done. Split it into a full roadmap, but do not initialize sprint folders yet.`
-5. `The roadmap looks correct. I approve it. Mark roadmap_ready: pass and initialize the sprint set.`
-6. `Execute only the current active sprint, then stop so I can review the result.`
-7. `Resume the initiative in ./.ub-workflows/initiatives/2026-04-02-parser-performance and tell me what to do next.`
-8. `I am in the middle of this initiative and I only want help with the current sprint.`
-9. `I think this initiative is basically done. Can you verify whether we can close it?`
-10. `Archive this initiative if it is actually complete and all required files are current.`
-11. `What comes next here? I am not sure whether I should edit the PRD, generate the roadmap, or start implementing.`
+5. `The roadmap looks correct. I approve it. Mark roadmap_ready: pass and prepare the sprint pack.`
+6. `The sprint pack is ready. Initialize the sprint set, but do not start implementation yet.`
+7. `Execute only the current active sprint, then stop so I can review the result.`
+8. `Resume the initiative in ./.ub-workflows/initiatives/2026-04-02-parser-performance and tell me what to do next.`
+9. `I am in the middle of this initiative and I only want help with the current sprint.`
+10. `I think this initiative is basically done. Can you verify whether we can close it?`
+11. `Archive this initiative if it is actually complete and all required files are current.`
+12. `What comes next here? I am not sure whether I should edit the PRD, generate the roadmap, prepare the sprint pack, or start implementing.`
 
 ### Governance Prompts
 

@@ -169,5 +169,15 @@ Apply modern CSS platform features with predictable cascade control, token-drive
 ## Version & Research Policy
 
 - Use web search to verify current browser support data before recommending or gating CSS features.
-- Refer to AGENTS.MD for centralized version policy and default tooling.
+- Refer to AGENTS.md for centralized version policy and default tooling.
 - Do not hardcode snapshot dates or version numbers in generated guidance — keep recommendations evergreen.
+
+## Output Requirements
+
+When generating or reviewing CSS guidance, include:
+
+1. Token note: source of truth for tokens and how they map into runtime CSS.
+2. Cascade note: layer order and selector-specificity strategy.
+3. Enhancement note: which features are baseline versus gated by `@supports`.
+4. Accessibility note: focus, motion, contrast, and forced-color considerations.
+5. Validation note: lint, build, browser-support, or manual verification steps actually used.

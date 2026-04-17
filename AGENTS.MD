@@ -6,6 +6,23 @@
 
 Skills MUST NOT hardcode version numbers. Detect the project's actual versions from `package.json`, lockfiles, and `pyproject.toml`. Use web search to verify latest stable patterns. When the project's version differs from latest stable, note the gap and recommend an upgrade path.
 
+## Policy Versus Defaults
+
+This repository is intentionally opinionated, but not every opinion has the
+same status.
+
+Repository policy means the rule is explicitly part of the repository contract
+and is often backed by validation, integrity checks, or mandatory skill
+instructions.
+
+Strong defaults mean the repository currently recommends the approach because it
+fits best here, while downstream adopters may still need to adapt it
+deliberately.
+
+Freshness review for volatile framework and tool guidance is warning-only by
+default. Do not turn freshness into a blocking gate unless the repository
+explicitly promotes it beyond advisory status.
+
 | Technology   | Version Policy      | Primary Tool     | Fallback |
 | ------------ | ------------------- | ---------------- | -------- |
 | Node.js      | Latest LTS          | bun              | npm/node |
@@ -20,9 +37,9 @@ Skills MUST NOT hardcode version numbers. Detect the project's actual versions f
 
 Always load these skills for every task — no exceptions.
 
-| Skill            | Description                                                                                                            | Path                                   |
-| ---------------- | ---------------------------------------------------------------------------------------------------------------------- | -------------------------------------- |
-| **ub-quality**   | Cross-language code quality standards for design patterns, formatting, documentation, code structure, and refactoring. | `.agents/skills/ub-quality/SKILL.md`   |
+| Skill          | Description                                                                                                            | Path                                 |
+| -------------- | ---------------------------------------------------------------------------------------------------------------------- | ------------------------------------ |
+| **ub-quality** | Cross-language code quality standards for design patterns, formatting, documentation, code structure, and refactoring. | `.agents/skills/ub-quality/SKILL.md` |
 
 ## Skills
 
@@ -35,19 +52,18 @@ Always load these skills for every task — no exceptions.
 | ub-tailwind       | Tailwind CSS (latest stable): setup, migration, debugging across standalone HTML, Vue + Vite, and Nuxt projects.                 | `.agents/skills/ub-tailwind/SKILL.md`               |
 | ub-ts             | TypeScript (latest stable): typing, module/moduleResolution, compiler flags, tsconfig architecture.                              | `.agents/skills/ub-ts/SKILL.md`                     |
 | ub-vuejs          | Vue (latest stable): SFCs, composables, reactivity, watchers, SSR/hydration, component contracts with strict TypeScript.         | `.agents/skills/ub-vuejs/SKILL.md`                  |
-| ub-governance     | Unified governance: repo governance, testing/TDD, evidence/ADR/claim governance, shared contracts.                               | `.agents/skills/ub-governance/SKILL.md`             |
-| ub-customizations | VS Code Copilot customization builder: creates skills, prompts, agents, instructions, hooks, MCP configs, plugins, and bundles.  | `.agents/skills/ub-customizations/SKILL.md`         |
+| ub-governance     | Unified governance: repo governance, testing, evidence/ADR/claim governance, and shared contracts.                               | `.agents/skills/ub-governance/SKILL.md`             |
+| ub-customizations | VS Code Copilot customization builder: creates skills, prompts, agents, hooks, MCP configs, plugins, and bundles.                | `.agents/skills/ub-customizations/SKILL.md`         |
 | ub-workflow       | Initiative planning, roadmap generation, resumable sprint orchestration, and final-audit flow for larger multi-session work.     | `.agents/skills/ub-workflow/SKILL.md`               |
 
 ## Agents
 
-| Agent             | Description                                                                                     |
-| ----------------- | ----------------------------------------------------------------------------------------------- |
-| Explore           | Fast read-only codebase exploration and Q&A subagent. Supports quick / medium / thorough modes. |
-| ub-governance     | Interactive governance guide grounded in the ub-governance skill and references.                |
-| ub-teacher        | Teaching and explanation agent for readable, beginner-friendly code walkthroughs.               |
-| ub-customizations | Interactive Copilot customization builder with classify/generate/validate/iterate workflow.     |
-| ub-workflow       | Interactive initiative planning and sprint-orchestration guide for larger multi-session work.   |
+| Agent             | Description                                                                                   |
+| ----------------- | --------------------------------------------------------------------------------------------- |
+| ub-governance     | Interactive governance guide grounded in the ub-governance skill and references.              |
+| ub-teacher        | Teaching and explanation agent for readable, beginner-friendly code walkthroughs.             |
+| ub-customizations | Interactive Copilot customization builder with classify/generate/validate/iterate workflow.   |
+| ub-workflow       | Interactive initiative planning and sprint-orchestration guide for larger multi-session work. |
 
 ## Prompts
 

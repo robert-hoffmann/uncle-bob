@@ -26,21 +26,25 @@ In this repository, the default operating surface is `./.ub-workflows/`.
 
 Use the deterministic helper to bootstrap that operations root when it is
 missing, scaffold dated initiative roots under `./.ub-workflows/initiatives/`,
-initialize sprint directories from the completed roadmap, and archive completed
-initiatives on explicit request.
+materialize sprint directories from an approved roadmap, and archive completed
+initiatives on explicit request. Prepare sprint content before execution,
+whether that preparation is done directly in the artifacts or through a
+helper-supported flow.
 
 ## Core Principle
 
 Drive work through this ordered flow:
 
-1. brainstorming and research
+1. research and discovery
 2. execution-ready PRD
-3. durable roadmap generated and approved in one pass
-4. all sprint folders initialized up front only after roadmap approval
-5. standalone resumable sprint execution
-6. sprint closeout with explicit handoff
-7. final audit
-8. retained note
+3. initiative scaffold and durable planning baseline
+4. durable roadmap generated and approved in one pass
+5. sprint-content preparation
+6. sprint materialization and start readiness
+7. standalone resumable sprint execution
+8. sprint closeout with explicit handoff and review pause
+9. final audit and review pause
+10. retained note and archive decision
 
 ## Initiative-Level Gates
 
@@ -48,8 +52,12 @@ Use these lifecycle gates for initiative work:
 
 1. `prd_ready`
 2. `roadmap_ready`
-3. `sprint_closeout`
-4. `initiative_complete`
+3. `research_ready`
+4. `sprint_content_ready`
+5. `sprint_start_ready`
+6. `sprint_closeout`
+7. `archive_ready`
+8. `initiative_complete`
 
 Allowed states:
 
@@ -69,6 +77,9 @@ These are initiative workflow gates, not repository governance gates.
   repository adaptation rules.
 - Read `references/scaffold-helper.md` when using the deterministic helper or
   validating scaffold, sync, and archive behavior.
+- Read `references/placeholder-contract.md` when validating generated
+  initiative output for unresolved placeholders or deciding whether strict
+  placeholder enforcement should block progress.
 - Read `references/governance-bridge.md` when explicit governance alignment,
   evidence depth, or audit mapping is needed.
 - Read `references/validation-and-completion.md` for per-phase exit criteria,
@@ -107,7 +118,8 @@ Rules:
 ## Core Workflow
 
 1. Detect whether the user needs discovery, PRD shaping, roadmap generation,
-   sprint initialization, sprint execution support, or final audit.
+   sprint preparation, sprint initialization, sprint execution support, or
+   final audit.
 2. Inspect repository truth before writing repository-specific validation or
    adaptation details.
 3. If `./.ub-workflows/` does not exist, bootstrap it first through `scripts/scaffold_initiative.py create ...`.
@@ -120,22 +132,27 @@ Rules:
 9. Surface a review checklist for sprint breakdown completeness, ordering and
   dependencies, scope boundaries and non-goals, and validation/docs
   expectations before `roadmap_ready: pass` can be set.
-10. Do not initialize sprint folders until `roadmap_ready: pass`.
+10. Do not prepare sprint content, initialize sprint folders, or begin sprint
+  execution until `roadmap_ready: pass`.
 11. Make the roadmap explicit about every planned sprint from `Sprint 01`
   through `Sprint NN`, then keep the final audit as the last roadmap item.
-12. Initialize all planned sprint folders from the initiative's
-  `sprint-template/` up front by running the deterministic helper, then stop
-  and wait for an explicit user request before executing the active sprint.
-13. Keep each `sprint.md` standalone so execution does not depend on reopening
+12. Prepare each planned sprint as a standalone execution-ready `sprint.md`
+  before Sprint 01 or any later sprint begins.
+13. Initialize or repair all planned sprint folders from the initiative's
+  `sprint-template/` only after roadmap approval and in a way that preserves
+  the prepared sprint content.
+14. When a sprint needs additional context refresh before execution, record the
+  checkpoint explicitly before the sprint begins.
+15. Keep each `sprint.md` standalone so execution does not depend on reopening
   the master PRD.
-14. Execute only one user-requested active sprint at a time, updating
+16. Execute only one user-requested active sprint at a time, updating
   `roadmap.md`, `README.md`, and the active `closeout.md` as state changes.
-15. Stop after each sprint so the human can review before any next sprint work.
-16. Treat validation, documentation synchronization, and completion evidence
+17. Stop after each sprint so the human can review before any next sprint work.
+18. Treat validation, documentation synchronization, and completion evidence
    as gating conditions for both sprint closeout and initiative completion.
-17. End every initiative with a final audit and `retained-note.md`, then stop
+19. End every initiative with a final audit and `retained-note.md`, then stop
   for human review before any archive action.
-18. Archive only when the user explicitly asks for it and the completion
+20. Archive only when the user explicitly asks for it and the completion
    controls pass.
 
 ## Repository Defaults
@@ -143,8 +160,14 @@ Rules:
 1. Treat `./.ub-workflows/initiatives/README.md`, `operation-guide.md`, and `user-guide.md` as the workflow entry surfaces for creating or resuming initiatives.
 2. Treat `roadmap.md` as the smallest live progress document for an initiative.
 3. Keep roadmap sprint entries rich enough to prevent omissions: path, goal, dependencies, validation focus, subtasks, and evidence folder.
-4. Keep the skill useful outside this repository by keeping the canonical templates internal to the skill rather than requiring copied local scaffolding directories.
-5. Treat roadmap approval as a human-owned checkpoint, not an automatic agent transition.
+4. Treat sprint preparation as a distinct lifecycle phase; do not treat
+  initialized directories or placeholder sprint shells as execution-ready by
+  default.
+5. Keep the skill useful outside this repository by keeping the canonical
+  templates internal to the skill rather than requiring copied local
+  scaffolding directories.
+6. Treat roadmap approval and archive readiness as human-owned checkpoints,
+  not automatic agent transitions.
 
 ## Output Requirements
 
@@ -162,15 +185,20 @@ When using this skill to plan or scaffold an initiative, include:
 
 - The lifecycle phase is explicit.
 - The current initiative-level gate is explicit.
+- Discovery and PRD readiness are explicit before roadmap generation.
 - The PRD is self-contained before roadmap generation.
 - The roadmap is the durable approved planning artifact before sprint initialization begins.
 - `roadmap_ready: pass` is set only after explicit human approval.
+- Sprint content is prepared before sprint execution begins.
 - Validation expectations and documentation touch points are explicit.
 - The roadmap ends with a final audit step.
-- All sprint folders are initialized only after `roadmap_ready: pass`.
+- All sprint folders are initialized only after `roadmap_ready: pass` and in a
+  way that preserves prepared sprint content.
 - Sprint execution never starts without an explicit user request.
+- Sprint execution never starts from a placeholder-only sprint shell.
 - The workflow stops after every sprint and after final audit for human review.
 - Each sprint document is standalone and resumable.
+- Archive readiness is surfaced explicitly before any archive action.
 - Touched workflow documents satisfy ub-quality formatting and structure rules.
 - The retained note captures durable outcomes after completion.
 

@@ -146,6 +146,16 @@ Structure every generation response as:
 7. **Portability notes** — which pieces are VS Code-only, Copilot-compatible, or broadly portable
 8. **Risks / follow-up** — preview features, secrets, plugin trust, unsupported vendor features
 
+## Completion Checklist
+
+- Artifact choice is the smallest sufficient primitive for the request.
+- Any recommended multi-artifact bundle is explained and justified.
+- Generated files are valid for the chosen customization type.
+- Tool access is least-privilege rather than broad by default.
+- Validation and smoke-test guidance is explicit.
+- VS Code-only versus broadly portable behavior is called out.
+- Secret handling, trust, or preview-feature risks are surfaced when relevant.
+
 ## Safety Defaults
 
 - Default to **read-only planning** where possible.
@@ -165,3 +175,11 @@ Structure every generation response as:
 - Do NOT grant all-tools access by default — use least privilege.
 - Do NOT generate plugin packaging unless distribution is explicitly requested.
 - Do NOT write vague output like "follow best practices" — use explicit steps, criteria, and examples.
+
+## Freshness Review
+
+- Volatility: high
+- Review recommendation: review on touch and during periodic maintenance, targeting a quarterly rhythm when practical.
+- Trigger signals: VS Code Copilot customization-surface changes, new agent or hook capabilities, MCP schema changes, or portability model changes across supported vendors.
+- Enforcement: advisory only; freshness warnings should not block unrelated customization work by default.
+- Stable core: smallest-sufficient artifact choice, least privilege, progressive disclosure, and explicit validation remain the durable guidance even when platform features evolve quickly.

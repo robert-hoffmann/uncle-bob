@@ -27,9 +27,12 @@ REQUIRED_PATHS = (
     SKILL_DIR / "scripts" / "build_adr_registry.py",
     SKILL_DIR / "scripts" / "check_adr_gate.py",
     SKILL_DIR / "scripts" / "check_claim_register.py",
+    SKILL_DIR / "scripts" / "check_package_metadata.py",
+    SKILL_DIR / "scripts" / "check_repo_catalog.py",
+    SKILL_DIR / "scripts" / "check_repo_paths.py",
+    SKILL_DIR / "scripts" / "check_skill_schema.py",
     SKILL_DIR / "scripts" / "check_test_signal.py",
     SKILL_DIR / "scripts" / "check_skill_integrity.py",
-    SKILL_DIR / "tests" / "governance_scripts" / "test_governance_scripts.py",
 )
 
 LEGACY_SUFFIXES = ("core", "repository", "testing", "evidence")

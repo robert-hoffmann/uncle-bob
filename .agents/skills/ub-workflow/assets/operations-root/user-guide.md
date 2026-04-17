@@ -15,14 +15,15 @@ short human process.
 4. Generate the full `roadmap.md` from that PRD in one pass.
 5. Review the roadmap with the agent's checklist.
 6. If the roadmap is correct, explicitly approve it and mark `roadmap_ready: pass`.
-7. Run `python .agents/skills/ub-workflow/scripts/scaffold_initiative.py init-sprints <initiative-root>`.
-8. Stop and wait until the user explicitly asks to execute the active sprint.
-9. Execute one sprint at a time.
-10. After each sprint, stop for human review before moving to the next sprint.
-11. End the roadmap with a final audit.
-12. Stop for final human review before archive or other closure actions.
-13. Ask whether any follow-up audits or refactors are wanted.
-14. Write the retained note.
+7. Run `python .agents/skills/ub-workflow/scripts/scaffold_initiative.py prepare-sprints <initiative-root>`.
+8. Run `python .agents/skills/ub-workflow/scripts/scaffold_initiative.py init-sprints <initiative-root>` when directory materialization is still needed.
+9. Stop and wait until the user explicitly asks to execute the active sprint.
+10. Execute one sprint at a time.
+11. After each sprint, stop for human review before moving to the next sprint.
+12. End the roadmap with a final audit.
+13. Stop for final human review before archive or other closure actions.
+14. Ask whether any follow-up audits or refactors are wanted.
+15. Write the retained note.
 
 ## Mental Model
 
@@ -32,8 +33,9 @@ short human process.
 4. The helper bootstraps the operations root if `./.ub-workflows/` does not exist.
 5. The helper uses the skill's internal templates, so you do not need to copy a local `initiative-template/` folder into the operations root.
 6. Sprint folders are never created during the initial scaffold step.
-7. Sprint initialization is scaffolding only; it does not start Sprint 01 automatically.
-8. The workflow pauses after every sprint and after final audit so the human can review.
+7. Sprint-pack preparation renders execution-ready sprint PRDs before Sprint 01 begins.
+8. Sprint initialization is scaffolding only; it does not start Sprint 01 automatically.
+9. The workflow pauses after every sprint and after final audit so the human can review.
 
 ## Archive Flow
 

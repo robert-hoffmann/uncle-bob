@@ -83,8 +83,16 @@ When generating or modifying code, always provide:
 - Detect the project's actual Tailwind version from `package.json` and lockfiles.
 - Use web search to verify current best practices, directive availability, and migration guidance against official Tailwind CSS documentation.
 - When the project's installed version is behind latest stable, note the version gap and recommend an upgrade path.
-- Refer to AGENTS.MD for centralized version policy and default tooling.
+- Refer to AGENTS.md for centralized version policy and default tooling.
 - Do not hardcode version numbers in generated guidance — keep recommendations evergreen.
+
+## Freshness Review
+
+- Volatility: high
+- Review recommendation: review on touch and during periodic maintenance, targeting a quarterly rhythm when practical.
+- Trigger signals: official migration changes, deprecated directives, major Tailwind releases, or repo toolchain changes that affect setup recipes.
+- Enforcement: advisory only; stale Tailwind guidance is a review signal, not a blocking gate by itself.
+- Stable core: environment detection, official recipe selection, and deprecated-syntax avoidance should remain useful even when exact setup details evolve.
 
 ## Completion Checklist
 

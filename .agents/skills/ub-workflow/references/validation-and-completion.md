@@ -18,6 +18,18 @@ move forward.
 9. governance bridge level is explicit when governance coordination is needed
 10. another operator could continue without chat history
 
+## Research Readiness
+
+`research_ready` is `pass` only when:
+
+1. the current problem or initiative context is grounded enough to support a
+   durable PRD
+2. open questions that would block PRD authorship are either answered or
+   explicitly recorded
+3. repository truth checks needed for PRD scope have been completed where known
+4. another operator could understand why the initiative exists without relying
+   on chat history
+
 ## Roadmap Readiness
 
 `roadmap_ready` is `pass` only when:
@@ -32,6 +44,18 @@ move forward.
 8. `README.md` points to sprint initialization as the correct next step
 9. repository-specific validation and documentation expectations are explicit where known
 
+## Sprint Content Readiness
+
+`sprint_content_ready` is `pass` only when:
+
+1. every planned sprint has a standalone `sprint.md`
+2. the active or next sprint is execution-ready rather than a placeholder shell
+3. later sprints contain only named pending handoff markers that legitimately
+   depend on prior closeout truth
+4. each sprint names concrete validation expectations and handoff guidance
+5. the sprint pack is rich enough to survive a session reset without relying on
+   chat history
+
 ## Sprint Initialization
 
 Do not start sprint execution until:
@@ -39,10 +63,33 @@ Do not start sprint execution until:
 1. the roadmap exists
 2. `roadmap_ready` is `pass`
 3. all planned sprint folders are initialized
-4. each planned sprint has a standalone `sprint.md`
-5. each planned sprint includes a concrete validation plan
-6. the final roadmap item is a final audit
-7. the workflow stops after initialization and waits for an explicit user request before the active sprint begins
+4. `sprint_content_ready` is `pass`
+5. each planned sprint has a standalone `sprint.md`
+6. each planned sprint includes a concrete validation plan
+7. when needed, `sprint_start_ready` is explicit after context refresh
+8. the final roadmap item is a final audit
+9. the workflow stops after initialization and waits for an explicit user
+   request before the active sprint begins
+
+## Sprint Start Readiness
+
+`sprint_start_ready` is `pass` only when:
+
+1. the active or next sprint is execution-ready
+2. the smallest required resume file set has been read after any session reset
+3. blockers or pending handoff markers have been resolved or explicitly carried
+   forward
+4. the next action is explicit before implementation begins
+
+## Archive Readiness
+
+`archive_ready` is `pass` only when:
+
+1. `initiative_complete` is effectively satisfied pending explicit human review
+2. the final audit output is ready for review
+3. `retained-note.md`, `README.md`, and `roadmap.md` reflect the final state
+4. archive is being considered explicitly rather than as an automatic side
+   effect
 
 ## Sprint Closeout
 

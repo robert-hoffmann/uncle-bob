@@ -37,10 +37,20 @@ jobs:
             target: lint-py
           - name: YAML (yamllint)
             target: lint-yaml
+          - name: Repository Catalog
+            target: test-repo-catalog
+          - name: Package Metadata
+            target: test-package-metadata
+          - name: Repository Paths
+            target: test-repo-paths
+          - name: Skill Schema
+            target: test-skill-schema
           - name: Governance Integrity
-            target: test-integrity
+            target: test-governance-integrity
           - name: Governance Regression
             target: test-governance
+          - name: Workflow Regression
+            target: test-workflow
 
     steps:
       - uses: actions/checkout@v4

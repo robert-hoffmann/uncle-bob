@@ -34,8 +34,16 @@ Use this skill to enforce latest stable TypeScript modern defaults and patterns 
 - Use web search to verify current best practices, API availability, and migration guidance against official TypeScript documentation.
 - Do not emit beta-only syntax unless the user explicitly requests it.
 - When the project's installed version is behind latest stable, note the version gap and recommend an upgrade path.
-- Refer to AGENTS.MD for centralized version policy and default tooling.
+- Refer to AGENTS.md for centralized version policy and default tooling.
 - Do not hardcode version numbers in generated guidance — keep recommendations evergreen.
+
+## Freshness Review
+
+- Volatility: high
+- Review recommendation: review on touch and during periodic maintenance, targeting a quarterly rhythm when practical.
+- Trigger signals: TypeScript release changes, compiler-flag behavior shifts, new module-resolution guidance, or runtime-platform updates that affect tsconfig strategy.
+- Enforcement: advisory only; freshness should inform review priority, not become a blocking requirement by itself.
+- Stable core: runtime-faithful module strategy, strict typing, and explicit boundary modeling remain the durable guidance even when compiler defaults evolve.
 
 ## Implementation Rules
 

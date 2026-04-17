@@ -77,8 +77,16 @@ Use this skill to keep Nuxt work current-version aligned, type-safe, and framewo
 - Detect the project's actual Nuxt version from `package.json`, `nuxt.config.*`, and lockfiles.
 - Use web search to verify current best practices, API availability, and migration guidance against official Nuxt documentation.
 - When the project's installed version is behind latest stable, note the version gap and recommend an upgrade path.
-- Refer to AGENTS.MD for centralized version policy and default tooling.
+- Refer to AGENTS.md for centralized version policy and default tooling.
 - Do not hardcode version numbers in generated guidance — keep recommendations evergreen.
+
+## Freshness Review
+
+- Volatility: high
+- Review recommendation: review on touch and during periodic maintenance, targeting a quarterly rhythm when practical.
+- Trigger signals: Nuxt release-cycle changes, updated framework migration guides, runtime defaults shifts, or ecosystem-module guidance changes.
+- Enforcement: advisory only; freshness markers should prioritize review, not block unrelated Nuxt work automatically.
+- Stable core: Nuxt-native primitives, clear server/client boundaries, and app-source versus runtime-root separation remain the stable principles even when recipes evolve.
 
 ## Output Requirements
 

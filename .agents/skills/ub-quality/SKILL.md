@@ -57,6 +57,7 @@ Apply this skill whenever you create, modify, review, refactor, or normalize cod
 - Load and apply `references/formatting-alignment.md` for mandatory alignment rules and guardrails.
 - Load and apply `references/documentation-structure-refactoring.md` for documentation standards, file structure, and refactoring workflow.
 - Load and apply `references/important-tags-and-doc-generation.md` for mandatory comment-tag preservation and document-generation policy.
+- Read `references/freshness-portability.md` when deciding whether a quality rule is repository policy, a strong house default, or an advisory freshness concern.
 
 ## Non-Compliance
 
@@ -82,6 +83,12 @@ The following are non-compliant when a touched block is eligible for alignment:
 - Apply this skill together with the most relevant language/framework skill when available.
 - Treat syntax, runtime, and framework correctness as primary constraints.
 - Do not treat formatter preference or familiar house style as a valid reason to violate the alignment contract.
+
+## Policy Versus Defaults
+
+- In this repository, the alignment contract and required-reference workflow are repository policy when `ub-quality` is loaded.
+- Many language/framework recommendations coordinated through sibling skills are strong defaults, not universal portability requirements.
+- Treat volatile setup recipes as freshness-review candidates first, not as automatic blockers, unless the repository explicitly promotes them to policy.
 
 ## Output Requirements
 

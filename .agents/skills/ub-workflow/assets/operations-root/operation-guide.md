@@ -25,9 +25,10 @@ The most common workflow is:
 2. a human or AI agent scaffolds a dated initiative root and copies that PRD into `./prd.md`
 3. a human or AI agent refines the PRD and produces a durable `roadmap.md`
 4. the human reviews and explicitly approves the roadmap
-5. sprint folders are initialized only after the roadmap is approved
-6. the workflow stops until the human explicitly requests the active sprint
-7. execution happens one sprint at a time, with a human review checkpoint after each sprint, until the initiative is complete
+5. sprint-pack preparation happens only after the roadmap is approved
+6. sprint folders are initialized only after the roadmap is approved when directory materialization is needed
+7. the workflow stops until the human explicitly requests the active sprint
+8. execution happens one sprint at a time, with a human review checkpoint after each sprint, until the initiative is complete
 
 This SOP supports other authorship patterns, but it assumes the initial product
 or engineering intent has a clear human owner.
@@ -60,7 +61,7 @@ note is enough.
 <!-- #region Operating Model -->
 ## Operating Model
 
-This SOP defines a four-phase lifecycle.
+This SOP defines a six-phase lifecycle.
 
 ### Phase 1: Plan And Author The PRD
 
@@ -72,12 +73,22 @@ executed later by a different operator or agent.
 Goal: turn the approved PRD into one durable roadmap that can initialize sprint
 folders without relying on chat history.
 
-### Phase 3: Execute In Ordered Sprints
+### Phase 3: Prepare The Sprint Pack
+
+Goal: turn the approved roadmap into execution-ready sprint PRDs before any
+implementation begins.
+
+### Phase 4: Initialize Sprint Directories
+
+Goal: materialize or repair sprint directories without conflating scaffolding
+with sprint execution.
+
+### Phase 5: Execute In Ordered Sprints
 
 Goal: split the PRD into bounded sprints that can be paused, resumed, audited,
 and handed off without loss of context.
 
-### Phase 4: Final Audit And Durable Retention
+### Phase 6: Final Audit And Durable Retention
 
 Goal: finish the roadmap with a mandatory final audit, confirm completeness and
 synchronization, ask for any follow-up audits or refactors, then replace bulky
@@ -91,8 +102,11 @@ release gates.
 | Gate | Meaning | Allowed States |
 | ---- | ------- | -------------- |
 | `prd_ready` | The PRD is execution-ready and sprint planning may begin | `pass`, `fail`, `blocked` |
-| `roadmap_ready` | The roadmap is execution-ready and sprint initialization may begin | `pass`, `fail`, `blocked` |
+| `roadmap_ready` | The roadmap is execution-ready and sprint preparation may begin | `pass`, `fail`, `blocked` |
+| `sprint_content_ready` | The sprint pack is execution-ready and sprint start readiness may begin | `pass`, `fail`, `blocked` |
+| `sprint_start_ready` | The next sprint may begin after context refresh when needed | `pass`, `fail`, `blocked` |
 | `sprint_closeout` | A sprint has enough evidence and handoff detail to pause or continue | `pass`, `fail`, `blocked` |
+| `archive_ready` | The final audit output is ready for explicit archive review | `pass`, `fail`, `blocked` |
 | `initiative_complete` | The initiative has a retained note and a validated completion baseline | `pass`, `fail`, `blocked` |
 
 `roadmap_ready: pass` is human-owned in this workflow. The agent may recommend

@@ -49,14 +49,14 @@ Replace with one rejected alternative and concise pros and cons.
 ## Validation Expectations
 
 1. Replace with the concrete validation command, check, or acceptance method
-	for the initiative.
+   for the initiative.
 2. Replace with any required test-signal, regression, build, or audit checks
-	when behavior changes are in scope.
+   when behavior changes are in scope.
 
 ## Documentation Touch Points
 
 1. Replace with the docs, architecture notes, or synchronized artifacts that
-	must be updated or explicitly confirmed unchanged.
+   must be updated or explicitly confirmed unchanged.
 2. Replace with how documentation synchronization will be validated.
 
 ## Governance Bridge

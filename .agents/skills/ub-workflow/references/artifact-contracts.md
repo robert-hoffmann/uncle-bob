@@ -4,17 +4,15 @@ Use these files as the minimum contract for a reusable initiative workflow.
 
 ## Required Initiative Files
 
-| Artifact           | Purpose                                      |
-| ------------------ | -------------------------------------------- |
-| `README.md`        | Root resume surface and current status       |
-| `AGENTS.md`        | Local resume order and update discipline     |
-| `prd.md`           | Self-contained initiative definition         |
-| `roadmap.md`       | Small live tracker with full sprint order    |
-| `retained-note.md` | Durable completion summary                   |
-| `research/`        | Optional discovery notes and supporting inputs |
-| `exceptions/`      | Optional bounded exception records           |
-| `sprints/`         | Execution directories                        |
-| `sprint-template/` | Canonical template used to seed each sprint  |
+- `README.md`: root resume surface and current status
+- `AGENTS.md`: local resume order and update discipline
+- `prd.md`: self-contained initiative definition
+- `roadmap.md`: small live tracker with full sprint order
+- `retained-note.md`: durable completion summary
+- `research/`: optional discovery notes and supporting inputs
+- `exceptions/`: optional bounded exception records
+- `sprints/`: execution directories
+- `sprint-template/`: canonical template used to seed each sprint
 
 ## `README.md`
 
@@ -79,6 +77,9 @@ Roadmap shape rules:
 
 Each sprint document must stand alone.
 
+Treat each `sprint.md` as an execution-ready sprint PRD, not as a starter
+shell.
+
 Minimum sections:
 
 1. sprint objective
@@ -93,6 +94,18 @@ Minimum sections:
 10. final-audit checklist for the final audit sprint
 11. handoff expectation
 12. definition of done
+
+Sprint document rules:
+
+1. The active or next sprint must be readable and actionable without reopening
+ the full initiative chat history.
+2. Placeholder-only sprint shells are incomplete planning state, not
+ execution-ready artifacts.
+3. Later sprints may contain named pending handoff markers only in fields that
+ legitimately depend on prior closeout truth.
+4. The validation plan must be concrete enough for another operator to execute
+ it without improvising missing checks.
+5. The handoff expectation must name what the next sprint should read first.
 
 ## `closeout.md`
 
