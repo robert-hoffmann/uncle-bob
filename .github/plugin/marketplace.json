@@ -12,7 +12,7 @@
   "plugins": [
     {
       "name": "uncle-bob",
-      "description": "11 workflow-first skills (workflow, quality, governance, customizations, Markdown, CSS, Tailwind, TypeScript, Python, Vue, Nuxt) and 4 custom agents (workflow, governance, customizations, teacher).",
+      "description": "11 domain skills (workflow, quality, governance, customizations, Markdown, CSS, Tailwind, TypeScript, Python, Vue, Nuxt) and 4 custom agents (workflow, governance, customizations, teacher).",
       "version": "1.0.0",
       "author": {
         "name": "robert-hoffmann",
