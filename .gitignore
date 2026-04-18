@@ -3,6 +3,8 @@ mcp.json
 
 /.agents/skills/*
 !/.agents/skills/ub-*
+!/.agents/skills/references/
+!/.agents/skills/references/**
 
 /.github/agents/*
 !/.github/agents/ub-*
