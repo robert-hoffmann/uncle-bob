@@ -57,6 +57,38 @@ If you want guided help choosing the right lane, start with the
 `ub-workflow` agent or the workflow quick start in
 [quick-start.md](./.agents/skills/ub-workflow/docs/quick-start.md).
 
+## Interaction Modes
+
+`ub-workflow` supports four modes that change how visible and hands-on the
+execution flow feels. They do not weaken readiness rules. They change how much
+analysis is surfaced, when follow-up questions appear, and whether the
+workflow pauses between sprints or execution chunks.
+
+1. `reviewed`
+   The most interactive and hands-on mode. Before execution, it surfaces the
+   analysis, exposes meaningful options when there is a real choice, and asks
+   follow-up questions when confirmation or direction is needed. After
+   execution, it reports what changed, why it mattered, what to watch out for
+   next, and then pauses for manual advancement before the next sprint or
+   execution chunk.
+2. `flow`
+   A little faster and lighter. It still gives a short explanatory note before
+   execution and a fuller update after execution, but it does not normally stop
+   to ask pre-execution questions unless something important is unclear or
+   risky. It still waits for manual advancement after each sprint or chunk.
+3. `auto`
+   More autonomous. Most pre-execution analysis stays internal, and the updates
+   back to the user are shorter and more focused. It keeps moving forward
+   automatically unless it hits an interruption condition such as a blocker, a
+   conflict, a material ambiguity, or a decision that could significantly
+   reshape the work.
+4. `continuous` (`yolo`)
+   The least interruptive mode. It still does internal analysis, planning, and
+   artifact updates, but it does not stop to provide routine before-and-after
+   user-facing notes, and it does not pause between sprints unless a major
+   blocker, contradiction, or conflict forces the work to stop and be resolved
+   before continuing.
+
 ## How The Workflow Feels
 
 The main value of this repo is not that it gives an agent more prompts.
@@ -208,6 +240,34 @@ your host tool and how much control you want over updates.
    Cons:
    - highest maintenance overhead
    - easiest path to drift if you stop syncing upstream changes
+
+### How Custom Agents Are Installed
+
+Skills and custom agents do not currently have the same portability story.
+
+1. VS Code Copilot
+   Custom agents are workspace-discovered from `.github/agents/*.agent.md`.
+   If you vendor this repo manually into another project, include
+   `.github/agents/` alongside `.agents/skills/` and `AGENTS.md`.
+
+2. Copilot CLI
+   The plugin install path includes custom agents automatically because this
+   repo's [plugin.json](./plugin.json) explicitly points its `agents` field to
+   `.github/agents/`. After installing, you can verify that the agents loaded
+   in a Copilot CLI session with `/agent`.
+
+3. `skills.sh`
+   `skills.sh` is excellent for distributing the skills, but it is not the
+   install path for these repo-local Copilot custom agents. Its job is to place
+   skills into host-specific skill directories, not to vend `.github/agents`
+   style agent profiles from this repository.
+
+4. Claude Code and Codex
+   This repo is usable there today through skills and instruction surfaces, but
+   these specific custom agents are not yet mirrored into host-native agent
+   directories such as `.claude/agents/`. So there is not currently a
+   first-class one-command custom-agent install story for those hosts from this
+   repo alone.
 
 ### Support Notes
 
