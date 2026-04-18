@@ -56,6 +56,20 @@ Typical Level 1 workflow-native decision-memory artifacts include sprint
 `decision-log.md` files and the initiative `rollup.md`, backed by the owning
 sprint `evidence/` folders.
 
+Operator examples:
+
+1. ordinary initiative work:
+   workflow artifacts plus sprint-local evidence are the blocking record, and
+   ADR or claim-register artifacts are not required by default
+2. repository-wide durable decision:
+   workflow artifacts can record execution context, but the blocking evidence
+   must include ADR alignment and the decision object fields for the escalated
+   run
+3. explicit high-risk governance run:
+   require ADR alignment evidence, the decision object fields, and
+   claim-register validation output when the blocking rationale depends on
+   claims
+
 ## 5) Validation Record Linkage
 
 Every blocking run must produce a record matching `agent-validation-record.schema.json`.

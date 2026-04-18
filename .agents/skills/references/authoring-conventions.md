@@ -38,6 +38,10 @@ Use this when the skill regularly produces:
 Do not force identical section names across every skill. Consistency of intent
 matters more than mechanical sameness.
 
+For high-impact skills, keep this section easy to find near the end of the
+skill so readers can scan the expected reporting shape quickly without reading
+the whole file first.
+
 ### 3. Load References On Demand
 
 Use `Load References On Demand` when the skill depends on deeper supporting

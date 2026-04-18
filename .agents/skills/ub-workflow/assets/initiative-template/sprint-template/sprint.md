@@ -68,6 +68,38 @@ begins.
 5. Add TG001-TG005 or equivalent deterministic test-signal checks when tests
  will change.
 
+## Mode-Specific Start Checkpoint
+
+1. Record the active interaction mode for this sprint before execution begins.
+2. Write the exact pre-sprint preview that should be surfaced to the user
+   before work starts, including an explicit statement that the sprint has not
+   started yet and what the sprint would do if started now.
+3. If the active mode is `reviewed`, follow the canonical reviewed-mode
+   pre-sprint preview pattern defined in the `ub-workflow`
+   `workflow-contract.md` reference.
+4. If the active mode is `reviewed`, record the explicit approval checkpoint
+   and any question that changes the sprint path before
+   `sprint_start_ready: pass`.
+5. If the active mode is `reviewed` and the sprint is non-trivial, record at
+   least two plausible implementation paths with concise pros and cons plus a
+   recommended path marked `(*)`.
+6. If the active mode is `reviewed` and the sprint is non-trivial, structure
+   the user-facing preview in this order:
+   `What Repo Truth Says`, `Inference`, `Implementation Paths`,
+   `Recommendation`, `Questions That Change The Sprint Path`,
+   then the explicit approval boundary.
+7. If the active mode is `reviewed` and the sprint is non-trivial, do not
+   lead the preview with artifact-update or validation bookkeeping unless that
+   bookkeeping is itself the repo truth that materially changes the sprint.
+8. If the active mode is `reviewed`, preserve the exact text-fallback question
+   shape when questions are needed:
+   `(*)` on the best qualitative fit, a short explanation under every option
+   in `(...)`, and a final `Custom` option.
+9. If the active mode is not `reviewed`, record why a pre-execution stop is
+   not required for this sprint.
+10. Record the expected post-execution reporting shape so the closeout can
+   recover it without relying on chat history.
+
 ## Reviewability Check
 
 1. Confirm each execution slice is independently understandable.

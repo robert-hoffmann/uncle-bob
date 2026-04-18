@@ -60,8 +60,10 @@ agent interrupts.
 
 Short mode reference:
 
-1. `reviewed`: full pre-execution analysis, fuller post-execution report,
-   manual advancement
+1. `reviewed`: counterfactual pre-sprint preview, questions that change the
+   sprint path,
+   explicit approval before execution, fuller post-execution summary, manual
+   advancement
 2. `flow`: short pre-execution note, fuller post-execution report, manual
    advancement
 3. `auto`: internal pre-execution analysis, concise post-execution report,
@@ -89,6 +91,32 @@ When that tool is unavailable, the workflow should use text questions with:
 1. `(*)` on the best qualitative fit
 2. a short explanation under every option in `(...)`
 3. a final `Custom` option
+4. the same decision structure as the reviewed-mode preview pattern in the
+   workflow contract, not just the same typography
+
+In `reviewed` mode, start approval is itself a checkpoint.
+That means the workflow should not silently move from “sprint is ready” to
+“sprint is executing”.
+It should first surface the pre-sprint preview of what would happen if the
+sprint started now, then ask any questions that change the sprint path, and only
+then ask for explicit approval to start the sprint.
+In `reviewed` mode, that approval must come in a later reply after the preview
+is shown.
+
+For non-trivial reviewed-mode sprints, that preview should read like a short
+decision note, not a bookkeeping note.
+Lead with:
+
+1. `What Repo Truth Says`
+2. `Inference`
+3. `Implementation Paths`
+4. `Recommendation`
+5. `Questions That Change The Sprint Path`
+6. explicit approval boundary
+
+Artifact or validation notes can still appear, but they should not be the
+opening content unless they are themselves the repo truth that materially
+changes the sprint.
 <!-- #endregion Modes -->
 
 <!-- #region Entry Points -->
@@ -151,6 +179,8 @@ Expected behavior:
 4. it explains the roadmap-planning step after scaffolding
 5. it makes the default interaction mode explicit unless the user chose a
    different one
+6. in `reviewed` mode, it stops for an explicit start checkpoint before any
+   sprint execution begins
 
 ### Shape A PRD
 
@@ -240,6 +270,8 @@ Expected behavior:
    preparation is surfaced to the user
 6. the agent stops after sprint preparation so a human can review before sprint
  execution or helper redesign work continues
+7. in `reviewed` mode, the next sprint still requires its own explicit
+   pre-sprint preview after sprint-pack preparation is done
 
 ### Initialize The Sprint Set
 
@@ -280,6 +312,8 @@ Expected behavior:
 1. the agent reads the initiative in resume order
 2. it reports current phase, gate state, blocker, and next action
 3. it does not reopen the whole initiative from scratch unless needed
+4. in `reviewed` mode, it surfaces a distinct pre-sprint preview and approval
+   checkpoint before sprint execution resumes
 
 ### Guide The Active Sprint
 
@@ -302,6 +336,11 @@ Expected behavior:
 5. it respects the active interaction mode for pre-execution visibility,
    post-execution reporting, and pause behavior
 6. it still refuses to execute a sprint that is not actually ready
+7. in `reviewed` mode, it records the pre-sprint preview, resolves any
+   questions that change the sprint path, and waits for explicit approval
+   before execution begins
+8. in `reviewed` mode, a request like `Start the next sprint.` opens the
+   preview only; it does not start execution in the same turn
 
 ### Run Final Audit
 
@@ -431,14 +470,16 @@ Use handoffs when the next action is obvious and you want a fast transition.
 <!-- #region Scaffolding -->
 ## Deterministic Scaffolding
 
-For repeatable setup, use:
+For repeatable setup in this repository, use:
 
 ```text
-python .agents/skills/ub-workflow/scripts/scaffold_initiative.py create --prd-source <path-to-prd>
-python .agents/skills/ub-workflow/scripts/scaffold_initiative.py prepare-sprints <initiative-root>
-python .agents/skills/ub-workflow/scripts/scaffold_initiative.py init-sprints <initiative-root>
-python .agents/skills/ub-workflow/scripts/scaffold_initiative.py archive <initiative-root>
+uv run python .agents/skills/ub-workflow/scripts/scaffold_initiative.py create --prd-source <path-to-prd>
+uv run python .agents/skills/ub-workflow/scripts/scaffold_initiative.py prepare-sprints <initiative-root>
+uv run python .agents/skills/ub-workflow/scripts/scaffold_initiative.py init-sprints <initiative-root>
+uv run python .agents/skills/ub-workflow/scripts/scaffold_initiative.py archive <initiative-root>
 ```
+
+In an adopting repository, resolve the equivalent local Python runner first.
 
 The helper:
 
@@ -455,6 +496,14 @@ operations.
 
 It does not, by itself, guarantee execution-ready sprint PRDs, so sprint-pack
 preparation remains a separate workflow step before any sprint begins.
+
+A fresh scaffold can still be phase-correct even when placeholder findings are
+reported.
+Treat that output as “valid for this phase, incomplete for the next phase”
+unless strict readiness is being checked.
+Treat `prepare-sprints` and `init-sprints` the same way:
+they prepare execution, but they do not mean Sprint 01 or any later sprint has
+already started.
 
 The agent should use the helper directly when tooling permits it.
 

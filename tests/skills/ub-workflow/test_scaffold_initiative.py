@@ -69,17 +69,24 @@ class ScaffoldInitiativeScriptTests(unittest.TestCase):
             self.assertFalse((target / "sprint-template").exists())
 
             root_readme = (ops_root / "initiatives" / "README.md").read_text(encoding="utf-8")
+            ops_user_guide = (ops_root / "initiatives" / "user-guide.md").read_text(encoding="utf-8")
             readme = (target / "README.md").read_text(encoding="utf-8")
             roadmap = (target / "roadmap.md").read_text(encoding="utf-8")
 
             self.assertIn("`initiatives/2026-04-01-my-new-initiative`", root_readme)
             self.assertIn("My New Initiative", readme)
             self.assertIn("2026-04-01", readme)
-            self.assertIn("Template scaffolded, awaiting PRD import", readme)
+            self.assertIn("Scaffold valid for PRD authoring; PRD import pending", readme)
             self.assertIn("`prd_ready: blocked`", readme)
             self.assertIn("unassigned", readme)
             self.assertIn("Master PRD imported into `./prd.md`", roadmap)
             self.assertIn("- Next sprint: `define after roadmap approval`", roadmap)
+            self.assertIn("Start the next sprint.", ops_user_guide)
+            self.assertIn("preview only; execution begins only after", ops_user_guide)
+            self.assertIn("later approval message", ops_user_guide)
+            self.assertIn("What Repo Truth Says", ops_user_guide)
+            self.assertIn("Implementation Paths", ops_user_guide)
+            self.assertIn("artifact or validation", ops_user_guide)
 
     def test_create_uses_prd_source_slug_and_copies_prd_without_rewriting(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -108,7 +115,7 @@ class ScaffoldInitiativeScriptTests(unittest.TestCase):
             self.assertEqual((target / "prd.md").read_text(encoding="utf-8"), prd_body)
 
             readme = (target / "README.md").read_text(encoding="utf-8")
-            self.assertIn("PRD copied, awaiting review and roadmap planning", readme)
+            self.assertIn("Scaffold valid for PRD review; roadmap planning pending", readme)
             self.assertIn("`prd_ready: blocked`", readme)
             self.assertIn("Do not initialize sprint directories until `roadmap_ready: pass`", readme)
 
@@ -144,7 +151,7 @@ class ScaffoldInitiativeScriptTests(unittest.TestCase):
 
             self.assertIn("Parser Modernization", readme)
             self.assertIn("Platform Team", readme)
-            self.assertIn("PRD imported, awaiting roadmap planning", readme)
+            self.assertIn("Scaffold valid for roadmap planning; roadmap approval pending", readme)
             self.assertIn("`prd_ready: pass`", readme)
 
     def test_prepare_sprints_ignores_legacy_local_sprint_template(self) -> None:
@@ -1054,8 +1061,33 @@ Completed successfully.
 
             self.assertEqual(result.returncode, 0, msg=result.stdout + result.stderr)
             self.assertIn("placeholder summary:", result.stdout)
+            self.assertIn("phase status: scaffold is valid for PRD authoring.", result.stdout)
             self.assertIn("prd.md", result.stdout)
             self.assertIn("roadmap.md", result.stdout)
+
+    def test_create_spec_reports_phase_status_for_generated_artifacts(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            ops_root = Path(tmp) / ".ub-workflows"
+            target = ops_root / "specs" / "2026-04-01-workflow-gap-note"
+
+            result = run_cmd(
+                [
+                    PYTHON_BIN,
+                    str(SCRIPT),
+                    "create-spec",
+                    "workflow-gap-note",
+                    "--ops-root",
+                    str(ops_root),
+                    "--date",
+                    "2026-04-01",
+                ]
+            )
+
+            self.assertEqual(result.returncode, 0, msg=result.stdout + result.stderr)
+            self.assertTrue((target / "spec.md").exists())
+            self.assertIn(f"scaffolded lightweight spec at {target.resolve().as_posix()}", result.stdout)
+            self.assertIn("phase status: scaffold is valid for spec authoring.", result.stdout)
+            self.assertIn("placeholder summary:", result.stdout)
 
     def test_check_scaffold_placeholders_strict_fails_for_placeholder_only_sprint_shells(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

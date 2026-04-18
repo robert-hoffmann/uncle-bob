@@ -53,6 +53,8 @@ instead of rewriting the config by hand.
 
 ## Load References On Demand
 
+- Read `../references/authoring-conventions.md` when adjusting shared routing
+  guidance, output structure, or cross-skill authoring conventions.
 - Read `references/repo-markdownlint-resolution.md` first for how to resolve the
   repository's actual Markdown lint config, ignored paths, and command
   entrypoints without duplicating policy in prose.
@@ -135,6 +137,9 @@ npx --yes markdownlint-cli2 "<target-globs>"
   the adopting team aware that it is an opinionated house style.
 
 ## Output Requirements
+
+Treat this section as the stable output expectation for non-trivial Markdown
+work in this catalog.
 
 When this skill is used for non-trivial Markdown work:
 

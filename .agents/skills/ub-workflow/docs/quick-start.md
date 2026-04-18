@@ -39,10 +39,23 @@ It is the durable planning surface for bigger work:
 6. run the final audit
 7. write the retained note and archive intentionally
 
+Fresh scaffold note:
+
+1. a newly scaffolded initiative or lightweight spec can be valid for its
+   current phase even when placeholder findings are still present
+2. treat those findings as next-phase readiness markers unless strict
+   readiness for the next phase is being checked
+3. do not confuse “still incomplete for later work” with “broken now”
+4. do not confuse “sprint pack ready” with “execution started”; opening or
+   initializing sprint artifacts is still pre-execution until the active
+   sprint is explicitly started
+
 ## Modes At A Glance
 
 1. `reviewed`
-   Full pre-step analysis and full post-step reporting with manual advancement.
+   Counterfactual pre-sprint preview, path-shaping questions when needed,
+   explicit approval before execution, full post-sprint summary, and manual
+   advancement.
 2. `flow`
    Short pre-step note, fuller post-step reporting, manual advancement.
 3. `auto`
@@ -54,6 +67,19 @@ It is the durable planning surface for bigger work:
 
 Modes do not weaken readiness rules.
 They only change visibility, pause behavior, and interruption behavior.
+
+In `reviewed` mode, “ready to start” is not the same thing as “already
+started”.
+The sprint should stop for a pre-sprint preview of what it would do if started
+now, then resolve any questions that change the sprint path, and only then ask for explicit
+approval before execution begins.
+A prompt like `Start the next sprint.` opens that preview, but execution starts
+only after a later approval message.
+
+For non-trivial reviewed-mode sprints, that preview should read like a short
+decision note:
+`What Repo Truth Says`, `Inference`, `Implementation Paths`,
+`Recommendation`, then the questions that change the sprint path.
 
 ## Good First Prompts
 

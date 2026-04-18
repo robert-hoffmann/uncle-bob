@@ -73,3 +73,16 @@ For the final audit sprint, answer at minimum:
 4. Did the final validation and documentation synchronization checks pass?
 5. Are any governance exceptions, ADR waivers, or follow-up validation items
    still open?
+
+## post_execution_summary_note
+
+Replace with the user-facing post-execution summary that should be recoverable
+from this closeout.
+
+When the active mode surfaces post-execution reporting, include at minimum:
+
+1. what changed
+2. why it mattered
+3. assumptions made
+4. considerations moving forward
+5. things to watch before the next sprint begins

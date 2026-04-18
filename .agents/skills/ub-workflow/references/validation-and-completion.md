@@ -114,6 +114,15 @@ Do not start sprint execution until:
    decisions as execution proceeds
 7. the active interaction mode is explicit and does not conflict with the
    current initiative status artifacts
+8. in `reviewed` mode, the pre-sprint preview is written down and explicitly
+   states that the sprint has not started yet
+9. in `reviewed` mode, non-trivial sprint previews preserve the richer
+   counterfactual structure:
+   `What Repo Truth Says`, `Inference`, `Implementation Paths`,
+   `Recommendation`, then the questions that change the sprint path
+10. in `reviewed` mode, any questions that change the sprint path are resolved and the
+   explicit human approval to start the sprint is recorded before execution
+   begins
 
 ## Archive Readiness
 
@@ -144,6 +153,8 @@ Do not start sprint execution until:
 10. the workflow's next-step behavior matches the active interaction mode
 11. when the active interaction mode surfaces user-facing post-execution
     reporting, considerations moving forward and things to watch are explicit
+12. when the active interaction mode surfaces post-execution reporting, a
+    recoverable post-execution summary is recorded in `closeout.md`
 
 ## Initiative Completion
 

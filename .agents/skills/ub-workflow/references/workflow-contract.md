@@ -87,7 +87,14 @@ Persistence:
 Canonical modes:
 
 1. `reviewed`
-   - user-facing pre-execution analysis
+   - user-facing pre-sprint preview as a distinct sprint-start checkpoint
+   - the preview evaluates what the sprint would do if it started now, before
+     any implementation begins
+   - non-trivial sprints should surface multiple implementation paths with
+     concise pros and cons plus a recommended path
+   - questions that change the sprint path should be resolved before execution
+     using the structured question fallback when needed
+   - explicit human approval before execution or `sprint_start_ready: pass`
    - user-facing post-execution reporting
    - mandatory pause between sprints or bounded execution chunks
 2. `flow`
@@ -113,15 +120,124 @@ Question handling:
 2. always allow a custom reply path
 3. when the question tool is unavailable, use the same text structure:
    `(*)` on the best qualitative fit, a short explanation under every option
-   in `(...)`, and a final `Custom` option
+   in `(...)`, and a final `Custom` option.
+4. when text questions are used for a reviewed-mode pre-sprint preview, keep
+   the same decision structure as the canonical reviewed-mode pre-sprint
+   preview pattern below.
+5. In `reviewed` mode, resolve the questions that change the sprint path
+   before the explicit start-approval question.
+   A request like `Start the next sprint.` opens the preview, but it does not
+   count as sprint-start approval in the same turn.
 
 Mode reporting:
 
 1. user-facing execution contexts should include a concise mode reference so
    the user does not need to search the docs for the mode names
-2. user-facing post-execution reporting should cover what changed, why it
+2. in `reviewed` mode, the pre-sprint preview should explicitly say the sprint
+   has not started yet and should explain what the sprint would do if it
+   started now
+3. for non-trivial reviewed-mode sprints, that preview should surface at least
+   two plausible implementation paths with concise pros and cons plus a
+   recommended path
+4. in `reviewed` mode, the preview should make the active sprint, chosen path,
+   approval boundary, and any questions that change the sprint path explicit
+   before execution begins
+5. for non-trivial reviewed-mode sprints, lead the user-facing preview with
+   the actual sprint analysis rather than artifact-update or validation
+   bookkeeping; artifact sync notes are secondary and should not be the opener
+6. user-facing post-execution reporting should cover what changed, why it
    mattered, considerations moving forward, assumptions made, and things to
    watch whenever the active mode surfaces post-execution reporting
+
+## Reviewed-Mode Pre-Sprint Preview Pattern
+
+This is the canonical reviewed-mode sprint-start pattern.
+Other workflow surfaces should summarize it, not redefine it.
+
+Always required:
+
+1. state that the sprint is still in pre-sprint mode
+2. state that no implementation has started yet
+3. explain what the sprint would do if it started now
+4. name the intended or recommended path
+5. state the approval boundary explicitly
+6. state that execution begins only after a later approval message, not from
+   the same start request that opened the preview
+
+Required only for non-trivial reviewed-mode sprints:
+
+1. lead with the actual sprint analysis, not artifact-update or validation
+   bookkeeping
+2. include a `What Repo Truth Says` section that captures the current repo
+   facts that materially shape the sprint
+3. include an `Inference` section that explains what those facts mean for the
+   sprint now
+4. include an `Implementation Paths` section with at least two plausible paths
+5. include concise pros and cons for each path
+6. mark the recommended path with `(*)`
+7. include a `Recommendation` section that explains why the recommended path
+   is currently the best fit
+8. ask the questions that change the sprint path before asking for explicit
+   sprint-start approval
+9. close with the explicit approval boundary and a no-edits-yet statement
+
+Treat a sprint as non-trivial when any of these are true:
+
+1. more than one plausible path would materially change scope, ordering,
+   touched surfaces, or later sprints
+2. the sprint touches shared contracts, governance boundaries, or other
+   cross-cutting behavior
+3. the user could reasonably want to steer the path before execution starts
+
+Compact example:
+
+```text
+Sprint 03 is still in pre-sprint mode only.
+No implementation has started.
+
+If we started this sprint now, the job would be to tighten governance-owned
+guidance around the minimum durable record without changing the governance
+model.
+
+What Repo Truth Says
+
+- The governance model is already coherent enough for normal initiative work.
+- The remaining friction is that “minimum durable record” is still slower to
+  infer than it should be.
+- The repo does not need a new governance system; it needs faster operator
+  guidance.
+
+Inference
+
+This sprint should stay narrow and calibrate governance-owned guidance rather
+than widen into command-policy cleanup or catalog-wide consistency work.
+
+Implementation Paths
+
+`A` (*) narrow owner-surface calibration
+(Best fit because it solves the fast-path problem directly without widening
+scope.)
+`B` broader governance-surface harmonization
+(Pros: more complete in one pass. Cons: blends into later consistency work.)
+`Custom`
+
+Recommendation
+
+`A` is the strongest fit because it improves the operator fast path without
+quietly redesigning governance.
+
+Questions That Change The Sprint Path
+
+Which path should this sprint use before it starts?
+
+Start approval:
+I have not started Sprint 03.
+This preview turn does not start execution.
+Execution would begin only after a later approval message that approves
+path `A`.
+
+No files were edited in this pre-sprint evaluation step.
+```
 
 ## Execution Rules
 
@@ -149,38 +265,60 @@ Mode reporting:
    way that preserves the prepared sprint content.
 13. When a fresh or resumed sprint needs additional context refresh, record that
    checkpoint explicitly before advancing `sprint_start_ready: pass`.
-14. Stop after sprint-pack preparation and wait for an explicit user request
+14. In `reviewed` mode, surface a distinct pre-sprint preview checkpoint before
+    execution begins.
+15. That preview must make explicit that no implementation has started yet,
+    explain what the sprint would do if started now, surface alternatives when
+    the sprint is non-trivial, and ask any questions that change the sprint
+    path needed to calibrate the sprint path.
+16. For non-trivial reviewed-mode sprints, that preview should lead with the
+    sprint analysis itself:
+    `What Repo Truth Says`, `Inference`, `Implementation Paths`,
+    `Recommendation`, then the questions that change the sprint path.
+    Do not lead the user-facing preview with artifact-update or validation
+    bookkeeping.
+17. Wait for explicit human approval only after the reviewed-mode preview and
+    its questions are resolved, then advance `sprint_start_ready: pass` or
+    start the sprint.
+18. In `reviewed` mode, that approval must come in a later user reply after
+    the preview is shown.
+    Do not infer sprint-start approval from the same user turn that requested
+    the sprint start.
+19. Stop after sprint-pack preparation and wait for an explicit user request
     before Sprint 01 or any later sprint begins.
-15. Keep sprint execution ordered unless the roadmap explicitly allows parallel
+20. Keep sprint execution ordered unless the roadmap explicitly allows parallel
     work.
-16. Resolve and honor the active interaction mode before execution begins.
-17. For initiative sprint execution, every mode requires the same readiness
+21. Resolve and honor the active interaction mode before execution begins.
+22. For initiative sprint execution, every mode requires the same readiness
     prerequisites: approved roadmap, prepared sprint pack, execution-ready
     current sprint, and no unresolved blockers preventing safe execution.
-18. Use each sprint's `decision-log.md` as the running sprint-level memory
+23. Use each sprint's `decision-log.md` as the running sprint-level memory
     surface and use `rollup.md` as the readable initiative-level carry-forward
     summary.
-19. Keep `research/` supportive and cross-sprint in character, and keep
+24. Keep `research/` supportive and cross-sprint in character, and keep
     `exceptions/` bounded and explicit instead of treating either folder as a
     generic note dump.
-20. Update `roadmap.md`, the initiative `README.md`, and `rollup.md` whenever
+25. Update `roadmap.md`, the initiative `README.md`, and `rollup.md` whenever
     state changes materially affect later resume work.
-21. Keep the active sprint's `decision-log.md` and `closeout.md` current before
+26. Keep the active sprint's `decision-log.md` and `closeout.md` current before
     pausing.
-22. Materialize newly introduced additive workflow files in existing sprint
+27. When the active mode surfaces post-execution reporting, write a recoverable
+    post-execution summary into `closeout.md` before the workflow pauses or
+    advances.
+28. Materialize newly introduced additive workflow files in existing sprint
     folders from the canonical `ub-workflow` sprint template when it evolves,
     without overwriting prepared sprint content.
-23. `reviewed` and `flow` stop after every sprint closeout so the human can
+29. `reviewed` and `flow` stop after every sprint closeout so the human can
     review before the next sprint begins.
-24. `auto` may continue after sprint closeout unless a hard blocker, material
+30. `auto` may continue after sprint closeout unless a hard blocker, material
     ambiguity, repo-truth conflict, or later-sprint-shaping decision requires
     interruption.
-25. `continuous` / `yolo` may continue without routine user-facing reporting,
+31. `continuous` / `yolo` may continue without routine user-facing reporting,
     but must abort or pause when a major blocker or conflict requires explicit
     user resolution, and that interruption must be documented clearly.
-26. End the roadmap with a final audit step, then stop for explicit review
+32. End the roadmap with a final audit step, then stop for explicit review
     before `archive_ready: pass` or any archive action.
-27. Treat the number of implementation sprints as PRD-driven; the roadmap can
+33. Treat the number of implementation sprints as PRD-driven; the roadmap can
     contain `Sprint 01` through `Sprint NN` before the final audit.
 
 ## Operations Root Bootstrap

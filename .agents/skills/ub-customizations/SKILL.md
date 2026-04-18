@@ -181,6 +181,9 @@ Present the output for review. Refine based on user feedback. Re-validate after 
 
 ## Output Contract
 
+Treat this section as the stable output expectation for non-trivial
+customization work in this catalog.
+
 Structure every generation response as:
 
 1. **Recommendation** — what to generate and why

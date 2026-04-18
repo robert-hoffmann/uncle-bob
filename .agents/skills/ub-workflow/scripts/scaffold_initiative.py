@@ -240,6 +240,40 @@ def report_generated_placeholder_state(initiative_root: Path, *, strict: bool) -
         )
 
 
+def format_initiative_phase_status(args: argparse.Namespace, prd_source: Path | None) -> str:
+    """Describe the current-phase validity of a newly scaffolded initiative."""
+
+    if args.prd_imported:
+        return (
+            "phase status: scaffold is valid for roadmap planning. "
+            "It is not yet ready for sprint preparation or initialization until "
+            "the roadmap is reviewed and `roadmap_ready: pass` is recorded."
+        )
+    if prd_source is not None:
+        return (
+            "phase status: scaffold is valid for PRD review and refinement. "
+            "It is not yet ready for sprint preparation or initialization until "
+            "`./prd.md` is execution-ready, `roadmap.md` is approved, and "
+            "`roadmap_ready: pass` is recorded."
+        )
+    return (
+        "phase status: scaffold is valid for PRD authoring. "
+        "It is not yet ready for sprint preparation or initialization until "
+        "the real `./prd.md` exists, `roadmap.md` is approved, and "
+        "`roadmap_ready: pass` is recorded."
+    )
+
+
+def format_spec_phase_status() -> str:
+    """Describe the current-phase validity of a newly scaffolded lightweight spec."""
+
+    return (
+        "phase status: scaffold is valid for spec authoring. "
+        "It is not yet ready for direct execution or promotion until the "
+        "placeholders are replaced and the next action is explicit."
+    )
+
+
 def generated_roots_in_directory(root: Path) -> list[Path]:
     """Return sorted generated workflow roots inside one container directory."""
 
@@ -587,12 +621,12 @@ def build_initiative_placeholder_map(
         gate_state = "pass"
     has_prd_source = prd_source is not None
     validation_note = (
-        "The source PRD was copied into `./prd.md` as-is. Review or refine it until `prd_ready: pass`, then generate a durable `roadmap.md` before any sprint directories are initialized."
+        "This scaffold is valid for PRD review and refinement. The source PRD was copied into `./prd.md` as-is. Review or refine it until `prd_ready: pass`, then generate a durable `roadmap.md` before any sprint directories are initialized."
         if has_prd_source and not args.prd_imported
         else (
-            "The master PRD is imported and ready for roadmap planning. Generate the full ordered roadmap next, review it, and set `roadmap_ready: pass` before running `prepare-sprints` or `init-sprints`."
+            "This scaffold is valid for roadmap planning. Generate the full ordered roadmap next, review it, and set `roadmap_ready: pass` before running `prepare-sprints` or `init-sprints`."
             if args.prd_imported
-            else "This initiative has been scaffolded but `./prd.md` still needs the real master PRD before roadmap generation can begin."
+            else "This scaffold is valid for PRD authoring, but `./prd.md` still needs the real master PRD before roadmap generation can begin."
         )
     )
     next_action = (
@@ -614,12 +648,12 @@ def build_initiative_placeholder_map(
         "REPLACE_PHASE"           : (
             args.phase
             or (
-                "PRD imported, awaiting roadmap planning"
+                "Scaffold valid for roadmap planning; roadmap approval pending"
                 if args.prd_imported
                 else (
-                    "PRD copied, awaiting review and roadmap planning"
+                    "Scaffold valid for PRD review; roadmap planning pending"
                     if has_prd_source
-                    else "Template scaffolded, awaiting PRD import"
+                    else "Scaffold valid for PRD authoring; PRD import pending"
                 )
             )
         ),
@@ -685,6 +719,7 @@ def command_create(args: argparse.Namespace) -> int:
     sync_ops_root_readme(ops_root, operations_template_root)
 
     print(f"scaffolded initiative at {target_root.as_posix()}")
+    print(format_initiative_phase_status(args, prd_source))
     report_generated_placeholder_state(target_root, strict=args.strict_placeholders)
     return 0
 
@@ -738,6 +773,7 @@ def command_create_spec(args: argparse.Namespace) -> int:
     sync_ops_root_readme(ops_root, operations_template_root)
 
     print(f"scaffolded lightweight spec at {target_root.as_posix()}")
+    print(format_spec_phase_status())
     report_generated_placeholder_state(target_root, strict=args.strict_placeholders)
     return 0
 

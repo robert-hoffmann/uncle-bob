@@ -3,13 +3,16 @@
 Use the helper script when you want deterministic initiative operations instead
 of a manual copy workflow.
 
+In this repository, prefer `uv run python ...` for direct helper invocation.
+In an adopting repository, resolve the equivalent local Python runner first.
+
 ## Commands
 
-1. `python .agents/skills/ub-workflow/scripts/scaffold_initiative.py create --prd-source <path-to-prd>`
-2. `python .agents/skills/ub-workflow/scripts/scaffold_initiative.py prepare-sprints <initiative-root>`
-3. `python .agents/skills/ub-workflow/scripts/scaffold_initiative.py init-sprints <initiative-root>`
-4. `python .agents/skills/ub-workflow/scripts/scaffold_initiative.py archive <initiative-root>`
-5. `python .agents/skills/ub-workflow/scripts/check_scaffold_placeholders.py <initiative-root-or-scan-root>`
+1. `uv run python .agents/skills/ub-workflow/scripts/scaffold_initiative.py create --prd-source <path-to-prd>` in this repository
+2. `uv run python .agents/skills/ub-workflow/scripts/scaffold_initiative.py prepare-sprints <initiative-root>` in this repository
+3. `uv run python .agents/skills/ub-workflow/scripts/scaffold_initiative.py init-sprints <initiative-root>` in this repository
+4. `uv run python .agents/skills/ub-workflow/scripts/scaffold_initiative.py archive <initiative-root>` in this repository
+5. `uv run python .agents/skills/ub-workflow/scripts/check_scaffold_placeholders.py <initiative-root-or-scan-root>` in this repository
 
 ## What It Does
 
@@ -40,6 +43,15 @@ markers where prior closeout truth may still need to flow forward.
 The helper now also prints generated-output placeholder summaries after
 `create`, `prepare-sprints`, and `init-sprints`.
 
+Those summaries do not mean the scaffold is broken.
+For `create` and `create-spec`, treat the output first as phase-status guidance:
+the scaffold can be valid for PRD authoring, PRD review, roadmap planning, or
+spec authoring even while later-phase placeholders still exist.
+Likewise, `prepare-sprints` and `init-sprints` only prepare the sprint set:
+they do not start Sprint 01 or any later sprint by themselves.
+Actual sprint execution begins only when the active sprint is explicitly
+started.
+
 Use `--strict-placeholders` on `create`, `prepare-sprints`, or `init-sprints`
 when required unresolved generated-output placeholders should fail the command.
 
@@ -65,10 +77,10 @@ Rules:
 ## Recommended Usage
 
 ```bash
-python .agents/skills/ub-workflow/scripts/scaffold_initiative.py create --prd-source ./tmp/todo/parser-performance-prd.md --owner "Platform Team"
-python .agents/skills/ub-workflow/scripts/scaffold_initiative.py prepare-sprints ./.ub-workflows/initiatives/2026-04-02-parser-performance
-python .agents/skills/ub-workflow/scripts/scaffold_initiative.py init-sprints ./.ub-workflows/initiatives/2026-04-02-parser-performance
-python .agents/skills/ub-workflow/scripts/scaffold_initiative.py archive ./.ub-workflows/initiatives/2026-04-02-parser-performance
+uv run python .agents/skills/ub-workflow/scripts/scaffold_initiative.py create --prd-source ./tmp/todo/parser-performance-prd.md --owner "Platform Team"
+uv run python .agents/skills/ub-workflow/scripts/scaffold_initiative.py prepare-sprints ./.ub-workflows/initiatives/2026-04-02-parser-performance
+uv run python .agents/skills/ub-workflow/scripts/scaffold_initiative.py init-sprints ./.ub-workflows/initiatives/2026-04-02-parser-performance
+uv run python .agents/skills/ub-workflow/scripts/scaffold_initiative.py archive ./.ub-workflows/initiatives/2026-04-02-parser-performance
 ```
 
 Optional arguments:
@@ -114,11 +126,13 @@ After scaffolding:
 6. run `prepare-sprints` to render roadmap-derived sprint PRDs before any sprint begins
 7. review the rendered execution slices so acceptance, verification, and
    dependencies are explicit before implementation begins
-8. keep sprint-time decisions in each sprint `decision-log.md` and summarize
+8. treat a prepared or initialized sprint set as pre-execution state until the
+   active sprint is explicitly started
+9. keep sprint-time decisions in each sprint `decision-log.md` and summarize
    cross-sprint carry-forward in `rollup.md`
-9. treat `research/` as supportive discovery and `exceptions/` as bounded
+10. treat `research/` as supportive discovery and `exceptions/` as bounded
    exception records instead of default note buckets
-10. run `init-sprints` when you need directory-only materialization or
+11. run `init-sprints` when you need directory-only materialization or
     validation of the sprint set
-11. use `archive` only after the roadmap checklist, retained note, rollup,
+12. use `archive` only after the roadmap checklist, retained note, rollup,
     and initiative status are actually complete

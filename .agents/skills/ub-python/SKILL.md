@@ -13,6 +13,17 @@ Generate modern patterns for new code and refactor legacy patterns incrementally
 
 Write against the project's currently supported Python version, but structure code so it can move cleanly toward newer stable releases instead of accumulating compatibility layers.
 
+## When Not To Use
+
+- Do not use this skill for workflow intake, sprint planning, or resumable
+  initiative orchestration; defer that to `ub-workflow`.
+- Do not use this skill as the primary surface for framework-specific behavior
+  when the real question is owned by a sibling framework skill such as
+  `ub-nuxt`, `ub-vuejs`, or `ub-ts`.
+- Do not use this skill as a generic documentation-normalization layer when the
+  main task is Markdown structure or documentation quality rather than Python
+  implementation.
+
 ## Bundled Assets
 
 This skill ships reusable Ruff scaffolding under `assets/` and a deterministic
@@ -23,6 +34,8 @@ Python lint config of its own.
 
 ## Load References On Demand
 
+- Read `../references/authoring-conventions.md` when adjusting shared routing
+  guidance, output structure, or cross-skill authoring conventions.
 - Load and apply `references/python-standards.md` for canonical Python rules and toolchain policy.
 - Load and apply `references/repository-python-workflows.md` for resolving the
   target repository's actual Python validation and packaging-tooling baseline.
@@ -210,6 +223,9 @@ Migration-aware exception policy:
 - Document exactly what is retained, why it is retained, and the next modernization step.
 
 ## Output Requirements
+
+Treat this section as the stable output expectation for non-trivial Python work
+in this catalog.
 
 When generating or reviewing Python code, include:
 

@@ -100,11 +100,12 @@ Minimum sections:
 7. one rejected alternative with concise pros and cons
 8. affected files, modules, systems, or docs
 9. validation plan
-10. reviewability check
-11. exit criteria
-12. final-audit checklist for the final audit sprint
-13. handoff expectation
-14. definition of done
+10. mode-specific start checkpoint
+11. reviewability check
+12. exit criteria
+13. final-audit checklist for the final audit sprint
+14. handoff expectation
+15. definition of done
 
 Sprint document rules:
 
@@ -124,6 +125,18 @@ Sprint document rules:
 7. The handoff expectation must name what the next sprint should read first.
 8. Use `decision-log.md` for evolving sprint-time decisions, reversals, and
    deferrals instead of forcing all running memory into `closeout.md`.
+9. When the active interaction mode is `reviewed`, the sprint document must
+   make the pre-sprint preview, option questions when needed, approval
+   boundary, and expected post-execution reporting shape easy to recover.
+10. For non-trivial reviewed-mode sprints, the mode-specific start checkpoint
+   should preserve the richer counterfactual analysis in recoverable order:
+   `What Repo Truth Says`, `Inference`, `Implementation Paths`,
+   `Recommendation`, then any structured fallback questions needed before
+   sprint start approval.
+11. For non-trivial reviewed-mode sprints, artifact-update or validation
+   bookkeeping may appear in the checkpoint, but it should not be the lead
+   user-facing content unless it is itself the repo truth that materially
+   shapes the sprint.
 
 ## `decision-log.md`
 
@@ -162,6 +175,7 @@ Minimum sections:
 7. `done_verification_note`
 8. `handoff_note`
 9. `follow_up_note`
+10. `post_execution_summary_note`
 
 Closeout structure rules:
 
@@ -174,6 +188,9 @@ Closeout structure rules:
 6. When the active interaction mode exposes user-facing post-execution
    reporting, the closeout should make considerations moving forward,
    assumptions made, and things to watch easy to recover for later reporting.
+7. When the active interaction mode exposes user-facing post-execution
+   reporting, `post_execution_summary_note` should be readable enough to reuse
+   directly as the user-facing post-sprint summary.
 
 ## `rollup.md`
 

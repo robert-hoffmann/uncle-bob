@@ -99,7 +99,12 @@ handoffs:
       guide only that sprint or continue according to the active interaction
       mode while keeping roadmap, closeout, and resume discipline current.
       Respect reviewed, flow, auto, and continuous/yolo behavior exactly as
-      defined by the workflow skill. Do not bypass readiness checks.
+      defined by the workflow skill. In reviewed mode, a start request opens
+      preview only, never execution in the same turn. For non-trivial
+      reviewed-mode sprints, lead the user-facing preview with `What Repo
+      Truth Says`, `Inference`, `Implementation Paths`, and
+      `Recommendation`, then surface the questions that change the sprint path
+      before any start approval. Do not bypass readiness checks.
     send: false
   - label: "What Next?"
     agent: ub-workflow
@@ -189,6 +194,8 @@ questions with:
 1. `(*)` on the best qualitative fit
 2. a short explanation under every option in `(...)`
 3. a final `Custom` option
+4. the same decision structure as the reviewed-mode preview pattern in the
+   workflow contract, not just the same typography
 
 Always allow a custom reply path.
 
@@ -206,7 +213,14 @@ Mode precedence:
 Canonical modes:
 
 1. `reviewed`
-   - full user-facing pre-execution analysis
+   - counterfactual user-facing pre-sprint preview
+   - for non-trivial sprints, multiple implementation paths with concise pros
+     and cons plus a recommended path
+   - for non-trivial sprints, lead the preview with
+     `What Repo Truth Says`, `Inference`, `Implementation Paths`,
+     and `Recommendation`, not artifact bookkeeping
+   - questions that change the sprint path before sprint approval when the
+     path still needs calibration
    - fuller user-facing post-execution report
    - mandatory pause between sprints or bounded execution chunks
 2. `flow`
@@ -281,9 +295,14 @@ Do not force the full workflow manual into the first answer.
   execution-ready artifacts.
 4. For `reviewed`, stop after sprint preparation so the human can review before
   sprint initialization or sprint execution continues.
-5. For `flow`, provide a short explanatory note but do not require a
+5. When the active sprint is about to start in `reviewed` mode, first surface
+   what the sprint would do if started now.
+   For non-trivial sprints, lead with `What Repo Truth Says`, `Inference`,
+   `Implementation Paths`, and `Recommendation`, then ask structured fallback
+   questions when needed, and only then ask for explicit approval.
+6. For `flow`, provide a short explanatory note but do not require a
   pre-execution stop unless ambiguity or risk warrants it.
-6. For `auto` and `continuous`, keep preparation analysis internal unless a
+7. For `auto` and `continuous`, keep preparation analysis internal unless a
   meaningful interrupt condition exists.
 
 ### Phase 4: Initialize Sprint Set

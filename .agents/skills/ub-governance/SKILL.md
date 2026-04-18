@@ -107,12 +107,16 @@ shared contract governance.
 
 1. classify `changeType`, `evidenceLevel`, and `profile`
 2. detect high-risk path impact
-3. validate required artifacts and freshness
+3. choose the lightest durable record that matches the decision scope before
+   asking for heavier governance artifacts
 4. treat workflow-backed initiative artifacts as the default operational record
-   for Level 1 work, then escalate to ADR alignment only when Level 2 or
-   explicit repository-level governance applies
-5. validate ADR alignment or active waiver when that escalation applies
-6. validate claim confidence before blocking policy usage
+   for ordinary Level 1 work, including sprint-local evidence and closeout
+   notes
+5. escalate to ADR alignment only when Level 2, repository-wide durable
+   decisions, or explicit high-risk governance applies
+6. require claim-register validation only when blocking rationale depends on
+   claims
+7. validate required artifacts and freshness for the selected path
 
 ### Core-Contract Mode
 
@@ -138,6 +142,9 @@ shared contract governance.
   Level 1 workflow-backed work.
 
 ## Output Requirements
+
+Treat this section as the stable output expectation for non-trivial governance
+work in this catalog.
 
 When producing governance output, include:
 

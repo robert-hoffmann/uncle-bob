@@ -96,7 +96,10 @@ Modes:
 
 1. `reviewed`
    - default mode
-   - user-facing pre-execution analysis
+   - user-facing pre-sprint preview as a distinct sprint-start checkpoint
+   - follow the canonical reviewed-mode pre-sprint preview pattern in
+     `references/workflow-contract.md`
+   - explicit human approval before execution or `sprint_start_ready: pass`
    - user-facing post-execution reporting with considerations and watchouts
    - mandatory pause between sprints or bounded execution chunks
 2. `flow`
@@ -134,7 +137,14 @@ Question handling:
 2. always allow a custom reply path
 3. when the question tool is unavailable, fall back to the same text pattern:
    `(*)` on the best qualitative fit, a short explanation under every option in
-   `(...)`, and a final `Custom` option
+   `(...)`, and a final `Custom` option.
+4. for reviewed-mode pre-sprint previews, keep the same decision structure as
+   the canonical reviewed-mode pre-sprint preview pattern in
+   `references/workflow-contract.md`, not just the same typography.
+5. In `reviewed` mode, resolve the questions that change the sprint path plus
+   the explicit start-approval question when sprint execution is about to begin.
+   A request like `Start the next sprint.` opens the preview, but it does not
+   count as sprint-start approval in the same user turn.
 
 ## Load References On Demand
 
@@ -241,23 +251,45 @@ Rules:
 19. For initiatives, require the same readiness prerequisites in every mode:
    approved roadmap, prepared sprint pack, execution-ready current sprint, and
    no unresolved blockers that prevent safe execution.
-20. Execute the active sprint according to the active interaction mode,
+20. In `reviewed` mode, surface a distinct pre-sprint preview checkpoint before
+   execution begins.
+   Follow the canonical reviewed-mode pre-sprint preview pattern in
+   `references/workflow-contract.md` so the preview stays consistent across
+   users, agents, and sprint artifacts.
+21. Record that preview in the active `sprint.md`, make explicit that the
+   sprint has not started yet, and do not advance `sprint_start_ready: pass`
+   or begin execution until the human explicitly approves starting that sprint
+   after the preview questions are resolved.
+22. In `reviewed` mode, for non-trivial sprints, lead the user-facing preview
+   with the sprint analysis itself:
+   `What Repo Truth Says`, `Inference`, `Implementation Paths`,
+   `Recommendation`, then the questions that change the sprint path.
+   Treat artifact-sync or validation notes as secondary unless those notes are
+   themselves the repo truth that materially shapes the sprint.
+23. In `reviewed` mode, that approval must arrive in a later user reply after
+   the preview is shown.
+   Do not infer sprint-start approval from the same user turn that asked to
+   start the sprint.
+24. Execute the active sprint according to the active interaction mode,
    updating `roadmap.md`, `README.md`, `rollup.md`, the active
    `decision-log.md`, and the active `closeout.md` as state changes.
-21. `reviewed` and `flow` stop after each sprint so the human can review before
+25. `reviewed` and `flow` stop after each sprint so the human can review before
    any next sprint work.
-22. `auto` may continue between sprints when no interruption condition exists:
+26. `auto` may continue between sprints when no interruption condition exists:
    hard blocker, material ambiguity, repo-truth conflict, or a decision that
    would materially reshape later sprints.
-23. `continuous` / `yolo` may continue without routine user-facing reporting,
+27. When the active mode surfaces post-execution reporting, write a recoverable
+    post-execution summary into the active `closeout.md` before the workflow
+    pauses or advances.
+28. `continuous` / `yolo` may continue without routine user-facing reporting,
    but must abort or pause when a major blocker or conflict requires explicit
    user resolution, and that interruption must be documented clearly in the
    workflow artifacts.
-24. Treat validation, documentation synchronization, and completion evidence
+29. Treat validation, documentation synchronization, and completion evidence
    as gating conditions for both sprint closeout and initiative completion.
-25. End every initiative with a final audit and `retained-note.md`, then stop
+30. End every initiative with a final audit and `retained-note.md`, then stop
    for human review before any archive action.
-26. Archive only when the user explicitly asks for it and the completion
+31. Archive only when the user explicitly asks for it and the completion
    controls pass.
 
 ## Repository Defaults
@@ -287,6 +319,9 @@ Rules:
     user can see the available modes without opening the docs.
 
 ## Output Requirements
+
+Treat this section as the stable output expectation for non-trivial workflow
+work in this catalog.
 
 When using this skill to plan or scaffold an initiative, include:
 

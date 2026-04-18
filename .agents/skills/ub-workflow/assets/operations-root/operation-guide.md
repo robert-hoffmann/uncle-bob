@@ -112,7 +112,7 @@ release gates.
 | `prd_ready` | The PRD is execution-ready and sprint planning may begin | `pass`, `fail`, `blocked` |
 | `roadmap_ready` | The roadmap is execution-ready and sprint preparation may begin | `pass`, `fail`, `blocked` |
 | `sprint_content_ready` | The sprint pack is execution-ready and sprint start readiness may begin | `pass`, `fail`, `blocked` |
-| `sprint_start_ready` | The next sprint may begin after context refresh when needed | `pass`, `fail`, `blocked` |
+| `sprint_start_ready` | The next sprint may begin after context refresh and any required reviewed-mode approval | `pass`, `fail`, `blocked` |
 | `sprint_closeout` | A sprint has enough evidence and handoff detail to pause or continue | `pass`, `fail`, `blocked` |
 | `archive_ready` | The final audit output is ready for explicit archive review | `pass`, `fail`, `blocked` |
 | `initiative_complete` | The initiative has a retained note and a validated completion baseline | `pass`, `fail`, `blocked` |

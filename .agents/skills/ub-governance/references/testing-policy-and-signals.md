@@ -58,16 +58,28 @@ increment.
 
 ## 6) Deterministic Gate Command
 
-Use:
+Portable script surface:
 
 ```bash
 python .agents/skills/ub-governance/scripts/check_test_signal.py --path <test-file-or-dir> --language auto --strict
 ```
 
-For JSON output:
+In this repository, direct local invocation should use:
+
+```bash
+uv run python .agents/skills/ub-governance/scripts/check_test_signal.py --path <test-file-or-dir> --language auto --strict
+```
+
+For JSON output, the portable script surface is:
 
 ```bash
 python .agents/skills/ub-governance/scripts/check_test_signal.py --path <test-file-or-dir> --language auto --format json --strict
+```
+
+For JSON output in this repository, direct local invocation should use:
+
+```bash
+uv run python .agents/skills/ub-governance/scripts/check_test_signal.py --path <test-file-or-dir> --language auto --format json --strict
 ```
 
 ## 7) Flake Policy
