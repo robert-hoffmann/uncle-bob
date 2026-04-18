@@ -40,5 +40,6 @@ Applies to this initiative root and its descendants.
 - Keep the active sprint's `decision-log.md` current during execution.
 - Keep the active sprint's `closeout.md` current before stopping work.
 - Do not create sprint folders until `roadmap_ready: pass`.
-- Create sprint folders from `./sprint-template/` only when initializing the approved roadmap.
+- Create sprint folders from the canonical `ub-workflow` sprint template only
+  when initializing the approved roadmap.
 - Record the user's follow-up audit or refactor decision before closing the initiative.

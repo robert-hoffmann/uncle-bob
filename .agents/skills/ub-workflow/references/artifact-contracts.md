@@ -17,7 +17,6 @@ lightweight-spec workflow surfaces.
   store
 - `sprints/`: execution directories and the default home for sprint-local
   evidence and sprint-local decision memory
-- `sprint-template/`: canonical template used to seed each sprint
 
 ## `README.md`
 

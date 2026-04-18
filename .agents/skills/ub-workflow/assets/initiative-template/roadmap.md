@@ -13,7 +13,7 @@ as the initiative moves forward.
 - [ ] Master PRD imported into `./prd.md`
 - [ ] Master roadmap generated from `./prd.md`
 - [ ] Roadmap reviewed and approved with `roadmap_ready: pass`
-- [ ] All sprint folders initialized under `./sprints/` from `./sprint-template/`
+- [ ] All sprint folders initialized under `./sprints/` from the canonical `ub-workflow` sprint template
 - [ ] Sprint execution started
 - [ ] All sprint closeouts completed
 - [ ] Final audit completed as the last roadmap item

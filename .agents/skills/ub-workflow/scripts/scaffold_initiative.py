@@ -13,30 +13,39 @@ import shutil
 
 # region Constants
 
-SKILL_ROOT = Path(__file__).resolve().parents[1]
+SKILL_ROOT                    = Path(__file__).resolve().parents[1]
 DEFAULT_INITIATIVE_TEMPLATE_ROOT = SKILL_ROOT / "assets" / "initiative-template"
+CANONICAL_SPRINT_TEMPLATE_ROOT   = DEFAULT_INITIATIVE_TEMPLATE_ROOT / "sprint-template"
 DEFAULT_OPERATIONS_TEMPLATE_ROOT = SKILL_ROOT / "assets" / "operations-root"
-DEFAULT_SPEC_TEMPLATE_ROOT = SKILL_ROOT / "assets" / "lightweight-spec-template"
-DEFAULT_OPS_ROOT = Path(".ub-workflows")
-TEXT_FILE_SUFFIXES = {
+DEFAULT_SPEC_TEMPLATE_ROOT       = SKILL_ROOT / "assets" / "lightweight-spec-template"
+DEFAULT_OPS_ROOT                 = Path(".ub-workflows")
+TEXT_FILE_SUFFIXES               = {
     ".md",
     ".txt",
     ".yaml",
     ".yml",
     ".json",
 }
-KNOWN_COMMANDS           = {"create", "create-spec", "prepare-sprints", "init-sprints", "archive"}
+KNOWN_COMMANDS            = {"create", "create-spec", "prepare-sprints", "init-sprints", "archive"}
 ACTIVE_INITIATIVE_HEADING = "## Active Initiative Roots"
-ACTIVE_SPEC_HEADING      = "## Active Lightweight Specs"
-OPERATIONS_INDEX_FILES   = {"AGENTS.md", "README.md", "operation-guide.md", "user-guide.md"}
-SPRINT_ENTRY_PATTERN     = re.compile(r"^-\s+\[[ xX]\]\s+(.+?)\s*$")
-SPRINT_SUBTASK_PATTERN   = re.compile(r"^\s+-\s+\[[ xX]\]\s+(.+?)\s*$")
-SPRINT_PATH_PATTERN      = re.compile(r"^\s+-\s+Path:\s+`?(.+?sprint\.md)`?\s*$")
-SPRINT_GOAL_PATTERN      = re.compile(r"^\s+-\s+Goal:\s+(.+?)\s*$")
-SPRINT_DEPENDS_PATTERN   = re.compile(r"^\s+-\s+Depends on:\s+(.+?)\s*$")
+ACTIVE_SPEC_HEADING       = "## Active Lightweight Specs"
+OPERATIONS_INDEX_FILES    = {"AGENTS.md", "README.md", "operation-guide.md", "user-guide.md"}
+SPRINT_ENTRY_PATTERN      = re.compile(r"^-\s+\[[ xX]\]\s+(.+?)\s*$")
+SPRINT_SUBTASK_PATTERN    = re.compile(r"^\s+-\s+\[[ xX]\]\s+(.+?)\s*$")
+SPRINT_PATH_PATTERN       = re.compile(r"^\s+-\s+Path:\s+`?(.+?sprint\.md)`?\s*$")
+SPRINT_GOAL_PATTERN       = re.compile(r"^\s+-\s+Goal:\s+(.+?)\s*$")
+SPRINT_DEPENDS_PATTERN    = re.compile(r"^\s+-\s+Depends on:\s+(.+?)\s*$")
 SPRINT_VALIDATION_PATTERN = re.compile(r"^\s+-\s+Validation focus:\s+(.+?)\s*$")
-SPRINT_EVIDENCE_PATTERN  = re.compile(r"^\s+-\s+Evidence folder:\s+`?(.+?)`?\s*$")
-PENDING_HANDOFF_PREFIX   = "PENDING_HANDOFF:"
+SPRINT_EVIDENCE_PATTERN   = re.compile(r"^\s+-\s+Evidence folder:\s+`?(.+?)`?\s*$")
+PENDING_HANDOFF_PREFIX    = "PENDING_HANDOFF:"
+LEGACY_SPRINT_INIT_UNCHECKED = "- [ ] All sprint folders initialized under `./sprints/` from `./sprint-template/`"
+LEGACY_SPRINT_INIT_CHECKED   = "- [x] All sprint folders initialized under `./sprints/` from `./sprint-template/`"
+SPRINT_INIT_UNCHECKED        = (
+    "- [ ] All sprint folders initialized under `./sprints/` from the canonical `ub-workflow` sprint template"
+)
+SPRINT_INIT_CHECKED          = (
+    "- [x] All sprint folders initialized under `./sprints/` from the canonical `ub-workflow` sprint template"
+)
 
 # endregion Constants
 
@@ -448,6 +457,20 @@ def copy_tree(source: Path, destination: Path) -> None:
     shutil.copytree(source, destination, dirs_exist_ok=destination.exists())
 
 
+def copy_initiative_template(source: Path, destination: Path) -> None:
+    """Copy initiative control files while keeping sprint seeding internal."""
+
+    destination.mkdir(parents=True, exist_ok=True)
+    for child in sorted(source.iterdir()):
+        if child.name == "sprint-template":
+            continue
+        target = destination / child.name
+        if child.is_dir():
+            copy_tree(child, target)
+            continue
+        shutil.copy2(child, target)
+
+
 def determine_target_root(args: argparse.Namespace) -> Path:
     """Resolve the new initiative root from a slug or explicit path."""
 
@@ -655,7 +678,7 @@ def command_create(args: argparse.Namespace) -> int:
 
     ensure_operations_root(ops_root, operations_template_root, initiative_template_root)
     ensure_directory_is_safe(target_root)
-    copy_tree(initiative_template_root, target_root)
+    copy_initiative_template(initiative_template_root, target_root)
     render_placeholders(target_root, build_initiative_placeholder_map(args, target_root, prd_source))
     if prd_source is not None:
         shutil.copy2(prd_source, target_root / "prd.md")
@@ -897,6 +920,27 @@ def ensure_sprint_directory(template_root: Path, sprint_root: Path) -> str:
     )
 
 
+def resolve_canonical_sprint_template_root() -> Path:
+    """Return the canonical sprint template root or raise a clear helper error."""
+
+    template_root = CANONICAL_SPRINT_TEMPLATE_ROOT
+    required_entries = {"sprint.md", "closeout.md", "decision-log.md", "evidence"}
+    if not template_root.exists() or not template_root.is_dir():
+        raise ValueError(
+            "Canonical `ub-workflow` sprint template is missing or invalid: "
+            f"{template_root.as_posix()}"
+        )
+
+    present_entries = {path.name for path in template_root.iterdir()}
+    missing_entries = sorted(required_entries - present_entries)
+    if missing_entries:
+        raise ValueError(
+            "Canonical `ub-workflow` sprint template is missing required entries at "
+            f"{template_root.as_posix()}: {', '.join(missing_entries)}"
+        )
+    return template_root
+
+
 def ensure_initiative_rollup(initiative_root: Path) -> bool:
     """Backfill rollup.md into existing initiative roots when missing."""
 
@@ -1069,11 +1113,10 @@ def refresh_roadmap_after_sprint_init(roadmap_path: Path, first_sprint_title: st
 
     text = roadmap_path.read_text(encoding="utf-8")
     text = replace_pattern_once(text, r"^Status:\s+.+$", "Status: generated")
-    text = text.replace(
-        "- [ ] All sprint folders initialized under `./sprints/` from `./sprint-template/`",
-        "- [x] All sprint folders initialized under `./sprints/` from `./sprint-template/`",
-        1,
-    )
+    for candidate in (SPRINT_INIT_UNCHECKED, LEGACY_SPRINT_INIT_UNCHECKED, LEGACY_SPRINT_INIT_CHECKED):
+        if candidate in text:
+            text = text.replace(candidate, SPRINT_INIT_CHECKED, 1)
+            break
     text = replace_pattern_once(text, r"^- Next sprint:\s+.+$", f"- Next sprint: `{first_sprint_title}`")
     text = replace_pattern_once(text, r"^- Resume from:\s+.+$", f"- Resume from: `{normalize_path(first_sprint_path)}`")
     roadmap_path.write_text(text, encoding="utf-8")
@@ -1169,11 +1212,9 @@ def command_init_sprints(args: argparse.Namespace) -> int:
 
     initiative_root = Path(args.initiative_root).resolve()
     roadmap_path = initiative_root / "roadmap.md"
-    sprint_template_root = initiative_root / "sprint-template"
+    sprint_template_root = resolve_canonical_sprint_template_root()
     if not roadmap_path.exists():
         raise ValueError(f"Initiative roadmap does not exist: {roadmap_path.as_posix()}")
-    if not sprint_template_root.exists():
-        raise ValueError(f"Sprint template does not exist: {sprint_template_root.as_posix()}")
 
     readiness_errors = validate_roadmap_ready(initiative_root, roadmap_path)
     if readiness_errors:
@@ -1238,12 +1279,10 @@ def command_prepare_sprints(args: argparse.Namespace) -> int:
 
     initiative_root = Path(args.initiative_root).resolve()
     roadmap_path = initiative_root / "roadmap.md"
-    sprint_template_root = initiative_root / "sprint-template"
+    sprint_template_root = resolve_canonical_sprint_template_root()
     sprint_template_path = sprint_template_root / "sprint.md"
     if not roadmap_path.exists():
         raise ValueError(f"Initiative roadmap does not exist: {roadmap_path.as_posix()}")
-    if not sprint_template_path.exists():
-        raise ValueError(f"Sprint template does not exist: {sprint_template_path.as_posix()}")
 
     readiness_errors = validate_roadmap_ready(initiative_root, roadmap_path)
     if readiness_errors:
@@ -1438,7 +1477,7 @@ def build_parser() -> argparse.ArgumentParser:
     create_parser.add_argument(
         "--template-root",
         default=str(DEFAULT_INITIATIVE_TEMPLATE_ROOT),
-        help="Initiative template directory to copy from",
+        help="Initiative control-file template directory to copy from",
     )
     create_parser.add_argument(
         "--operations-template-root",
@@ -1509,7 +1548,7 @@ def build_parser() -> argparse.ArgumentParser:
         "prepare-sprints",
         help="Prepare sprint PRDs from roadmap metadata before execution begins",
     )
-    prepare_parser.add_argument("initiative_root", help="Initiative root containing roadmap.md and sprint-template/")
+    prepare_parser.add_argument("initiative_root", help="Initiative root containing roadmap.md")
     prepare_parser.add_argument(
         "--strict-placeholders",
         action="store_true",
@@ -1518,7 +1557,7 @@ def build_parser() -> argparse.ArgumentParser:
     prepare_parser.add_argument("--dry-run", action="store_true", help="Report sprint preparation without writing files")
 
     init_parser = subparsers.add_parser("init-sprints", help="Initialize sprint directories from roadmap paths")
-    init_parser.add_argument("initiative_root", help="Initiative root containing roadmap.md and sprint-template/")
+    init_parser.add_argument("initiative_root", help="Initiative root containing roadmap.md")
     init_parser.add_argument(
         "--strict-placeholders",
         action="store_true",

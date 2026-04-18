@@ -227,9 +227,9 @@ Rules:
    through `Sprint NN`, then keep the final audit as the last roadmap item.
 14. Prepare each planned sprint as a standalone execution-ready `sprint.md`
    before Sprint 01 or any later sprint begins.
-15. Initialize or repair all planned sprint folders from the initiative's
-   `sprint-template/` only after roadmap approval and in a way that preserves
-   the prepared sprint content.
+15. Initialize or repair all planned sprint folders from the canonical
+   `ub-workflow` sprint template only after roadmap approval and in a way that
+   preserves the prepared sprint content.
 16. When a sprint needs additional context refresh before execution, record the
    checkpoint explicitly before the sprint begins.
 17. Keep each `sprint.md` standalone so execution does not depend on reopening

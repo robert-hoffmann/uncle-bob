@@ -168,8 +168,8 @@ Mode reporting:
 21. Keep the active sprint's `decision-log.md` and `closeout.md` current before
     pausing.
 22. Materialize newly introduced additive workflow files in existing sprint
-    folders when canonical templates evolve, without overwriting prepared
-    sprint content.
+    folders from the canonical `ub-workflow` sprint template when it evolves,
+    without overwriting prepared sprint content.
 23. `reviewed` and `flow` stop after every sprint closeout so the human can
     review before the next sprint begins.
 24. `auto` may continue after sprint closeout unless a hard blocker, material

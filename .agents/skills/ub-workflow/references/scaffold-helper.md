@@ -22,8 +22,9 @@ of a manual copy workflow.
 6. prepares sprint PRDs from roadmap metadata when explicit sprint-pack
    preparation is requested
 7. initializes the full sprint set from roadmap path entries on demand
-8. backfills additive sprint-template files such as `decision-log.md` into
-   existing sprint directories without overwriting prepared sprint content
+8. backfills additive sprint files such as `decision-log.md` from the
+   canonical template into existing sprint directories without overwriting
+   prepared sprint content
 9. archives completed initiatives on explicit request only
 10. synchronizes the initiative-index `README.md` after create and archive
     actions
@@ -53,9 +54,9 @@ Rules:
 3. if a sprint directory already exists but is missing core files such as
    `sprint.md`, `closeout.md`, or `evidence/`, `init-sprints` exits with an
    error
-4. if a sprint directory already exists and only lacks additive template files
-   such as `decision-log.md`, the helper backfills those files without
-   overwriting existing prepared content
+4. if a sprint directory already exists and only lacks additive sprint files
+   such as `decision-log.md`, the helper backfills those files from the
+   canonical template without overwriting existing prepared content
 5. if an initiative root predates `rollup.md`, `prepare-sprints` and
    `init-sprints` backfill it from the canonical template
 6. `archive` refuses to move incomplete initiatives

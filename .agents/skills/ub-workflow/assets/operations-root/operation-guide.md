@@ -162,7 +162,6 @@ Generic pattern:
       prd.md
       roadmap.md
       research/
-      sprint-template/
       sprints/
         01-<sprint-slug>/
           sprint.md
@@ -206,8 +205,9 @@ planning phase. The PRD may cite it, but must not depend on it for core intent.
 The execution packs. Each sprint gets its own numbered directory so planning,
 evidence, and closeout stay co-located.
 
-Use the sprint template when initializing all sprint directories from the master
-roadmap. Do not initialize sprint directories until `roadmap_ready: pass`.
+Use the canonical `ub-workflow` sprint template when initializing all sprint
+directories from the master roadmap. Do not initialize sprint directories until
+`roadmap_ready: pass`.
 Initialization prepares execution; it does not start sprint work automatically.
 
 ### `exceptions/`

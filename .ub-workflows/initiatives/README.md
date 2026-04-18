@@ -26,6 +26,4 @@ If you want to bootstrap a new initiative quickly, use
 
 ## Active Lightweight Specs
 
-1. `specs/2026-04-18-agent-ux-and-workflow-help`
-2. `specs/2026-04-18-cross-skill-config-aware-scaffolding`
-3. `specs/2026-04-18-ub-workflow-interaction-modes`
+1. `none`

@@ -42,7 +42,7 @@ When resuming a lightweight spec root, read `./spec.md` first.
 - Keep `closeout.md` current before pausing or handing off.
 - Do not initialize sprint folders until `roadmap.md` is complete enough to
   stand in for plan output without chat history.
-- Initialize sprint folders from the initiative root's `./sprint-template/`
+- Initialize sprint folders from the canonical `ub-workflow` sprint template
   when building the roadmap-derived sprint set.
 - Execute only the user-requested active sprint in one invocation, then stop
   after closeout and roadmap updates.

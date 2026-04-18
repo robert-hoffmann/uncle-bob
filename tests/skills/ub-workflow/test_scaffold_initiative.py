@@ -1,11 +1,13 @@
 from __future__ import annotations
 
+from argparse import Namespace
 import importlib.util
 from pathlib import Path
 import subprocess
 import sys
 import tempfile
 import unittest
+from unittest import mock
 
 
 def find_repo_root() -> Path:
@@ -64,7 +66,7 @@ class ScaffoldInitiativeScriptTests(unittest.TestCase):
             self.assertTrue((ops_root / "initiatives" / "AGENTS.md").exists())
             self.assertTrue((target / "README.md").exists())
             self.assertTrue((target / "roadmap.md").exists())
-            self.assertTrue((target / "sprint-template" / "sprint.md").exists())
+            self.assertFalse((target / "sprint-template").exists())
 
             root_readme = (ops_root / "initiatives" / "README.md").read_text(encoding="utf-8")
             readme = (target / "README.md").read_text(encoding="utf-8")
@@ -145,6 +147,77 @@ class ScaffoldInitiativeScriptTests(unittest.TestCase):
             self.assertIn("PRD imported, awaiting roadmap planning", readme)
             self.assertIn("`prd_ready: pass`", readme)
 
+    def test_prepare_sprints_ignores_legacy_local_sprint_template(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            ops_root = Path(tmp) / "ops"
+            initiative_root = ops_root / "initiatives" / "2026-04-02-parser-modernization"
+
+            create_result = run_cmd(
+                [
+                    PYTHON_BIN,
+                    str(SCRIPT),
+                    "create",
+                    str(initiative_root),
+                    "--ops-root",
+                    str(ops_root),
+                    "--date",
+                    "2026-04-02",
+                    "--initiative-name",
+                    "Parser Modernization",
+                ]
+            )
+            self.assertEqual(create_result.returncode, 0, msg=create_result.stdout + create_result.stderr)
+            self.assertFalse((initiative_root / "sprint-template").exists())
+
+            legacy_template_root = initiative_root / "sprint-template"
+            legacy_template_root.mkdir(parents=True, exist_ok=True)
+            (legacy_template_root / "sprint.md").write_text(
+                "# Sprint PRD\n\nLEGACY LOCAL TEMPLATE SHOULD NOT BE USED.\n",
+                encoding="utf-8",
+            )
+            (legacy_template_root / "closeout.md").write_text("# Sprint Closeout\n", encoding="utf-8")
+            (legacy_template_root / "decision-log.md").write_text("# Sprint Decision Log\n", encoding="utf-8")
+            (legacy_template_root / "evidence").mkdir(exist_ok=True)
+
+            (initiative_root / "roadmap.md").write_text(
+                """# Sprint Roadmap
+
+Status: planned
+
+## Overall Checklist
+
+- [x] Master PRD imported into `./prd.md`
+- [x] Master roadmap generated from `./prd.md`
+- [x] Roadmap reviewed and approved with `roadmap_ready: pass`
+- [ ] All sprint folders initialized under `./sprints/` from the canonical `ub-workflow` sprint template
+
+## Sprint Sequence
+
+- [ ] Sprint 01 - Define Contract
+  - Path: `./sprints/01-define-contract/sprint.md`
+  - Goal: Define the contract
+  - Depends on: `none`
+  - Validation focus: Contract review
+  - Subtasks:
+    - [ ] Draft the contract
+  - Evidence folder: `./sprints/01-define-contract/evidence/`
+""",
+                encoding="utf-8",
+            )
+
+            readme_path = initiative_root / "README.md"
+            readme_path.write_text(
+                readme_path.read_text(encoding="utf-8").replace("`prd_ready: blocked`", "`roadmap_ready: pass`"),
+                encoding="utf-8",
+            )
+
+            result = run_cmd([PYTHON_BIN, str(SCRIPT), "prepare-sprints", str(initiative_root)])
+
+            self.assertEqual(result.returncode, 0, msg=result.stdout + result.stderr)
+            sprint_text = (initiative_root / "sprints" / "01-define-contract" / "sprint.md").read_text(encoding="utf-8")
+            self.assertIn("## Machine-Derived Context", sprint_text)
+            self.assertNotIn("LEGACY LOCAL TEMPLATE SHOULD NOT BE USED", sprint_text)
+
     def test_prepare_sprints_renders_roadmap_metadata_into_sprint_prds(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             ops_root = Path(tmp) / "ops"
@@ -176,7 +249,7 @@ Status: planned
 - [x] Master PRD imported into `./prd.md`
 - [x] Master roadmap generated from `./prd.md`
 - [x] Roadmap reviewed and approved with `roadmap_ready: pass`
-- [ ] All sprint folders initialized under `./sprints/` from `./sprint-template/`
+- [ ] All sprint folders initialized under `./sprints/` from the canonical `ub-workflow` sprint template
 
 ## Current Position
 
@@ -222,6 +295,7 @@ Status: planned
                 readme_path.read_text(encoding="utf-8").replace("`prd_ready: blocked`", "`roadmap_ready: pass`"),
                 encoding="utf-8",
             )
+            self.assertFalse((initiative_root / "sprint-template").exists())
 
             result = run_cmd([PYTHON_BIN, str(SCRIPT), "prepare-sprints", str(initiative_root)])
 
@@ -245,7 +319,10 @@ Status: planned
             self.assertIn("PENDING_HANDOFF:", second_sprint)
             self.assertIn("`sprint_content_ready: pass`", readme)
             self.assertIn("Sprint pack prepared, awaiting Sprint 01 execution", readme)
-            self.assertIn("- [x] All sprint folders initialized under `./sprints/` from `./sprint-template/`", roadmap)
+            self.assertIn(
+                "- [x] All sprint folders initialized under `./sprints/` from the canonical `ub-workflow` sprint template",
+                roadmap,
+            )
 
     def test_prepare_sprints_preserves_non_placeholder_sprint_docs(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -278,7 +355,7 @@ Status: planned
 - [x] Master PRD imported into `./prd.md`
 - [x] Master roadmap generated from `./prd.md`
 - [x] Roadmap reviewed and approved with `roadmap_ready: pass`
-- [ ] All sprint folders initialized under `./sprints/` from `./sprint-template/`
+- [ ] All sprint folders initialized under `./sprints/` from the canonical `ub-workflow` sprint template
 
 ## Sprint Sequence
 
@@ -349,7 +426,7 @@ Status: generated
 - [x] Master PRD imported into `./prd.md`
 - [x] Master roadmap generated from `./prd.md`
 - [x] Roadmap reviewed and approved with `roadmap_ready: pass`
-- [x] All sprint folders initialized under `./sprints/` from `./sprint-template/`
+- [x] All sprint folders initialized under `./sprints/` from the canonical `ub-workflow` sprint template
 
 ## Sprint Sequence
 
@@ -407,7 +484,7 @@ Status: planned
 - [x] Master PRD imported into `./prd.md`
 - [x] Master roadmap generated from `./prd.md`
 - [ ] Roadmap reviewed and approved with `roadmap_ready: pass`
-- [ ] All sprint folders initialized under `./sprints/` from `./sprint-template/`
+- [ ] All sprint folders initialized under `./sprints/` from the canonical `ub-workflow` sprint template
 
 ## Sprint Sequence
 
@@ -461,7 +538,7 @@ Status: generated
 - [x] Master PRD imported into `./prd.md`
 - [x] Master roadmap generated from `./prd.md`
 - [x] Roadmap reviewed and approved with `roadmap_ready: pass`
-- [x] All sprint folders initialized under `./sprints/` from `./sprint-template/`
+- [x] All sprint folders initialized under `./sprints/` from the canonical `ub-workflow` sprint template
 
 ## Current Position
 
@@ -533,7 +610,7 @@ Status: generated
 - [x] Master PRD imported into `./prd.md`
 - [x] Master roadmap generated from `./prd.md`
 - [x] Roadmap reviewed and approved with `roadmap_ready: pass`
-- [x] All sprint folders initialized under `./sprints/` from `./sprint-template/`
+- [x] All sprint folders initialized under `./sprints/` from the canonical `ub-workflow` sprint template
 
 ## Current Position
 
@@ -647,7 +724,7 @@ Status: complete
 - [x] Master PRD imported into `./prd.md`
 - [x] Master roadmap generated from `./prd.md`
 - [x] Roadmap reviewed and approved with `roadmap_ready: pass`
-- [x] All sprint folders initialized under `./sprints/` from `./sprint-template/`
+- [x] All sprint folders initialized under `./sprints/` from the canonical `ub-workflow` sprint template
 - [x] Sprint execution started
 - [x] All sprint closeouts completed
 - [x] Final audit completed as the last roadmap item
@@ -704,7 +781,7 @@ Status: planned
 - [x] Master PRD imported into `./prd.md`
 - [x] Master roadmap generated from `./prd.md`
 - [x] Roadmap reviewed and approved with `roadmap_ready: pass`
-- [ ] All sprint folders initialized under `./sprints/` from `./sprint-template/`
+- [ ] All sprint folders initialized under `./sprints/` from the canonical `ub-workflow` sprint template
 
 ## Current Position
 
@@ -755,6 +832,7 @@ Status: planned
                 readme_path.read_text(encoding="utf-8").replace("`prd_ready: blocked`", "`roadmap_ready: pass`"),
                 encoding="utf-8",
             )
+            self.assertFalse((initiative_root / "sprint-template").exists())
 
             result = run_cmd([PYTHON_BIN, str(SCRIPT), "init-sprints", str(initiative_root)])
 
@@ -771,7 +849,10 @@ Status: planned
             self.assertIn("Start Sprint 01 - Define Contract", readme)
             self.assertIn("`roadmap_ready: pass`", readme)
             self.assertIn("Status: generated", roadmap)
-            self.assertIn("- [x] All sprint folders initialized under `./sprints/` from `./sprint-template/`", roadmap)
+            self.assertIn(
+                "- [x] All sprint folders initialized under `./sprints/` from the canonical `ub-workflow` sprint template",
+                roadmap,
+            )
             self.assertIn("- Next sprint: `Sprint 01 - Define Contract`", roadmap)
 
     def test_init_sprints_blocks_until_roadmap_ready_gate_passes(self) -> None:
@@ -805,7 +886,7 @@ Status: planned
 - [x] Master PRD imported into `./prd.md`
 - [x] Master roadmap generated from `./prd.md`
 - [ ] Roadmap reviewed and approved with `roadmap_ready: pass`
-- [ ] All sprint folders initialized under `./sprints/` from `./sprint-template/`
+- [ ] All sprint folders initialized under `./sprints/` from the canonical `ub-workflow` sprint template
 
 ## Sprint Sequence
 
@@ -895,7 +976,7 @@ Status: complete
 - [x] Master PRD imported into `./prd.md`
 - [x] Master roadmap generated from `./prd.md`
 - [x] Roadmap reviewed and approved with `roadmap_ready: pass`
-- [x] All sprint folders initialized under `./sprints/` from `./sprint-template/`
+- [x] All sprint folders initialized under `./sprints/` from the canonical `ub-workflow` sprint template
 - [x] Sprint execution started
 - [x] All sprint closeouts completed
 - [x] Final audit completed as the last roadmap item
@@ -1008,7 +1089,7 @@ Status: planned
 - [x] Master PRD imported into `./prd.md`
 - [x] Master roadmap generated from `./prd.md`
 - [x] Roadmap reviewed and approved with `roadmap_ready: pass`
-- [ ] All sprint folders initialized under `./sprints/` from `./sprint-template/`
+- [ ] All sprint folders initialized under `./sprints/` from the canonical `ub-workflow` sprint template
 
 ## Current Position
 
@@ -1078,7 +1159,7 @@ Status: planned
 - [x] Master PRD imported into `./prd.md`
 - [x] Master roadmap generated from `./prd.md`
 - [x] Roadmap reviewed and approved with `roadmap_ready: pass`
-- [ ] All sprint folders initialized under `./sprints/` from `./sprint-template/`
+- [ ] All sprint folders initialized under `./sprints/` from the canonical `ub-workflow` sprint template
 
 ## Current Position
 
@@ -1133,6 +1214,74 @@ Status: planned
             self.assertIn("advisory", result.stdout)
             self.assertIn("PENDING_HANDOFF:", result.stdout)
 
+    def test_prepare_sprints_fails_when_canonical_sprint_template_is_missing(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            ops_root = Path(tmp) / "ops"
+            initiative_root = ops_root / "initiatives" / "2026-04-02-parser-modernization"
+
+            create_result = run_cmd(
+                [
+                    PYTHON_BIN,
+                    str(SCRIPT),
+                    "create",
+                    str(initiative_root),
+                    "--ops-root",
+                    str(ops_root),
+                    "--date",
+                    "2026-04-02",
+                    "--initiative-name",
+                    "Parser Modernization",
+                ]
+            )
+            self.assertEqual(create_result.returncode, 0, msg=create_result.stdout + create_result.stderr)
+
+            (initiative_root / "roadmap.md").write_text(
+                """# Sprint Roadmap
+
+Status: planned
+
+## Overall Checklist
+
+- [x] Master PRD imported into `./prd.md`
+- [x] Master roadmap generated from `./prd.md`
+- [x] Roadmap reviewed and approved with `roadmap_ready: pass`
+- [ ] All sprint folders initialized under `./sprints/` from the canonical `ub-workflow` sprint template
+
+## Sprint Sequence
+
+- [ ] Sprint 01 - Define Contract
+  - Path: `./sprints/01-define-contract/sprint.md`
+  - Goal: Define the contract
+  - Depends on: `none`
+  - Validation focus: Contract review
+  - Subtasks:
+    - [ ] Draft the contract
+  - Evidence folder: `./sprints/01-define-contract/evidence/`
+""",
+                encoding="utf-8",
+            )
+
+            readme_path = initiative_root / "README.md"
+            readme_path.write_text(
+                readme_path.read_text(encoding="utf-8").replace("`prd_ready: blocked`", "`roadmap_ready: pass`"),
+                encoding="utf-8",
+            )
+
+            missing_template_root = Path(tmp) / "missing-sprint-template"
+            with (
+                mock.patch.object(SCRIPT_MODULE, "CANONICAL_SPRINT_TEMPLATE_ROOT", missing_template_root),
+                self.assertRaisesRegex(ValueError, "Canonical `ub-workflow` sprint template is missing or invalid") as exc,
+            ):
+                SCRIPT_MODULE.command_prepare_sprints(
+                    Namespace(
+                        initiative_root=str(initiative_root),
+                        strict_placeholders=False,
+                        dry_run=False,
+                    )
+                )
+
+            self.assertIn(missing_template_root.as_posix(), str(exc.exception))
+
     def test_placeholder_checker_ignores_code_examples_and_quoted_placeholder_prose(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             ops_root = Path(tmp) / "ops"
@@ -1180,7 +1329,7 @@ Status: generated
 - [x] Master PRD imported into `./prd.md`
 - [x] Master roadmap generated from `./prd.md`
 - [x] Roadmap reviewed and approved with `roadmap_ready: pass`
-- [x] All sprint folders initialized under `./sprints/` from `./sprint-template/`
+- [x] All sprint folders initialized under `./sprints/` from the canonical `ub-workflow` sprint template
 """,
                 encoding="utf-8",
             )
