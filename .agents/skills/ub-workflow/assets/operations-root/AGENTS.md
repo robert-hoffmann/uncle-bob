@@ -10,6 +10,7 @@ Applies to this operations root and its descendants.
 - `user-guide.md` is the human-facing explanation of the same workflow.
 - `roadmap.md` is the small live progress document for an initiative and should
   be the first file read when resuming work.
+- `spec.md` is the first file to read when resuming a lightweight spec root.
 - Each sprint `sprint.md` must be a standalone sprint PRD that can be executed
   without reopening the master `prd.md`.
 - After importing a master PRD, stop and produce a durable `roadmap.md` before
@@ -31,6 +32,8 @@ When resuming work inside one initiative root, read in this order:
 3. the active or next sprint `sprint.md`
 4. `./README.md`
 5. `./prd.md` only if additional initiative-level context is still needed
+
+When resuming a lightweight spec root, read `./spec.md` first.
 
 ## Update Discipline
 

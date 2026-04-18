@@ -8,11 +8,31 @@ Use these requirements to decide what to document, how to organize files, and ho
 
 Good documentation transcends language syntax. These principles apply to **ALL** programming languages.
 
+Use documentation to reduce reconstruction cost for future readers, including
+maintainers, reviewers, and tool-assisted agents.
+
+Prefer this information hierarchy:
+
+1. **Code and names**   — Carry mechanics and immediate intent
+2. **Types and shapes** — Carry structure and interface expectations
+3. **Docs**             — Carry contract, constraints, usage boundaries, and examples
+4. **Comments**         — Carry rationale, caveats, and non-obvious local context
+
+Avoid low-signal narration that simply paraphrases execution already visible in
+clear code.
+
 ---
 
 ## Function/Method Documentation
 
-Every function, method, or callable should include:
+Document functions, methods, and callables when they are public, reusable,
+risky, domain-heavy, or non-obvious to a future reader.
+
+Prefer lightweight or no extra documentation when a callable is private,
+trivial, and already clear from naming, types, and surrounding structure.
+
+When fuller callable documentation is warranted, include the fields that
+materially reduce reader guesswork:
 
 1. **Brief description** — What the function does (one line)
 2. **Parameters**        — Each parameter with its type and purpose
@@ -39,23 +59,33 @@ Brief description of what this function does.
 <doc_block_end>
 ```
 
-**Principle:** A developer should understand how to use a function without reading its implementation.
+**Principle:** A reader should understand how to use important call surfaces
+without reconstructing intent from implementation details alone.
 
 ---
 
 ## Class/Type Documentation
 
-Every class, struct, or type definition should include:
+Document classes, structs, and types when their role, lifecycle, invariants, or
+usage boundaries are not already obvious from the name and local context.
+
+Prioritize:
 
 1. **Purpose**               — What this type represents
 2. **Attributes/Properties** — Key fields and their purposes
 3. **Usage context**         — When and how to use this type
 
+Keep lightweight value objects or obvious local-only shapes concise unless more
+detail materially improves understanding.
+
 ---
 
 ## Inline Comments
 
-Add inline comments throughout code to explain:
+Add inline comments where they reduce reconstruction cost for a reader who does
+not already have the current implementation loaded into short-term memory.
+
+Use them to explain:
 
 - **Complex logic**        — Algorithms, formulas, or non-obvious operations
 - **Business rules**       — Domain-specific requirements or constraints
@@ -67,7 +97,11 @@ Add inline comments throughout code to explain:
 - Explain non-obvious logic, business constraints, data shape changes, and trade-offs
 - Prefer documenting **why** a decision exists over restating **what** the code already says
 - Keep comments close to the logic they clarify
-- Remove comments that only narrate obvious operations
+- Treat "obvious" contextually: logic that is easy for a domain expert to infer
+  may still deserve documentation when a new maintainer or tool-assisted agent
+  would otherwise need to rebuild the reasoning from scratch
+- Remove comments that only narrate obvious operations when the code, names,
+  and types already make the behavior clear
 
 ---
 
@@ -75,13 +109,16 @@ Add inline comments throughout code to explain:
 
 > **Applies to:** All languages with import/include/require statements
 
-Imports are the entry point to understanding a file's dependencies. Document them clearly with inline comments explaining what each import provides.
+Imports are the entry point to understanding a file's dependencies. Use
+structure first, then add comments only where the dependency role is not
+already obvious.
 
 Use this generic approach:
 
 1. Group dependencies by source (platform/core, external, project-local).
 2. Keep one declaration per line for multiline import/include blocks.
-3. Add concise role comments for non-obvious dependencies.
+3. Add concise role comments for non-obvious dependencies, grouped aliases, or
+   unusual side-effect imports.
 4. Align inline role comments inside the same logical block when practical.
 
 **Logical grouping** — organize imports into sections:
@@ -92,7 +129,9 @@ Use this generic approach:
 
 Keep section headers and grouping labels language-neutral.
 
-**Principle:** A developer scanning imports should immediately understand what each dependency provides without looking it up.
+**Principle:** A reader scanning imports should understand the dependency shape
+immediately and need comments only for the dependencies whose role is not
+self-evident.
 
 ---
 
@@ -182,8 +221,12 @@ Ask yourself:
 - Can someone unfamiliar with this codebase understand what this does?
 - Are the business rules and constraints documented?
 - Is the "why" explained, not just the "what"?
+- Would a future maintainer or tool-assisted agent need to simulate hidden
+  context to understand this file?
 
-**Principle:** The code IS the documentation — write it so that it tells a clear story.
+**Principle:** The code is the first layer of documentation; use surrounding
+docs and comments to expose the contract and reasoning the code alone does not
+communicate cheaply.
 
 ---
 
@@ -240,7 +283,9 @@ Use visual separators to divide code into logical sections:
 When modifying existing code:
 
 1. **Preserve all existing functionality** — Don't remove features unless explicitly requested
-2. **Keep commented-out sections**         — They often contain important context or fallback code
+2. **Keep commented-out sections selectively** — Preserve them only when they
+   still carry active migration context, bounded fallback strategy, or
+   intentional near-term follow-up value
 3. **Maintain existing structure**         — Follow the file's established patterns and organization
 4. **Respect existing formatting**         — Match surrounding style unless it conflicts with the alignment policy precedence above
 5. **Remove migration-only labels**        — Do not keep transitional markers in final code
@@ -338,10 +383,11 @@ These refactoring practices apply to **ALL** programming languages. The goal is 
 
 ## Logging and Observability
 
-> **Use logging extensively so we can easily identify errors**
+> **Use logging deliberately where it improves diagnosis and operability**
 
-- Add logging at key decision points
-- Log function entry/exit for complex operations
+- Add logging at key decision points and failure boundaries
+- Log function entry/exit only when it materially helps diagnosis for complex or
+  opaque flows
 - Include relevant context in log messages
 - Use appropriate log levels (debug, info, warning, error)
 
@@ -357,7 +403,8 @@ When reviewing code for refactoring opportunities, check for:
 - [ ] Dead code or unused variables
 - [ ] Deep nesting that could be flattened
 - [ ] Missing error handling
-- [ ] Missing logging for debugging
+- [ ] Missing diagnostic logging where failures would be difficult to
+      investigate
 - [ ] Inefficient algorithms or data structures
 - [ ] Magic numbers/strings that should be constants
 - [ ] Region markers are balanced in files that use fold regions

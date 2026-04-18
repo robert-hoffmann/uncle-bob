@@ -17,6 +17,20 @@ disable-model-invocation: false
 
 Route the user to the correct VS Code Copilot customization primitive(s), generate safe and valid artifacts, validate output, and recommend companion artifacts when a single file is not enough.
 
+Implement against the target host and tool reality, but bias the generated
+customization toward current official guidance and forward-compatible artifact
+choices instead of preserving deprecated or legacy customization surfaces by
+default.
+
+## When Not To Use
+
+- Do not use this skill for general repository workflow planning; defer that to
+  `ub-workflow`.
+- Do not use this skill for governance-only policy or evidence questions;
+  defer those to `ub-governance`.
+- Do not use this skill when the user only needs normal code implementation in
+  an existing stack rather than Copilot customization artifacts.
+
 ## Artifact Selection Matrix
 
 Classify the request BEFORE generating anything.
@@ -67,6 +81,32 @@ Before generating anything, interview the user with targeted questions. Use `ask
 
 After classification, state the recommendation, assumptions, and rationale before generating.
 
+## Platform & Research Policy
+
+- Treat the latest stable VS Code and GitHub Copilot customization guidance as
+  the preferred baseline for artifact choice, file structure, and capability
+  recommendations.
+- Detect workspace and host truth before generating: repository structure,
+  existing customization artifacts, target host, available tools, and
+  portability requirements.
+- Treat repo and host truth as the gold implementation standard when deciding
+  what can actually ship safely in the target environment.
+- Use web search to verify current official customization guidance against
+  primary VS Code and GitHub documentation before making non-trivial or
+  platform-sensitive recommendations.
+- If official guidance and repo or host truth diverge materially on a
+  non-trivial recommendation, surface `OFFICIAL_CONFLICT`, implement the
+  host-safe path, and explain the migration or portability consequence.
+- If official sources disagree with each other on a non-trivial
+  recommendation, also surface `OFFICIAL_CONFLICT` instead of silently
+  collapsing the disagreement.
+- If a non-trivial claim cannot be confirmed in official sources after
+  targeted research, mark it `UNVERIFIED` or avoid presenting it as settled
+  guidance.
+- Keep conflict and uncertainty disclosure scoped to non-trivial,
+  platform-sensitive, or contested guidance rather than simple artifact
+  generation.
+
 ## Bundle Recommendations
 
 Many workflows need multiple artifacts working together. Actively recommend these bundles during classification:
@@ -110,6 +150,12 @@ State assumptions, file tree, and rationale. For the artifact type being generat
 | Cross-vendor exports | [references/cross-vendor.md](references/cross-vendor.md) |
 
 For writing quality guidance, read [references/prompt-engineering.md](references/prompt-engineering.md).
+When changing shared routing or authoring structure, read
+[`../references/authoring-conventions.md`](../references/authoring-conventions.md).
+
+Before generating non-trivial or platform-sensitive customizations, compare
+official guidance, repo truth, and target host reality and surface
+`OFFICIAL_CONFLICT` or `UNVERIFIED` when relevant.
 
 ### 4. Generate
 
@@ -138,13 +184,17 @@ Present the output for review. Refine based on user feedback. Re-validate after 
 Structure every generation response as:
 
 1. **Recommendation** — what to generate and why
-2. **Assumptions** — defaults chosen, unresolved ambiguities
-3. **File tree** — directories and files to create or update
-4. **Generated content** — file-by-file output
-5. **Validation checklist** — human review items + technical checks
-6. **Smoke-test prompts** — how to verify the artifact works
-7. **Portability notes** — which pieces are VS Code-only, Copilot-compatible, or broadly portable
-8. **Risks / follow-up** — preview features, secrets, plugin trust, unsupported vendor features
+2. **Source truth note** — detected host, repo artifact reality, and any
+   material gap versus latest official guidance
+3. **Assumptions** — defaults chosen, unresolved ambiguities
+4. **File tree** — directories and files to create or update
+5. **Generated content** — file-by-file output
+6. **Validation checklist** — human review items + technical checks
+7. **Smoke-test prompts** — how to verify the artifact works
+8. **Portability notes** — which pieces are VS Code-only, Copilot-compatible, or broadly portable
+9. **Risks / follow-up** — preview features, secrets, plugin trust, unsupported vendor features
+10. **Conflict note when relevant** — `OFFICIAL_CONFLICT` or `UNVERIFIED`
+    with a concise explanation and the implementation consequence
 
 ## Completion Checklist
 
@@ -155,6 +205,8 @@ Structure every generation response as:
 - Validation and smoke-test guidance is explicit.
 - VS Code-only versus broadly portable behavior is called out.
 - Secret handling, trust, or preview-feature risks are surfaced when relevant.
+- Any material official-source conflict or unverified non-trivial guidance is
+  disclosed explicitly when relevant.
 
 ## Safety Defaults
 

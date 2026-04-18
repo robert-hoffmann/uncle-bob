@@ -40,11 +40,21 @@ Artifacts are selected by:
 
 ## 4) High-Risk Modifier (Immediate Blocking)
 
-When touched paths match `high-risk-paths.yaml`, require:
+When touched paths match `high-risk-paths.yaml` under explicit Level 2,
+repository-level, or ADR-gate governance, require:
 
 1. ADR alignment evidence (`docs/adr/registry.json` linkage)
 2. decision object fields: `impact`, `alignment`, `adrRefs`, optional `waiverRef`, `constraintsRef`
 3. claim-register validation output when blocking rationale depends on claims
+
+For Level 1 workflow-backed initiatives that have not escalated into ADR
+alignment, keep the operational record in workflow artifacts and sprint-local
+evidence unless a repository-level decision or explicit high-risk governance
+run requires the heavier ADR path.
+
+Typical Level 1 workflow-native decision-memory artifacts include sprint
+`decision-log.md` files and the initiative `rollup.md`, backed by the owning
+sprint `evidence/` folders.
 
 ## 5) Validation Record Linkage
 

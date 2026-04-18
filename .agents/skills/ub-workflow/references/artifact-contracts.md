@@ -1,6 +1,7 @@
 # Artifact Contracts
 
-Use these files as the minimum contract for a reusable initiative workflow.
+Use these files as the minimum contract for reusable initiative and
+lightweight-spec workflow surfaces.
 
 ## Required Initiative Files
 
@@ -8,10 +9,14 @@ Use these files as the minimum contract for a reusable initiative workflow.
 - `AGENTS.md`: local resume order and update discipline
 - `prd.md`: self-contained initiative definition
 - `roadmap.md`: small live tracker with full sprint order
+- `rollup.md`: readable cross-sprint summary and carry-forward surface
 - `retained-note.md`: durable completion summary
-- `research/`: optional discovery notes and supporting inputs
-- `exceptions/`: optional bounded exception records
-- `sprints/`: execution directories
+- `research/`: optional supportive discovery notes, kept secondary to the main
+  workflow artifacts
+- `exceptions/`: optional bounded exception records, not a catch-all note
+  store
+- `sprints/`: execution directories and the default home for sprint-local
+  evidence and sprint-local decision memory
 - `sprint-template/`: canonical template used to seed each sprint
 
 ## `README.md`
@@ -19,16 +24,17 @@ Use these files as the minimum contract for a reusable initiative workflow.
 Minimum sections:
 
 1. initiative name and owner
-2. current phase
-3. current gate state
-4. roadmap status
-5. active sprint or `none`
-6. last completed sprint
-7. next step
-8. blockers
-9. governance bridge level and profile when applicable
-10. validation pointers
-11. smallest file set needed to resume
+2. active interaction mode
+3. current phase
+4. current gate state
+5. roadmap status
+6. active sprint or `none`
+7. last completed sprint
+8. next step
+9. blockers
+10. governance bridge level and profile when applicable
+11. validation pointers
+12. smallest file set needed to resume
 
 ## `prd.md`
 
@@ -65,6 +71,10 @@ Minimum sections:
 9. completion condition
 10. final audit as the last item
 
+Current-position rule:
+
+1. record the persisted interaction mode alongside current sprint state
+
 Roadmap shape rules:
 
 1. Use as many implementation sprints as the PRD actually requires; do not imply a two-sprint cap.
@@ -84,16 +94,18 @@ Minimum sections:
 
 1. sprint objective
 2. exact scope
-3. dependencies
-4. verified repository truth at sprint start
-5. chosen implementation path
-6. one rejected alternative with concise pros and cons
-7. affected files, modules, systems, or docs
-8. validation plan
-9. exit criteria
-10. final-audit checklist for the final audit sprint
-11. handoff expectation
-12. definition of done
+3. execution slices
+4. dependencies
+5. verified repository truth at sprint start
+6. chosen implementation path
+7. one rejected alternative with concise pros and cons
+8. affected files, modules, systems, or docs
+9. validation plan
+10. reviewability check
+11. exit criteria
+12. final-audit checklist for the final audit sprint
+13. handoff expectation
+14. definition of done
 
 Sprint document rules:
 
@@ -101,11 +113,42 @@ Sprint document rules:
  the full initiative chat history.
 2. Placeholder-only sprint shells are incomplete planning state, not
  execution-ready artifacts.
-3. Later sprints may contain named pending handoff markers only in fields that
+3. Execution slices should be the main place where planned work is broken into
+ independently reviewable chunks.
+4. Each execution slice should name acceptance, verification, dependencies,
+   and likely touched areas when those details materially affect execution or
+   review.
+5. Later sprints may contain named pending handoff markers only in fields that
  legitimately depend on prior closeout truth.
-4. The validation plan must be concrete enough for another operator to execute
+6. The validation plan must be concrete enough for another operator to execute
  it without improvising missing checks.
-5. The handoff expectation must name what the next sprint should read first.
+7. The handoff expectation must name what the next sprint should read first.
+8. Use `decision-log.md` for evolving sprint-time decisions, reversals, and
+   deferrals instead of forcing all running memory into `closeout.md`.
+
+## `decision-log.md`
+
+Use this file as the running sprint-level decision-memory surface.
+
+Minimum sections:
+
+1. purpose
+2. decisions
+3. reversals and deferrals
+4. evidence pointers
+5. carry forward
+
+Decision-log rules:
+
+1. Keep the log sprint-scoped; repository-level durable decisions still belong
+   in `docs/adr/` only when ADR escalation is actually warranted.
+2. Record rationale, changed direction, or non-obvious constraints here while
+   the sprint is active instead of relying on post-hoc reconstruction in
+   `closeout.md`.
+3. Link to sprint `evidence/`, touched files, or synchronized artifacts when
+   those links materially improve resumability.
+4. Keep the file readable; it is a high-signal running log, not a raw command
+   dump.
 
 ## `closeout.md`
 
@@ -127,6 +170,38 @@ Closeout structure rules:
 2. When governance is active, `gate_note` must also record the governance gate type and result.
 3. `validation_note` must capture commands, outcomes, evidence pointers, and documentation-sync status.
 4. When governance is active, `exception_note` must reference canonical governance exception metadata.
+5. When a sprint used `decision-log.md`, the closeout should leave it current
+   enough for the next sprint or final audit to trust it.
+6. When the active interaction mode exposes user-facing post-execution
+   reporting, the closeout should make considerations moving forward,
+   assumptions made, and things to watch easy to recover for later reporting.
+
+## `rollup.md`
+
+Use this file as the readable initiative-level summary across sprints.
+
+Minimum sections:
+
+1. purpose
+2. current snapshot
+3. major decisions
+4. sprint highlights
+5. cross-sprint risks and deferrals
+6. validation and evidence rollup
+7. research and exceptions pointers
+
+Rollup rules:
+
+1. Keep `rollup.md` shorter and easier to scan than walking every sprint
+   directory one by one.
+2. Summarize cross-sprint decisions, reversals, and major validation signals
+   here, then point to the owning sprint `decision-log.md`, `closeout.md`, or
+   `evidence/` when more detail is needed.
+3. Do not duplicate every sprint detail verbatim; the rollup is a readable
+   index, not a second full archive.
+4. Keep `research/` and `exceptions/` visibly secondary by pointing to them
+   only when they truly contain cross-sprint discovery or bounded exception
+   records.
 
 ## `retained-note.md`
 
@@ -145,3 +220,39 @@ Retained-note rules:
 1. When governance is active, record governance bridge level, profile, exception refs, and ADR refs.
 2. Validation baseline must be traceable enough for a later operator to reconstruct the final audit posture.
 3. Do not pre-fill initiative-specific decisions during scaffold creation; keep the retained note minimal until final audit work begins.
+
+## Lightweight Spec Root
+
+Use lightweight specs for work that sits between direct bounded execution and a
+full initiative.
+
+Path contract:
+
+- `./specs/YYYY-MM-DD-slug/spec.md`
+
+Minimum `spec.md` sections:
+
+1. snapshot
+2. summary
+3. problem or opportunity
+4. goals
+5. non-goals
+6. assumptions and unknowns
+7. scale decision
+8. chosen path
+9. one rejected alternative with concise pros and cons
+10. validation plan
+11. documentation touch points
+12. next action
+
+Lightweight spec rules:
+
+1. The spec must be self-contained enough for another operator to continue
+   without chat history.
+2. The spec must explain why the work is not merely a direct bounded task and
+   why it does not yet require a full initiative.
+3. The spec must record what would trigger promotion into a full initiative.
+4. The active interaction mode must be explicit in the lightweight spec
+   snapshot.
+5. Lightweight specs do not require `roadmap.md`, sprint scaffolding, or
+   retained-note flow by default.

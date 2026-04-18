@@ -1,4 +1,0 @@
-interface:
-  display_name: "UB Python"
-  short_description: "Project Python standards for modern typed development"
-  default_prompt: "Use $ub-python to implement or refactor repository Python code with typed Python (latest stable) patterns, boundary validation, and robust error handling."

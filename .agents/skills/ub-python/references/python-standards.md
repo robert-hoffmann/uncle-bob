@@ -21,6 +21,20 @@ official Python and tooling guidance.
 - Treat readability and maintainability as hard constraints.
 - For non-trivial work, explicitly compare at least two approaches with pros/cons.
 
+## 2A. Source Truth And Disclosure
+
+- Treat repo truth as the shipping constraint: detect the active Python floor,
+  runtime, and tooling before recommending implementation details.
+- Treat official Python docs and official tool docs as the preferred guidance
+  baseline for forward-looking design and migration-ready patterns.
+- If official docs, repo truth, or live code reality materially disagree on a
+  non-trivial recommendation, surface `OFFICIAL_CONFLICT`, implement the
+  repo-safe path, and explain the forward migration path.
+- If a non-trivial claim cannot be confirmed in official sources after targeted
+  research, mark it `UNVERIFIED` or avoid presenting it as settled guidance.
+- Keep these disclosures scoped to non-trivial, version-sensitive, or contested
+  guidance rather than every trivial edit.
+
 ## 3. Typing Rules (Modern Python Defaults)
 
 - Annotate non-trivial function parameters and return types.
@@ -28,12 +42,16 @@ official Python and tooling guidance.
 - Prefer `collections.abc` interface types (`Iterable`, `Sequence`, `Mapping`, `Callable`) and `abc` or `Protocol` contracts when mutation or a concrete container type is not required.
 - Prefer `typing_extensions` for newer typing features and backports when the project's supported version floor needs them or when the backport gives cleaner cross-version semantics and future-upgrade safety.
 - Prefer modern typing tools where useful:
-  - `type Alias = ...` and PEP 695 type parameter syntax in new code.
+  - `type Alias = ...` and PEP 695 type parameter syntax in new code only when
+    the project's active Python floor supports that syntax directly.
   - `override` for explicit override intent.
   - `Self`, `Protocol`, `TypeGuard`, `TypeIs`, `Required`, `NotRequired`, `ReadOnly`, and `assert_never` for correctness and safe refactors.
 - Do not build custom typing compatibility shims when `typing_extensions` already provides the forward-compatible path.
 - Keep `Any` out of public APIs unless unavoidable; if used, document why.
 - Legacy typing aliases (`Optional`, `Union`, `List`, `Dict`) are migration-only, not new-code defaults.
+- Prefer forward-compatible helpers and backports where they preserve the
+  current repo floor while reducing future migration work, but do not emit
+  syntax that the active runtime cannot parse.
 
 ## 4. Data Modeling and Boundary Validation
 
@@ -142,6 +160,9 @@ Operational guidance:
 
 - Prefer one-command workflows for local + CI (`lint`, `format`, `typecheck`, `test`).
 - For Ruff, set `target-version` and keep it aligned with `project.requires-python`.
+- Treat actual Ruff config files as the policy source of truth when they exist;
+  use starter scaffolds only when a repo wants this house style and does not
+  already have active Ruff config.
 - Keep repository-shared VS Code settings minimal and policy-oriented. Put personal UX preferences (hover summaries, inlay hint style, diagnostics language, UI ergonomics) in user settings.
 - If a `pyrightconfig.json` or `[tool.pyright]` exists, treat it as source of truth because it overrides some Pylance analysis settings.
 - After generating or modifying Python code, run the configured checks that apply to the touched scope instead of assuming code generation is sufficient.

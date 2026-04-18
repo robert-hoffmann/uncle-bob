@@ -11,7 +11,6 @@ vars:
     ".agents/skills/*/assets/**/*.md" ".ub-workflows/**/*.md"
   YAML_TARGETS: >-
     Taskfile.yml .pre-commit-config.yaml .yamllint.yaml .github/workflows/*.yml
-    .agents/skills/*/agents/openai.yaml
     .agents/skills/ub-governance/references/high-risk-paths.yaml
     .agents/skills/ub-workflow/assets/initiative-template/exceptions/exception-template.yaml
 

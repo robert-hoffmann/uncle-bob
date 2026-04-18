@@ -13,6 +13,7 @@ Current repository truth:
    sets `package = false`
 4. Python support in this repository is primarily for helper scripts,
    governance tooling, and workflow tooling
+5. active Ruff policy lives in `ruff.toml`
 
 ## Enforced Validation Baseline
 
@@ -39,6 +40,12 @@ When advising users inside this repository:
    repository truth
 3. keep Python guidance consistent with helper-script and repository-tooling use
    rather than service-backend assumptions
+4. treat the detected repo Python floor as the shipping constraint even when
+   official docs describe newer features
+5. prefer forward-compatible helpers such as `typing_extensions` when they let
+   the repo stay on its current floor while reducing future migration work
+6. do not recommend backward-compatibility layers or parser-incompatible newer
+   syntax as if they were currently shippable in this repository
 
 ## Practical Command Patterns
 
@@ -48,6 +55,17 @@ Use these command shapes by default in this repository:
 2. `uv run python -m unittest discover -s <suite-dir> -p 'test_*.py' -v`
 3. `uv run python <script-path>`
 4. `task check` when a full repository validation pass is needed
+
+## Starter Scaffolding
+
+This skill now ships a reusable Ruff starter profile and helper:
+
+1. `assets/ruff-template/ruff.toml`
+2. `scripts/scaffold_ruff.py`
+
+Use them only when a target repository wants this Ruff baseline and does not
+already have active Ruff config. Adapt the copied file to local repo truth
+after scaffolding.
 
 ## Packaging Guidance
 

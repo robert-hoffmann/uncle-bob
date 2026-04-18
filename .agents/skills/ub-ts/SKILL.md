@@ -9,10 +9,28 @@ description: Design, review, migrate, and debug TypeScript (latest stable) codeb
 
 Use this skill to enforce latest stable TypeScript modern defaults and patterns across app and library codebases. Generate modern-only output for new code, and allow legacy retention only as a bounded migration exception.
 
+Implement against the detected project TypeScript and runtime truth, but bias
+design toward forward-compatible migration rather than compatibility layers or
+legacy fallbacks.
+
+## Bundled Assets
+
+This skill ships reusable `tsconfig` starter scaffolding and an optional ESLint
+flat-config starter under `assets/`, plus a deterministic helper under
+`scripts/`.
+
+Use them when a repository wants this house-style starting point and does not
+yet have active TypeScript config of its own.
+
 ## Load References On Demand
 
 - Read `references/ts-modern-patterns.md` for archetype selection, tsconfig baselines, and modern typing patterns.
 - Read `references/ts-legacy-to-modern-migration.md` for old-to-new migrations, banned patterns, and exception handling.
+- Read `references/ts-config-resolution.md` when local TypeScript config
+  discovery, starter scaffolding, or optional ESLint support matters.
+- Use `scripts/scaffold_ts_baseline.py` with `assets/tsconfig-template/` and
+  `assets/eslint-template/` when a target repository needs a deterministic
+  starter instead of ad hoc config creation.
 
 ## Core Workflow
 
@@ -22,16 +40,38 @@ Use this skill to enforce latest stable TypeScript modern defaults and patterns 
    - Bundler runtime: `moduleResolution` as `bundler` with `module` as `esnext`
    - Library publishing: prefer Node-faithful resolution for compatibility checks
    - Type-stripping runtime: enforce erasable TypeScript subset
-3. Apply strict safety baseline and module hygiene defaults from `references/ts-modern-patterns.md`.
-4. Implement modern type patterns first (`satisfies`, `const` type parameters, `NoInfer`, discriminated unions, explicit boundary typing).
-5. Reject legacy output for new code and apply migration mapping from `references/ts-legacy-to-modern-migration.md` when touching existing code.
-6. Validate with available typecheck, lint, tests, and build commands in the target project.
+3. Compare official guidance, repo truth, and observed code reality for
+   non-trivial or version-sensitive recommendations.
+4. Surface `OFFICIAL_CONFLICT` when authoritative sources, repo truth, or live
+   code reality materially disagree on a non-trivial recommendation.
+5. Surface `UNVERIFIED` when a non-trivial claim could not be confirmed in
+   official sources after targeted research.
+6. Apply strict safety baseline and module hygiene defaults from `references/ts-modern-patterns.md`.
+7. Implement modern type patterns first (`satisfies`, `const` type parameters, `NoInfer`, discriminated unions, explicit boundary typing).
+8. Reject legacy output for new code and apply migration mapping from `references/ts-legacy-to-modern-migration.md` when touching existing code.
+9. Validate with available typecheck, lint, tests, and build commands in the target project.
+10. If a repository wants this baseline but lacks TypeScript config, scaffold
+    the bundled starter and explain the remaining repo-local adaptations.
 
 ## Version & Research Policy
 
 - Target the latest stable release of TypeScript.
 - Detect the project's actual TypeScript version from `package.json` and lockfiles.
 - Use web search to verify current best practices, API availability, and migration guidance against official TypeScript documentation.
+- Treat repo truth as the gold implementation standard when deciding what can
+  actually ship safely in the current project.
+- Treat official TypeScript docs as the preferred guidance baseline for
+  forward-looking design and migration-ready patterns.
+- If official guidance and repo truth diverge materially on a non-trivial
+  recommendation, surface `OFFICIAL_CONFLICT`, implement the repo-safe path,
+  and explain the migration path.
+- If official sources disagree with each other on a non-trivial recommendation,
+  also surface `OFFICIAL_CONFLICT` instead of silently collapsing the
+  disagreement.
+- If a non-trivial claim cannot be confirmed in official sources after targeted
+  research, mark it `UNVERIFIED` or avoid presenting it as settled guidance.
+- Keep conflict and uncertainty disclosure scoped to non-trivial,
+  version-sensitive, or contested guidance rather than trivial edits.
 - Do not emit beta-only syntax unless the user explicitly requests it.
 - When the project's installed version is behind latest stable, note the version gap and recommend an upgrade path.
 - Refer to AGENTS.md for centralized version policy and default tooling.
@@ -76,6 +116,20 @@ Use this skill to enforce latest stable TypeScript modern defaults and patterns 
 - Enable `isolatedDeclarations` for declaration-heavy library workflows.
 - Use `noUncheckedSideEffectImports` when side-effect imports are present.
 
+## Config Resolution And Scaffolding
+
+Treat real project config as the source of truth:
+
+1. inspect `tsconfig*.json`, `eslint.config.*`, `package.json`, and lockfiles
+   first when they exist
+2. match local runtime, bundler, and package-manager truth before choosing a
+   starter
+3. use the bundled `tsconfig` scaffold only when the repository lacks active
+   config and wants this house-style baseline
+4. treat the ESLint starter as optional strong-default support for TS repos,
+   not as universal TypeScript policy
+5. do not silently install dependencies or mutate CI as part of scaffolding
+
 ### Tradeoff Handling
 
 - Always propose at least two implementation paths for major TypeScript decisions.
@@ -101,11 +155,23 @@ Migration-aware exception policy:
 When generating or reviewing code, include:
 
 1. Environment note: detected archetype, runtime target, and toolchain context.
-2. Version note: TypeScript baseline and any intentional deviations.
-3. Decision note: chosen module and compiler strategy with one alternative.
-4. Tradeoff note: concise pros and cons for chosen path and rejected option.
-5. Legacy note: removed legacy patterns or bounded exceptions with rationale.
-6. Validation note: what checks were run and outcomes.
+2. Source truth note: detected project version/toolchain reality and any
+   material gap versus latest stable guidance.
+3. Version note: TypeScript baseline and any intentional deviations.
+4. Decision note: chosen module and compiler strategy with one alternative.
+5. Tradeoff note: concise pros and cons for chosen path and rejected option.
+6. Legacy note: removed legacy patterns or bounded exceptions with rationale.
+7. Validation note: what checks were run and outcomes.
+8. Conflict note when relevant: `OFFICIAL_CONFLICT` or `UNVERIFIED` with a
+   concise explanation and the implementation consequence.
+
+When this skill is used to scaffold TypeScript config into another repository,
+also include:
+
+1. which files were created or skipped
+2. which archetype was chosen and one rejected alternative
+3. which repo-local settings or dependencies still need adaptation
+4. the exact next validation command to run
 
 ## Completion Checklist
 
@@ -116,3 +182,7 @@ When generating or reviewing code, include:
 - New code avoids legacy patterns.
 - Any retained legacy pattern is documented with a migration path.
 - Typecheck and relevant project validations were executed when available.
+- Any material official-source conflict or unverified non-trivial guidance is
+  disclosed explicitly when relevant.
+- Any scaffolded baseline was reported as a starter profile rather than silent
+  repo policy.

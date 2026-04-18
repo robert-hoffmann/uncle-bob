@@ -10,6 +10,9 @@ Use it for two jobs:
 
 1. operating the skill and companion agent as a human user
 2. iterating on the skill and agent later with a stable usage baseline
+
+For first-use onboarding, start with [quick-start.md](./quick-start.md).
+This guide is the deeper operational reference.
 <!-- #endregion Purpose -->
 
 <!-- #region Mental Model -->
@@ -17,20 +20,76 @@ Use it for two jobs:
 
 `ub-workflow` is the planning and orchestration layer for larger work.
 
-It exists for initiatives that are too large, risky, or multi-session to run
-reliably from chat history alone.
+It exists to choose and shape the right planning surface:
+
+1. direct bounded work when no durable planning artifact is needed
+2. a lightweight spec when the work needs assumptions, scope, and validation
+   written down but does not justify a roadmap and sprint pack
+3. a full initiative when the work is too large, risky, or multi-session to
+   run reliably from chat history alone
+
+Rule of thumb:
+
+1. prefer a lightweight spec for bounded one-off work that still needs a
+   durable contract
+2. prefer an initiative for broader, higher-impact work where PRD, roadmap,
+   sprints, and final audit improve delivery and review quality
 
 The core lifecycle is:
 
-1. discovery and research
-2. self-contained PRD
-3. roadmap generated and approved in one pass
-4. sprint pack prepared so each planned `sprint.md` is execution-ready
-5. sprint folders materialized when needed from the approved roadmap
-6. standalone resumable sprint execution, one sprint per explicit user request
-7. final audit
-8. retained note
+1. scale decision
+2. lightweight spec or initiative planning chosen explicitly
+3. discovery and research when the work needs durable planning
+4. self-contained PRD for full initiatives
+5. roadmap generated and approved in one pass
+6. sprint pack prepared so each planned `sprint.md` is execution-ready
+7. sprint folders materialized when needed from the approved roadmap
+8. standalone resumable sprint execution, one sprint per explicit user request
+9. final audit
+10. retained note
 <!-- #endregion Mental Model -->
+
+<!-- #region Modes -->
+## Interaction Modes
+
+`ub-workflow` supports four interaction modes.
+
+The mode does not change workflow readiness requirements.
+It changes how much the user sees, when the workflow pauses, and when the
+agent interrupts.
+
+Short mode reference:
+
+1. `reviewed`: full pre-execution analysis, fuller post-execution report,
+   manual advancement
+2. `flow`: short pre-execution note, fuller post-execution report, manual
+   advancement
+3. `auto`: internal pre-execution analysis, concise post-execution report,
+   automatic advancement unless interruption is warranted
+4. `continuous` (`yolo`): internal analysis and artifact updates, no routine
+   user-facing sprint notes, continue until a major blocker or conflict
+   requires abort or pause
+
+Mode precedence:
+
+1. explicit user turn override
+2. persisted artifact mode
+3. default fallback = `reviewed`
+
+Persistence:
+
+1. initiatives persist mode in initiative artifacts
+2. lightweight specs persist mode in `spec.md`
+3. direct bounded work uses mode as runtime behavior only unless promoted
+
+When follow-up questions are needed, the preferred host path is
+`AskUserQuestion` / `vscode/askQuestions`.
+When that tool is unavailable, the workflow should use text questions with:
+
+1. `(*)` on the best qualitative fit
+2. a short explanation under every option in `(...)`
+3. a final `Custom` option
+<!-- #endregion Modes -->
 
 <!-- #region Entry Points -->
 ## Primary Entry Point
@@ -55,13 +114,14 @@ The skill and the companion agent currently hint these entry words:
 
 1. `overview`
 2. `scaffold`
-3. `resume`
-4. `prd`
-5. `roadmap`
-6. `sprint`
-7. `audit`
-8. `archive`
-9. `what-next`
+3. `spec`
+4. `resume`
+5. `prd`
+6. `roadmap`
+7. `sprint`
+8. `audit`
+9. `archive`
+10. `what-next`
 
 Treat these as guidance, not a rigid command language.
 
@@ -89,6 +149,8 @@ Expected behavior:
 2. it uses the scaffold helper when appropriate
 3. it copies the source PRD into `./prd.md` without rewriting it
 4. it explains the roadmap-planning step after scaffolding
+5. it makes the default interaction mode explicit unless the user chose a
+   different one
 
 ### Shape A PRD
 
@@ -104,9 +166,33 @@ Use initiative flow to refine this into an execution-ready PRD.
 
 Expected behavior:
 
-1. the agent stays in PRD-shaping mode
-2. it clarifies goals, non-goals, scope, risks, and options
-3. it does not jump straight to sprinting
+1. the agent starts by surfacing assumptions, unknowns, and constraints
+2. it makes an explicit scale decision between direct bounded work,
+   lightweight spec work, and full initiative PRD work
+3. when full-initiative scope is justified, it stays in PRD-shaping mode
+4. it clarifies goals, non-goals, scope, risks, and options
+5. it does not jump straight to sprinting
+
+### Shape A Lightweight Spec
+
+Examples:
+
+```text
+This is bigger than a quick fix but still smaller than a whole initiative. Make a lightweight spec for it.
+```
+
+```text
+Use initiative flow, but keep this in the lightweight-spec lane unless you find it truly needs roadmap and sprints.
+```
+
+Expected behavior:
+
+1. the agent surfaces assumptions, unknowns, and constraints first
+2. it records why this is not just a direct bounded task
+3. it records why this does not yet need a full initiative
+4. it creates or refines a self-contained `spec.md`
+5. it leaves promotion to a full initiative explicit instead of implied
+6. it records the active interaction mode in the spec snapshot
 
 ### Generate The Roadmap
 
@@ -144,9 +230,15 @@ Expected behavior:
 
 1. the agent prepares each planned sprint so `sprint.md` is no longer a
  placeholder shell
-2. concrete scope, validation, and handoff expectations are written into each
+2. roadmap subtasks are expanded into richer execution slices instead of
+   staying flat checklist items only
+3. each slice prompts for acceptance, verification, dependencies, and likely
+   touched areas where those details matter
+4. concrete scope, validation, and handoff expectations are written into each
  sprint PRD
-3. the agent stops after sprint preparation so a human can review before sprint
+5. the agent respects the current interaction mode for how much of this
+   preparation is surfaced to the user
+6. the agent stops after sprint preparation so a human can review before sprint
  execution or helper redesign work continues
 
 ### Initialize The Sprint Set
@@ -207,8 +299,9 @@ Expected behavior:
 2. it identifies the next implementation or validation step
 3. it preserves roadmap and closeout discipline
 4. it does not treat placeholder-only sprint shells as executable state
-5. it stops after the active sprint work and waits for human review before any
- next sprint work
+5. it respects the active interaction mode for pre-execution visibility,
+   post-execution reporting, and pause behavior
+6. it still refuses to execute a sprint that is not actually ready
 
 ### Run Final Audit
 
@@ -227,6 +320,31 @@ Expected behavior:
 1. the agent checks for missing closeouts or retained note work
 2. it asks about follow-up audits or refactors
 3. it prepares the initiative for durable closure
+
+### Switch Interaction Mode
+
+Examples:
+
+```text
+Use workflow in reviewed mode for this initiative.
+```
+
+```text
+Switch this initiative to auto mode.
+```
+
+```text
+Use yolo mode for this lightweight spec once the plan is execution-ready.
+```
+
+Expected behavior:
+
+1. the agent explains mode changes in terms of visibility, pause behavior, and
+   interruption behavior
+2. it does not treat a mode change as permission to bypass workflow readiness
+3. it records the new mode in the durable artifact when the lane supports
+   persistence
+4. it still uses runtime-only mode behavior for direct bounded work
 
 ### Archive A Completed Initiative
 
@@ -363,6 +481,8 @@ Use these prompts later when iterating on the agent.
 10. `I think this initiative is basically done. Can you verify whether we can close it?`
 11. `Archive this initiative if it is actually complete and all required files are current.`
 12. `What comes next here? I am not sure whether I should edit the PRD, generate the roadmap, prepare the sprint pack, or start implementing.`
+13. `Switch this initiative to flow mode and keep giving me short pre-sprint notes without pausing before execution.`
+14. `Use workflow in auto mode and continue through the prepared sprints unless a material conflict forces you to stop.`
 
 ### Governance Prompts
 

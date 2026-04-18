@@ -16,6 +16,7 @@ import shutil
 SKILL_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_INITIATIVE_TEMPLATE_ROOT = SKILL_ROOT / "assets" / "initiative-template"
 DEFAULT_OPERATIONS_TEMPLATE_ROOT = SKILL_ROOT / "assets" / "operations-root"
+DEFAULT_SPEC_TEMPLATE_ROOT = SKILL_ROOT / "assets" / "lightweight-spec-template"
 DEFAULT_OPS_ROOT = Path(".ub-workflows")
 TEXT_FILE_SUFFIXES = {
     ".md",
@@ -24,8 +25,9 @@ TEXT_FILE_SUFFIXES = {
     ".yml",
     ".json",
 }
-KNOWN_COMMANDS           = {"create", "prepare-sprints", "init-sprints", "archive"}
+KNOWN_COMMANDS           = {"create", "create-spec", "prepare-sprints", "init-sprints", "archive"}
 ACTIVE_INITIATIVE_HEADING = "## Active Initiative Roots"
+ACTIVE_SPEC_HEADING      = "## Active Lightweight Specs"
 OPERATIONS_INDEX_FILES   = {"AGENTS.md", "README.md", "operation-guide.md", "user-guide.md"}
 SPRINT_ENTRY_PATTERN     = re.compile(r"^-\s+\[[ xX]\]\s+(.+?)\s*$")
 SPRINT_SUBTASK_PATTERN   = re.compile(r"^\s+-\s+\[[ xX]\]\s+(.+?)\s*$")
@@ -75,7 +77,7 @@ CODE_FENCE_PATTERN = re.compile(r"^\s*(```|~~~)")
 
 
 def generated_artifact_role(initiative_root: Path, path: Path) -> str | None:
-    """Classify one generated initiative artifact path."""
+    """Classify one generated workflow artifact path."""
 
     try:
         relative = path.resolve().relative_to(initiative_root.resolve())
@@ -86,30 +88,42 @@ def generated_artifact_role(initiative_root: Path, path: Path) -> str | None:
         return "readme"
     if relative == Path("roadmap.md"):
         return "roadmap"
+    if relative == Path("spec.md"):
+        return "lightweight-spec"
     if relative == Path("prd.md"):
         return "prd"
+    if relative == Path("rollup.md"):
+        return "rollup"
     if relative == Path("retained-note.md"):
         return "retained-note"
     if len(relative.parts) == 3 and relative.parts[0] == "sprints" and relative.parts[2] == "sprint.md":
         return "sprint"
+    if len(relative.parts) == 3 and relative.parts[0] == "sprints" and relative.parts[2] == "decision-log.md":
+        return "decision-log"
     if len(relative.parts) == 3 and relative.parts[0] == "sprints" and relative.parts[2] == "closeout.md":
         return "closeout"
     return None
 
 
 def generated_artifact_paths(initiative_root: Path) -> list[Path]:
-    """Return the generated initiative artifacts covered by placeholder checks."""
+    """Return the generated workflow artifacts covered by placeholder checks."""
+
+    spec_path = initiative_root / "spec.md"
+    if spec_path.exists() and spec_path.is_file():
+        return [spec_path]
 
     candidates = [
         initiative_root / "README.md",
         initiative_root / "roadmap.md",
         initiative_root / "prd.md",
+        initiative_root / "rollup.md",
         initiative_root / "retained-note.md",
     ]
     sprints_root = initiative_root / "sprints"
     if sprints_root.exists():
         for sprint_root in sorted(path for path in sprints_root.iterdir() if path.is_dir()):
             candidates.append(sprint_root / "sprint.md")
+            candidates.append(sprint_root / "decision-log.md")
             candidates.append(sprint_root / "closeout.md")
     return [path for path in candidates if path.exists() and path.is_file()]
 
@@ -117,7 +131,7 @@ def generated_artifact_paths(initiative_root: Path) -> list[Path]:
 def human_placeholder_is_required(initiative_root: Path, path: Path) -> bool:
     """Return True when a plain-language placeholder blocks this generated artifact."""
 
-    return generated_artifact_role(initiative_root, path) in {"roadmap", "sprint"}
+    return generated_artifact_role(initiative_root, path) in {"roadmap", "sprint", "lightweight-spec"}
 
 
 def required_placeholder_markers(text: str, path: Path, initiative_root: Path) -> tuple[str, ...]:
@@ -212,27 +226,51 @@ def report_generated_placeholder_state(initiative_root: Path, *, strict: bool) -
     print(summary)
     if strict and any(finding.severity == "required" for finding in findings):
         raise ValueError(
-            "Generated initiative output still contains required unresolved placeholders:\n"
+            "Generated workflow output still contains required unresolved placeholders:\n"
             f"{summary}"
         )
 
 
-def discover_initiative_roots_for_placeholder_scan(scan_root: Path) -> list[Path]:
-    """Resolve one or more generated initiative roots from a scan target."""
+def generated_roots_in_directory(root: Path) -> list[Path]:
+    """Return sorted generated workflow roots inside one container directory."""
+
+    if not root.exists() or not root.is_dir():
+        return []
+    return sorted(path for path in root.iterdir() if path.is_dir())
+
+
+def discover_generated_roots_for_placeholder_scan(scan_root: Path) -> list[Path]:
+    """Resolve one or more generated workflow roots from a scan target."""
 
     resolved = scan_root.resolve()
+    if (resolved / "spec.md").exists():
+        return [resolved]
     if (resolved / "README.md").exists() and (resolved / "roadmap.md").exists():
         return [resolved]
     if resolved.name == "initiatives" and resolved.is_dir():
-        return sorted(path for path in resolved.iterdir() if path.is_dir())
-    if resolved.name == ".ub-workflows" and (resolved / "initiatives").is_dir():
-        return discover_initiative_roots_for_placeholder_scan(resolved / "initiatives")
-    if (resolved / ".ub-workflows" / "initiatives").is_dir():
-        return discover_initiative_roots_for_placeholder_scan(resolved / ".ub-workflows" / "initiatives")
+        return generated_roots_in_directory(resolved)
+    if resolved.name == "specs" and resolved.is_dir():
+        return generated_roots_in_directory(resolved)
+    if resolved.name == ".ub-workflows" and resolved.is_dir():
+        return sorted(
+            [
+                *generated_roots_in_directory(resolved / "initiatives"),
+                *generated_roots_in_directory(resolved / "specs"),
+            ]
+        )
+    if (resolved / ".ub-workflows").is_dir():
+        return discover_generated_roots_for_placeholder_scan(resolved / ".ub-workflows")
     raise ValueError(
-        "Placeholder scan target must be an initiative root, an initiatives directory, "
-        "a .ub-workflows root, or a repository root containing ./.ub-workflows/initiatives/."
+        "Placeholder scan target must be a workflow root, an initiatives directory, "
+        "a specs directory, a .ub-workflows root, or a repository root containing "
+        "./.ub-workflows/initiatives/ or ./.ub-workflows/specs/."
     )
+
+
+def discover_initiative_roots_for_placeholder_scan(scan_root: Path) -> list[Path]:
+    """Backward-compatible alias for generated workflow root discovery."""
+
+    return discover_generated_roots_for_placeholder_scan(scan_root)
 
 def derive_initiative_name(target_root: Path) -> str:
     """Derive a readable initiative name from a dated or plain directory name."""
@@ -430,33 +468,53 @@ def determine_target_root(args: argparse.Namespace) -> Path:
     return (Path(args.ops_root).resolve() / "initiatives" / directory_name).resolve()
 
 
-def build_active_initiative_list(ops_root: Path) -> str:
-    """Return the numbered active-initiative list for the operations root README."""
+def determine_spec_target_root(args: argparse.Namespace) -> Path:
+    """Resolve the new lightweight spec root from a slug or explicit path."""
 
-    initiatives_root = ops_root / "initiatives"
-    initiatives = sorted(
-        path.name for path in initiatives_root.iterdir() if path.is_dir()
-    ) if initiatives_root.exists() else []
-    if not initiatives:
+    if args.target:
+        raw_target = args.target.strip()
+        candidate = Path(raw_target)
+        if candidate.is_absolute() or len(candidate.parts) > 1 or raw_target.startswith("."):
+            return candidate.resolve()
+        directory_name = dated_directory_name(raw_target, args.date)
+        return (Path(args.ops_root).resolve() / "specs" / directory_name).resolve()
+
+    if not args.spec_name:
+        raise ValueError("Provide either a target slug/path or --spec-name.")
+    directory_name = dated_directory_name(args.spec_name, args.date)
+    return (Path(args.ops_root).resolve() / "specs" / directory_name).resolve()
+
+
+def build_active_root_list(ops_root: Path, root_name: str) -> str:
+    """Return one numbered active-root list for the operations root README."""
+
+    active_root = ops_root / root_name
+    active_items = sorted(
+        path.name for path in active_root.iterdir() if path.is_dir()
+    ) if active_root.exists() else []
+    if not active_items:
         return "1. `none`"
     return "\n".join(
-        f"{index}. `initiatives/{name}`"
-        for index, name in enumerate(initiatives, start=1)
+        f"{index}. `{root_name}/{name}`"
+        for index, name in enumerate(active_items, start=1)
     )
 
 
 def sync_ops_root_readme(ops_root: Path, template_root: Path) -> None:
-    """Synchronize the active initiative listing in the operations root README."""
+    """Synchronize the active workflow listings in the operations root README."""
 
     readme_path = ops_root / "initiatives" / "README.md"
     template_path = template_root / "README.md"
-    active_list = build_active_initiative_list(ops_root)
+    active_initiatives = build_active_root_list(ops_root, "initiatives")
+    active_specs = build_active_root_list(ops_root, "specs")
     if readme_path.exists():
         text = readme_path.read_text(encoding="utf-8")
     else:
         text = template_path.read_text(encoding="utf-8")
-    updated = text.replace("REPLACE_ACTIVE_INITIATIVE_ROOTS", active_list)
-    updated = replace_markdown_section(updated, ACTIVE_INITIATIVE_HEADING, active_list)
+    updated = text.replace("REPLACE_ACTIVE_INITIATIVE_ROOTS", active_initiatives)
+    updated = text.replace("REPLACE_ACTIVE_LIGHTWEIGHT_SPECS", active_specs)
+    updated = replace_markdown_section(updated, ACTIVE_INITIATIVE_HEADING, active_initiatives)
+    updated = replace_markdown_section(updated, ACTIVE_SPEC_HEADING, active_specs)
     readme_path.write_text(updated, encoding="utf-8")
 
 
@@ -470,6 +528,8 @@ def ensure_operations_root(
     ops_root.mkdir(parents=True, exist_ok=True)
     initiatives_root = ops_root / "initiatives"
     initiatives_root.mkdir(parents=True, exist_ok=True)
+    specs_root = ops_root / "specs"
+    specs_root.mkdir(parents=True, exist_ok=True)
     for child in operations_template_root.iterdir():
         if child.name == "template-copy-helper.md":
             continue
@@ -606,6 +666,59 @@ def command_create(args: argparse.Namespace) -> int:
     return 0
 
 # endregion Create Initiative
+
+
+# region Create Lightweight Spec
+
+def build_spec_placeholder_map(args: argparse.Namespace, target_root: Path) -> dict[str, str]:
+    """Build replacements for a newly created lightweight spec root."""
+
+    spec_name = args.spec_name or derive_initiative_name(target_root)
+    status = args.status if args.status.startswith("`") else f"`{args.status}`"
+    next_action = (
+        args.next_action
+        or "Review `./spec.md`, resolve the remaining placeholders, then decide whether to execute it directly or promote it into a full initiative."
+    )
+    return {
+        "REPLACE_SPEC_NAME"   : spec_name,
+        "REPLACE_SPEC_ROOT"   : normalize_path(target_root),
+        "REPLACE_CREATED_ON"  : args.date,
+        "REPLACE_OWNER"       : args.owner or "unassigned",
+        "REPLACE_SPEC_STATUS" : status,
+        "REPLACE_NEXT_ACTION" : next_action,
+    }
+
+
+def command_create_spec(args: argparse.Namespace) -> int:
+    """Create a new lightweight spec root under the repository operations tree."""
+
+    spec_template_root = Path(args.template_root).resolve()
+    operations_template_root = Path(args.operations_template_root).resolve()
+    ops_root = Path(args.ops_root).resolve()
+    target_root = determine_spec_target_root(args)
+
+    if not spec_template_root.exists() or not spec_template_root.is_dir():
+        raise ValueError(f"Lightweight spec template root does not exist: {spec_template_root.as_posix()}")
+    if not operations_template_root.exists() or not operations_template_root.is_dir():
+        raise ValueError(f"Operations template root does not exist: {operations_template_root.as_posix()}")
+
+    if args.dry_run:
+        print(f"dry-run: operations root would be {ops_root.as_posix()}")
+        print(f"dry-run: lightweight spec root would be {target_root.as_posix()}")
+        print("dry-run: operations root bootstrap and README sync would run if needed")
+        return 0
+
+    ensure_operations_root(ops_root, operations_template_root, DEFAULT_INITIATIVE_TEMPLATE_ROOT)
+    ensure_directory_is_safe(target_root)
+    copy_tree(spec_template_root, target_root)
+    render_placeholders(target_root, build_spec_placeholder_map(args, target_root))
+    sync_ops_root_readme(ops_root, operations_template_root)
+
+    print(f"scaffolded lightweight spec at {target_root.as_posix()}")
+    report_generated_placeholder_state(target_root, strict=args.strict_placeholders)
+    return 0
+
+# endregion Create Lightweight Spec
 
 
 # region Initialize Sprints
@@ -766,12 +879,39 @@ def ensure_sprint_directory(template_root: Path, sprint_root: Path) -> str:
     required = {"sprint.md", "closeout.md", "evidence"}
     present = {path.name for path in entries}
     if required.issubset(present):
-        return "existing"
+        synced = False
+        for template_child in sorted(template_root.iterdir()):
+            destination = sprint_root / template_child.name
+            if destination.exists():
+                continue
+            if template_child.is_dir():
+                copy_tree(template_child, destination)
+            else:
+                shutil.copy2(template_child, destination)
+            synced = True
+        return "synced" if synced else "existing"
     missing = ", ".join(sorted(required - present))
     raise ValueError(
         "Sprint directory already exists but is incomplete. "
         f"Add the missing template files or clean the directory first: {sprint_root.as_posix()} ({missing})"
     )
+
+
+def ensure_initiative_rollup(initiative_root: Path) -> bool:
+    """Backfill rollup.md into existing initiative roots when missing."""
+
+    rollup_path = initiative_root / "rollup.md"
+    if rollup_path.exists():
+        if not rollup_path.is_file():
+            raise ValueError(f"Initiative rollup path exists and is not a file: {rollup_path.as_posix()}")
+        return False
+
+    template_path = DEFAULT_INITIATIVE_TEMPLATE_ROOT / "rollup.md"
+    if not template_path.exists() or not template_path.is_file():
+        raise ValueError(f"Canonical initiative rollup template is missing: {template_path.as_posix()}")
+
+    shutil.copy2(template_path, rollup_path)
+    return True
 
 
 def format_checkbox_items(items: Sequence[str]) -> str:
@@ -789,6 +929,35 @@ def format_scope_items(entry: RoadmapSprintEntry) -> str:
     for index, subtask in enumerate(entry.subtasks, start=2):
         lines.append(f"{index}. Complete roadmap subtask: {subtask}.")
     lines.append(f"{len(lines) + 1}. Record any sprint-specific exclusions or constraints before execution begins.")
+    return "\n".join(lines)
+
+
+def format_execution_slices(entry: RoadmapSprintEntry) -> str:
+    """Return execution-slice prompts derived from roadmap subtasks."""
+
+    if not entry.subtasks:
+        return (
+            "1. Slice 01\n"
+            "   - Objective: Replace with the first execution slice objective.\n"
+            "   - Acceptance: Replace with how this slice will be considered done.\n"
+            "   - Verification: Replace with the check, command, or review step for this slice.\n"
+            "   - Dependencies: Replace with blocking inputs or `none`.\n"
+            "   - Likely touched areas: Replace with the files, modules, or docs most likely to change."
+        )
+
+    lines: list[str] = []
+    for index, subtask in enumerate(entry.subtasks, start=1):
+        label = f"Slice {index:02d}"
+        lines.extend(
+            [
+                f"{index}. {label}",
+                f"   - Objective: {subtask}",
+                "   - Acceptance: Replace with the concrete done condition for this slice.",
+                "   - Verification: Replace with the check, command, or review step for this slice.",
+                "   - Dependencies: Replace with prior slices, external prerequisites, or `none`.",
+                "   - Likely touched areas: Replace with the most likely files, modules, systems, or docs.",
+            ]
+        )
     return "\n".join(lines)
 
 
@@ -831,6 +1000,7 @@ def build_prepare_sprint_placeholder_map(
         "REPLACE_SPRINT_EVIDENCE_FOLDER": entry.evidence_folder,
         "REPLACE_SPRINT_SUBTASKS": format_checkbox_items(entry.subtasks),
         "REPLACE_SPRINT_SCOPE_ITEMS": format_scope_items(entry),
+        "REPLACE_SPRINT_EXECUTION_SLICES": format_execution_slices(entry),
         "REPLACE_PREVIOUS_HANDOFF_NOTE": previous_handoff_note(entry),
         "REPLACE_NEXT_HANDOFF_NOTE": next_handoff_note(next_entry),
     }
@@ -966,17 +1136,23 @@ def resolve_resume_file_order(initiative_root: Path, sprint_path: Path | None = 
     """Return the minimal file order needed to resume an initiative safely."""
 
     roadmap_path = initiative_root / "roadmap.md"
+    rollup_path = initiative_root / "rollup.md"
     readme_path = initiative_root / "README.md"
     prd_path = initiative_root / "prd.md"
     target_sprint = sprint_path or resolve_resume_target(initiative_root, roadmap_path)
 
     ordered: list[Path] = [roadmap_path]
+    if rollup_path.exists():
+        ordered.append(rollup_path)
     if target_sprint is not None:
         previous_closeout = previous_closeout_for_sprint(initiative_root, target_sprint)
         if previous_closeout is not None:
             ordered.append(previous_closeout)
         if target_sprint.exists():
             ordered.append(target_sprint)
+            decision_log = target_sprint.with_name("decision-log.md")
+            if decision_log.exists():
+                ordered.append(decision_log)
     ordered.append(readme_path)
     if (
         prd_path.exists()
@@ -1008,11 +1184,15 @@ def command_init_sprints(args: argparse.Namespace) -> int:
         return 0
 
     created = 0
+    synced = 0
+    rollup_created = ensure_initiative_rollup(initiative_root)
     first_entry = entries[0]
     for entry in entries:
         status = ensure_sprint_directory(sprint_template_root, initiative_root / entry.sprint_root)
         if status == "created":
             created += 1
+        elif status == "synced":
+            synced += 1
 
     readme_text = (initiative_root / "README.md").read_text(encoding="utf-8")
     current_gate = read_markdown_table_value(readme_text, "Current gate")
@@ -1042,7 +1222,11 @@ def command_init_sprints(args: argparse.Namespace) -> int:
         initiative_root / first_entry.sprint_file,
     )
 
-    print(f"initialized {len(entries)} sprint directories ({created} newly created)")
+    print(
+        f"initialized {len(entries)} sprint directories "
+        f"({created} newly created, {synced} additive template syncs, "
+        f"{1 if rollup_created else 0} rollup backfilled)"
+    )
     report_generated_placeholder_state(initiative_root, strict=args.strict_placeholders)
     return 0
 
@@ -1077,14 +1261,18 @@ def command_prepare_sprints(args: argparse.Namespace) -> int:
         return 0
 
     created = 0
+    synced = 0
     rendered = 0
     preserved = 0
+    rollup_created = ensure_initiative_rollup(initiative_root)
     first_entry = entries[0]
     for index, entry in enumerate(entries):
         sprint_root = initiative_root / entry.sprint_root
         status = ensure_sprint_directory(sprint_template_root, sprint_root)
         if status == "created":
             created += 1
+        elif status == "synced":
+            synced += 1
 
         sprint_path = initiative_root / entry.sprint_file
         if sprint_path.exists() and not sprint_document_has_blocking_placeholders(sprint_path):
@@ -1115,7 +1303,9 @@ def command_prepare_sprints(args: argparse.Namespace) -> int:
 
     print(
         f"prepared {len(entries)} sprint PRDs "
-        f"({created} directories created, {rendered} rendered, {preserved} preserved)"
+        f"({created} directories created, {synced} additive template syncs, "
+        f"{rendered} rendered, {preserved} preserved, "
+        f"{1 if rollup_created else 0} rollup backfilled)"
     )
     report_generated_placeholder_state(initiative_root, strict=args.strict_placeholders)
     return 0
@@ -1129,7 +1319,11 @@ def unresolved_placeholder_found(path: Path) -> bool:
     """Return True when a control file still contains obvious scaffold placeholders."""
 
     text = path.read_text(encoding="utf-8")
-    initiative_root = path.parent if path.name in {"README.md", "roadmap.md", "prd.md", "retained-note.md"} else path.parents[2]
+    initiative_root = (
+        path.parent
+        if path.name in {"README.md", "roadmap.md", "prd.md", "rollup.md", "retained-note.md"}
+        else path.parents[2]
+    )
     return bool(required_placeholder_markers(text, path, initiative_root))
 
 
@@ -1156,11 +1350,14 @@ def validate_archive_readiness(initiative_root: Path) -> list[str]:
     errors: list[str] = []
     readme_path = initiative_root / "README.md"
     roadmap_path = initiative_root / "roadmap.md"
+    rollup_path = initiative_root / "rollup.md"
     retained_note_path = initiative_root / "retained-note.md"
     if not readme_path.exists():
         errors.append("README.md is missing.")
     if not roadmap_path.exists():
         errors.append("roadmap.md is missing.")
+    if not rollup_path.exists():
+        errors.append("rollup.md is missing.")
     if not retained_note_path.exists():
         errors.append("retained-note.md is missing.")
     if errors:
@@ -1277,6 +1474,35 @@ def build_parser() -> argparse.ArgumentParser:
     )
     create_parser.add_argument("--dry-run", action="store_true", help="Report the resolved create operation without writing files")
 
+    create_spec_parser = subparsers.add_parser("create-spec", help="Create a new lightweight spec root")
+    create_spec_parser.add_argument("target", nargs="?", help="Lightweight spec slug or explicit target path")
+    create_spec_parser.add_argument("--ops-root", default=str(DEFAULT_OPS_ROOT), help="Operations root to bootstrap and use")
+    create_spec_parser.add_argument(
+        "--template-root",
+        default=str(DEFAULT_SPEC_TEMPLATE_ROOT),
+        help="Lightweight spec template directory to copy from",
+    )
+    create_spec_parser.add_argument(
+        "--operations-template-root",
+        default=str(DEFAULT_OPERATIONS_TEMPLATE_ROOT),
+        help="Operations-root template directory to copy from",
+    )
+    create_spec_parser.add_argument("--spec-name", help="Display name written into the lightweight spec scaffold")
+    create_spec_parser.add_argument("--owner", help="Lightweight spec owner")
+    create_spec_parser.add_argument(
+        "--date",
+        default=datetime.now(timezone.utc).date().isoformat(),
+        help="Date stamp used in generated paths and spec state",
+    )
+    create_spec_parser.add_argument("--status", default="draft", help="Initial lightweight spec status string")
+    create_spec_parser.add_argument("--next-action", help="Initial next-action value written into spec.md")
+    create_spec_parser.add_argument(
+        "--strict-placeholders",
+        action="store_true",
+        help="Fail after create-spec when generated output still has required unresolved placeholders",
+    )
+    create_spec_parser.add_argument("--dry-run", action="store_true", help="Report the resolved create-spec operation without writing files")
+
     prepare_parser = subparsers.add_parser(
         "prepare-sprints",
         help="Prepare sprint PRDs from roadmap metadata before execution begins",
@@ -1333,6 +1559,8 @@ def main(argv: Sequence[str] | None = None) -> int:
     try:
         if args.command == "create":
             return command_create(args)
+        if args.command == "create-spec":
+            return command_create_spec(args)
         if args.command == "prepare-sprints":
             return command_prepare_sprints(args)
         if args.command == "init-sprints":

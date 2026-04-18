@@ -52,6 +52,7 @@ Minimum questions to answer:
    when tests changed?
 4. Are the relevant docs and synchronized artifacts updated or explicitly unchanged?
 5. Is the validation evidence recorded?
+6. Is `decision-log.md` current, and was `rollup.md` updated or explicitly left unchanged when warranted?
 
 ## handoff_note
 

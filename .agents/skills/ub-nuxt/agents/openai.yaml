@@ -1,4 +1,0 @@
-interface:
-  display_name: "UB Nuxt"
-  short_description: "Modern Nuxt + Vue + TypeScript workflows (latest stable)"
-  default_prompt: "Use $ub-nuxt for Nuxt app/runtime work including nuxt.config.*, modules, SSR/SSG/hybrid behavior, server routes, and legacy-to-modern Nuxt migration."

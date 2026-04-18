@@ -1,0 +1,66 @@
+// markdownlint configuration — base UB Markdown profile
+// Adapt ignored paths and lint target globs per repository.
+{
+    // ── Headings ──────────────────────────────────────────────────────────────
+    "MD001": true,
+    "MD003": { "style": "atx" },
+    "MD022": true,
+    "MD023": true,
+    "MD024": { "siblings_only": true },
+    "MD025": true,
+    "MD026": true,
+    "MD036": true,
+    "MD041": true,
+
+    // ── Lists ─────────────────────────────────────────────────────────────────
+    "MD004": { "style": "dash" },
+    "MD005": true,
+    "MD007": { "indent": 2 },
+    "MD029": { "style": "ordered" },
+    "MD030": true,
+    "MD032": true,
+
+    // ── Whitespace / formatting ───────────────────────────────────────────────
+    "MD009": { "br_spaces": 0 },
+    "MD010": true,
+    "MD012": { "maximum": 1 },
+    "MD013": false,
+    "MD047": true,
+
+    // ── Code ──────────────────────────────────────────────────────────────────
+    "MD031": true,
+    "MD040": true,
+    "MD046": { "style": "fenced" },
+    "MD048": { "style": "backtick" },
+
+    // ── Links & images ────────────────────────────────────────────────────────
+    "MD034": true,
+    "MD039": true,
+    "MD042": true,
+    "MD045": true,
+    "MD051": true,
+    "MD053": true,
+
+    // ── Inline formatting ─────────────────────────────────────────────────────
+    "MD037": true,
+    "MD038": true,
+    "MD049": { "style": "asterisk" },
+    "MD050": { "style": "asterisk" },
+
+    // ── Misc ──────────────────────────────────────────────────────────────────
+    "MD033": {
+        "allowed_elements": [
+            "br",
+            "details",
+            "summary",
+            "kbd",
+            "sup",
+            "sub",
+            "table",
+            "tr",
+            "td",
+            "img"
+        ]
+    },
+    "MD035": { "style": "---" }
+}

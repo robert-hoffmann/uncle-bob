@@ -9,22 +9,42 @@ description: Build, review, migrate, and debug Nuxt (latest stable) applications
 
 Use this skill to keep Nuxt work current-version aligned, type-safe, and framework-native. This skill targets the latest stable Nuxt: enforce the `app/`-first source layout, modern Nuxt runtime defaults, and current Vue + TypeScript patterns while rejecting legacy directory guidance.
 
+Implement against the detected project and runtime truth, but bias framework
+guidance toward forward-compatible migration rather than preserving legacy
+layouts, outdated recipes, or compatibility-layer drift by default.
+
 ## Load References On Demand
 
+- Read `../references/authoring-conventions.md` when adjusting routing
+  guidance or cross-skill authoring conventions.
 - Read `references/nuxt-vue-patterns.md` for architecture, data-fetching, routing, server, and rendering guidance.
 - Read `references/typescript-modern.md` for strict TypeScript defaults, typing patterns, and anti-pattern checks.
 - Read `references/ecosystem-preferences.md` for modern package preferences, VueUse-first heuristics, and replacement matrix.
 - Read `references/nuxt-legacy-to-modern-migration.md` for migration deltas, codemod mapping, and compatibility caveats.
 
+## When Not To Use
+
+- Do not use this skill when the task is framework-agnostic Vue component or
+  composable logic without Nuxt runtime, app-directory, or Nitro concerns;
+  defer that to `ub-vuejs`.
+- Do not use this skill when the primary change surface is pure CSS or
+  Tailwind integration rather than Nuxt framework behavior.
+
 ## Core Workflow
 
 1. Detect Nuxt generation and active toolchain from `package.json`, `nuxt.config.*`, lockfiles, and modules. Always inspect `srcDir`, `future.compatibilityVersion`, and `app/` directory presence.
 2. Decide rendering/runtime mode first (SSR, SSG, hybrid, edge/server) before writing code.
-3. Implement features with Composition API, `<script setup lang="ts">`, typed composables, and server/client separation.
-4. Prefer VueUse and modern ecosystem defaults from `references/ecosystem-preferences.md`.
-5. Apply modern Nuxt runtime semantics from `references/nuxt-vue-patterns.md` and migration deltas from `references/nuxt-legacy-to-modern-migration.md`.
-6. Reject legacy Nuxt/Vue patterns and replace them with current equivalents.
-7. Validate types, lint/build output, and framework-specific constraints after edits.
+3. Compare official guidance, repo truth, and observed code reality for
+   non-trivial or version-sensitive recommendations.
+4. Surface `OFFICIAL_CONFLICT` when authoritative sources, repo truth, or live
+   code reality materially disagree on a non-trivial recommendation.
+5. Surface `UNVERIFIED` when a non-trivial claim could not be confirmed in
+   official sources after targeted research.
+6. Implement features with Composition API, `<script setup lang="ts">`, typed composables, and server/client separation.
+7. Prefer VueUse and modern ecosystem defaults from `references/ecosystem-preferences.md`.
+8. Apply modern Nuxt runtime semantics from `references/nuxt-vue-patterns.md` and migration deltas from `references/nuxt-legacy-to-modern-migration.md`.
+9. Reject legacy Nuxt/Vue patterns and replace them with current equivalents.
+10. Validate types, lint/build output, and framework-specific constraints after edits.
 
 ## Nuxt Modern Structure Contract (Hard Requirement)
 
@@ -76,6 +96,21 @@ Use this skill to keep Nuxt work current-version aligned, type-safe, and framewo
 - Target the latest stable release of Nuxt.
 - Detect the project's actual Nuxt version from `package.json`, `nuxt.config.*`, and lockfiles.
 - Use web search to verify current best practices, API availability, and migration guidance against official Nuxt documentation.
+- Treat repo truth as the gold implementation standard when deciding what can
+  actually ship safely in the current project.
+- Treat official Nuxt docs as the preferred guidance baseline for
+  forward-looking design and migration-ready patterns.
+- If official guidance and repo truth diverge materially on a non-trivial
+  recommendation, surface `OFFICIAL_CONFLICT`, implement the repo-safe path,
+  and explain the migration path.
+- If official sources disagree with each other on a non-trivial
+  recommendation, also surface `OFFICIAL_CONFLICT` instead of silently
+  collapsing the disagreement.
+- If a non-trivial claim cannot be confirmed in official sources after
+  targeted research, mark it `UNVERIFIED` or avoid presenting it as settled
+  guidance.
+- Keep conflict and uncertainty disclosure scoped to non-trivial,
+  version-sensitive, or contested guidance rather than trivial edits.
 - When the project's installed version is behind latest stable, note the version gap and recommend an upgrade path.
 - Refer to AGENTS.md for centralized version policy and default tooling.
 - Do not hardcode version numbers in generated guidance — keep recommendations evergreen.
@@ -93,11 +128,15 @@ Use this skill to keep Nuxt work current-version aligned, type-safe, and framewo
 When generating or reviewing code, always include:
 
 1. A short environment detection note (Nuxt generation, Vue version family, TS strictness state).
-2. A modern Nuxt structure compliance note (`app/` placement, root runtime dirs, `srcDir` handling, `future.compatibilityVersion` status).
-3. The selected rendering/runtime strategy and why it fits.
-4. The package selection rationale when adding dependencies (especially VueUse vs alternatives).
-5. A concise list of legacy patterns removed or avoided.
-6. Validation actions performed (typecheck/build/test/lint as available).
+2. A source truth note: detected project version, runtime layout, and any
+   material gap versus latest stable guidance.
+3. A modern Nuxt structure compliance note (`app/` placement, root runtime dirs, `srcDir` handling, `future.compatibilityVersion` status).
+4. The selected rendering/runtime strategy and why it fits.
+5. The package selection rationale when adding dependencies (especially VueUse vs alternatives).
+6. A concise list of legacy patterns removed or avoided.
+7. Validation actions performed (typecheck/build/test/lint as available).
+8. Conflict note when relevant: `OFFICIAL_CONFLICT` or `UNVERIFIED` with a
+   concise explanation and the implementation consequence.
 
 ## Completion Checklist
 
@@ -109,3 +148,5 @@ When generating or reviewing code, always include:
 - Added dependencies are modern, maintained, and justified.
 - Tailwind details are delegated to `ub-tailwind` when needed.
 - Legacy patterns are replaced, not carried forward.
+- Any material official-source conflict or unverified non-trivial guidance is
+  disclosed explicitly when relevant.

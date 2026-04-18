@@ -1,4 +1,0 @@
-interface:
-  display_name: "UB CSS"
-  short_description: "Modern CSS with DTCG tokens and progressive enhancement"
-  default_prompt: "Use $ub-css to author and refactor plain CSS or Vue/Nuxt style blocks with tokens, nesting, container queries, and compatibility-safe fallbacks."

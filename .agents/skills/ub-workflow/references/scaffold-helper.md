@@ -17,18 +17,24 @@ of a manual copy workflow.
 2. creates dated initiative roots under `./.ub-workflows/initiatives/`
 3. copies a provided source PRD into the initiative root as `./prd.md` without rewriting it
 4. renders the core placeholders into the initiative control files
-5. prepares sprint PRDs from roadmap metadata when explicit sprint-pack preparation is requested
-6. initializes the full sprint set from roadmap path entries on demand
-7. archives completed initiatives on explicit request only
-8. synchronizes the initiative-index `README.md` after create and archive actions
+5. backfills `rollup.md` into existing initiative roots when that workflow
+   memory surface is missing
+6. prepares sprint PRDs from roadmap metadata when explicit sprint-pack
+   preparation is requested
+7. initializes the full sprint set from roadmap path entries on demand
+8. backfills additive sprint-template files such as `decision-log.md` into
+   existing sprint directories without overwriting prepared sprint content
+9. archives completed initiatives on explicit request only
+10. synchronizes the initiative-index `README.md` after create and archive
+    actions
 
 The current helper does not, by itself, guarantee execution-ready sprint PRDs.
 Sprint content preparation remains a separate workflow step that must be
 completed before Sprint 01 or any later sprint begins.
 
 When `prepare-sprints` is used, the helper renders roadmap-derived sprint PRDs
-and leaves only named pending handoff markers where prior closeout truth may
-still need to flow forward.
+with richer execution-slice prompts and leaves only named pending handoff
+markers where prior closeout truth may still need to flow forward.
 
 The helper now also prints generated-output placeholder summaries after
 `create`, `prepare-sprints`, and `init-sprints`.
@@ -44,9 +50,16 @@ Rules:
 
 1. if the operations root does not exist, `create` bootstraps it automatically
 2. if the initiative root already contains files, `create` exits with an error
-3. if a sprint directory already exists but is missing template files, `init-sprints` exits with an error
-4. `archive` refuses to move incomplete initiatives
-5. use `--dry-run` when you want to inspect the resolved action before writing files
+3. if a sprint directory already exists but is missing core files such as
+   `sprint.md`, `closeout.md`, or `evidence/`, `init-sprints` exits with an
+   error
+4. if a sprint directory already exists and only lacks additive template files
+   such as `decision-log.md`, the helper backfills those files without
+   overwriting existing prepared content
+5. if an initiative root predates `rollup.md`, `prepare-sprints` and
+   `init-sprints` backfill it from the canonical template
+6. `archive` refuses to move incomplete initiatives
+7. use `--dry-run` when you want to inspect the resolved action before writing files
 
 ## Recommended Usage
 
@@ -98,5 +111,13 @@ After scaffolding:
 4. approve the roadmap and record `roadmap_ready: pass` in the initiative `README.md`
 5. ensure the roadmap lists every implementation sprint plus the final audit item
 6. run `prepare-sprints` to render roadmap-derived sprint PRDs before any sprint begins
-7. run `init-sprints` when you need directory-only materialization or validation of the sprint set
-8. use `archive` only after the roadmap checklist, retained note, and initiative status are actually complete
+7. review the rendered execution slices so acceptance, verification, and
+   dependencies are explicit before implementation begins
+8. keep sprint-time decisions in each sprint `decision-log.md` and summarize
+   cross-sprint carry-forward in `rollup.md`
+9. treat `research/` as supportive discovery and `exceptions/` as bounded
+   exception records instead of default note buckets
+10. run `init-sprints` when you need directory-only materialization or
+    validation of the sprint set
+11. use `archive` only after the roadmap checklist, retained note, rollup,
+    and initiative status are actually complete

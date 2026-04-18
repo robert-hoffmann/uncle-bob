@@ -22,6 +22,7 @@ as the initiative moves forward.
 
 ## Current Position
 
+- Interaction mode: `reviewed`
 - Current sprint: `none`
 - Last completed sprint: `none`
 - Next sprint: REPLACE_NEXT_SPRINT

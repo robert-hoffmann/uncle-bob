@@ -5,23 +5,25 @@
     "email": "robert-hoffmann@users.noreply.github.com"
   },
   "metadata": {
-    "description": "Cross-language code quality, governance, and framework skills with specialized Copilot agents.",
+    "description": "Workflow-first AI coding skills and custom agents for planning, quality, governance, Markdown, and framework-specific implementation work.",
     "version": "1.0.0",
     "pluginRoot": "."
   },
   "plugins": [
     {
       "name": "uncle-bob",
-      "description": "10 domain skills (quality, governance, workflow, CSS, Tailwind, TypeScript, Python, Vue, Nuxt, customizations) and 4 custom agents (governance, teacher, customizations, workflow) built by a 27-year full-stack veteran.",
+      "description": "11 workflow-first skills (workflow, quality, governance, customizations, Markdown, CSS, Tailwind, TypeScript, Python, Vue, Nuxt) and 4 custom agents (workflow, governance, customizations, teacher).",
       "version": "1.0.0",
       "author": {
         "name": "robert-hoffmann",
         "url": "https://github.com/robert-hoffmann"
       },
-      "homepage": "https://github.com/robert-hoffmann/uncle-bob",
+      "homepage": "https://github.com/robert-hoffmann/itech-agents",
       "keywords": [
+        "workflow",
         "quality",
         "governance",
+        "markdown",
         "typescript",
         "python",
         "vue",
@@ -34,7 +36,7 @@
         "best-practices"
       ],
       "license": "MIT",
-      "repository": "https://github.com/robert-hoffmann/uncle-bob",
+      "repository": "https://github.com/robert-hoffmann/itech-agents",
       "source": "."
     }
   ]

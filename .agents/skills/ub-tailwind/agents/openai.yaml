@@ -1,4 +1,0 @@
-interface:
-  display_name: "UB Tailwind"
-  short_description: "Tailwind CSS setup and migration guardrails (latest stable)"
-  default_prompt: "Use $ub-tailwind to implement Tailwind CSS setup, migration, and framework-specific integration fixes across Vue, Nuxt, and standalone projects."

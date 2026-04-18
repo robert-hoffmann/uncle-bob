@@ -2,6 +2,11 @@
 
 Use this template for new ADR files in `docs/adr/`.
 
+Use ADRs for repository-level or cross-initiative decisions that remain durable
+beyond one workflow-backed initiative. Do not turn routine sprint decisions
+into repository ADRs when workflow artifacts already provide the right
+operational record.
+
 Recommended filename: `NNNN-short-kebab-title.md`.
 
 ```markdown
@@ -92,4 +97,18 @@ Allowed status values:
 3. `deprecated`
 4. `superseded`
 
-Use `supersedes` to link transitions explicitly.
+Lifecycle guidance:
+
+1. use `proposed` while the decision is still being reviewed
+2. use `accepted` once the repository-level decision is the active rule
+3. use `superseded` when a newer ADR explicitly replaces this one; update the
+   newer ADR's `supersedes` field and keep the older ADR for historical context
+4. use `deprecated` when the decision is no longer recommended but is not
+   cleanly replaced by one direct successor ADR
+
+Supersession workflow:
+
+1. create the new ADR with its own identifier and active decision text
+2. set the new ADR's `supersedes` field to the older ADR id or ids
+3. update the older ADR status to `superseded` when the replacement is active
+4. do not delete old ADRs; they remain part of repository decision memory

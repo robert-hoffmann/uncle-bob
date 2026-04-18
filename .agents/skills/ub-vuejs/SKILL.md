@@ -9,25 +9,60 @@ description: Build, review, migrate, and debug Vue (latest stable) application c
 
 Use this skill to enforce Vue core best practices for the latest stable release with strict TypeScript and migration-aware legacy handling. Generate only modern patterns for new code and refactor existing legacy patterns incrementally.
 
+Implement against the detected project and runtime truth, but bias component
+design toward forward-compatible migration rather than retaining legacy
+patterns or outdated guidance by default.
+
 ## Load References On Demand
 
+- Read `../references/authoring-conventions.md` when adjusting routing
+  guidance or cross-skill authoring conventions.
 - Read `references/vue-modern-patterns.md` for the canonical modern Vue recipes and API usage patterns.
 - Read `references/vue-legacy-to-modern-migration.md` for migration mapping, compatibility exceptions, and modernization sequence.
+
+## When Not To Use
+
+- Do not use this skill when the task depends primarily on Nuxt runtime
+  behavior, app-directory policy, server routes, or Nitro concerns; defer that
+  to `ub-nuxt`.
+- Do not use this skill when the main issue is Tailwind integration or plain
+  CSS architecture rather than Vue component logic.
 
 ## Core Workflow
 
 1. Detect Vue version family and tooling from `package.json`, lockfiles, `vite.config.*`, `vue.config.*`, and TypeScript config.
 2. Confirm the task is Vue core scope (SFCs, reactivity, watchers, SSR and hydration, component contracts). If the task is Nuxt-specific, defer framework rules to `.agents/skills/ub-nuxt/SKILL.md`.
-3. Implement with strict TypeScript and SFC default `script setup` plus `lang="ts"`.
-4. Apply modern Vue patterns from `references/vue-modern-patterns.md`.
-5. Reject legacy output and apply migration mapping from `references/vue-legacy-to-modern-migration.md` when updating existing code.
-6. Validate behavior with typecheck, lint, and tests available in the target project.
+3. Compare official guidance, repo truth, and observed code reality for
+   non-trivial or version-sensitive recommendations.
+4. Surface `OFFICIAL_CONFLICT` when authoritative sources, repo truth, or live
+   code reality materially disagree on a non-trivial recommendation.
+5. Surface `UNVERIFIED` when a non-trivial claim could not be confirmed in
+   official sources after targeted research.
+6. Implement with strict TypeScript and SFC default `script setup` plus `lang="ts"`.
+7. Apply modern Vue patterns from `references/vue-modern-patterns.md`.
+8. Reject legacy output and apply migration mapping from `references/vue-legacy-to-modern-migration.md` when updating existing code.
+9. Validate behavior with typecheck, lint, and tests available in the target project.
 
 ## Version & Research Policy
 
 - Target the latest stable release of Vue.
 - Detect the project's actual Vue version from `package.json` and lockfiles.
 - Use web search to verify current best practices, API availability, and migration guidance against official Vue documentation.
+- Treat repo truth as the gold implementation standard when deciding what can
+  actually ship safely in the current project.
+- Treat official Vue docs as the preferred guidance baseline for
+  forward-looking design and migration-ready patterns.
+- If official guidance and repo truth diverge materially on a non-trivial
+  recommendation, surface `OFFICIAL_CONFLICT`, implement the repo-safe path,
+  and explain the migration path.
+- If official sources disagree with each other on a non-trivial
+  recommendation, also surface `OFFICIAL_CONFLICT` instead of silently
+  collapsing the disagreement.
+- If a non-trivial claim cannot be confirmed in official sources after
+  targeted research, mark it `UNVERIFIED` or avoid presenting it as settled
+  guidance.
+- Keep conflict and uncertainty disclosure scoped to non-trivial,
+  version-sensitive, or contested guidance rather than trivial edits.
 - When the project's installed version is behind latest stable, note the version gap and recommend an upgrade path.
 - Do not use pre-release or beta features unless explicitly requested.
 - Refer to AGENTS.md for centralized version policy and default tooling.
@@ -98,10 +133,14 @@ Non-goals:
 When generating or reviewing code, always include:
 
 1. Environment note: Vue version family, TypeScript state, and key tooling detected.
-2. Version note: detected Vue version and whether any pre-release behavior is intentionally excluded.
-3. Pattern note: which modern APIs were selected and why.
-4. Legacy note: what legacy patterns were removed or intentionally retained with compatibility rationale.
-5. Validation note: what checks were run (typecheck, lint, tests, build) and outcomes.
+2. Source truth note: detected project version and toolchain reality, plus any
+   material gap versus latest stable guidance.
+3. Version note: detected Vue version and whether any pre-release behavior is intentionally excluded.
+4. Pattern note: which modern APIs were selected and why.
+5. Legacy note: what legacy patterns were removed or intentionally retained with compatibility rationale.
+6. Validation note: what checks were run (typecheck, lint, tests, build) and outcomes.
+7. Conflict note when relevant: `OFFICIAL_CONFLICT` or `UNVERIFIED` with a
+   concise explanation and the implementation consequence.
 
 ## Completion Checklist
 
@@ -112,3 +151,5 @@ When generating or reviewing code, always include:
 - No new legacy output is introduced.
 - Any retained legacy is explicitly justified with an incremental migration path.
 - Nuxt and Tailwind concerns are delegated to their dedicated skills when applicable.
+- Any material official-source conflict or unverified non-trivial guidance is
+  disclosed explicitly when relevant.

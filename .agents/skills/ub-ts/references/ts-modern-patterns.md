@@ -6,6 +6,22 @@
 
 Provide portable, modern defaults for the latest stable TypeScript across Node apps, bundler apps, npm libraries, and type-stripping runtimes.
 
+## Source Truth And Disclosure
+
+- Treat detected project and runtime truth as the shipping constraint for
+  implementation decisions.
+- Treat official TypeScript docs as the preferred guidance baseline for
+  forward-looking design and migration-ready patterns.
+- If official docs, repo truth, or live code reality materially disagree on a
+  non-trivial recommendation, surface `OFFICIAL_CONFLICT`, implement the
+  repo-safe path, and explain the migration path.
+- If official TypeScript sources disagree with each other on a non-trivial
+  recommendation, surface `OFFICIAL_CONFLICT` instead of silently choosing one.
+- If a non-trivial claim cannot be confirmed in official sources after targeted
+  research, mark it `UNVERIFIED` or avoid presenting it as settled guidance.
+- Keep these disclosures scoped to non-trivial, version-sensitive, or
+  contested guidance rather than every trivial edit.
+
 ## Archetype Matrix
 
 | Archetype | Runtime authority | Recommended module settings | Emit posture | Notes |
@@ -33,6 +49,10 @@ Useful additions by context:
 - `rewriteRelativeImportExtensions: true` when emitting JS from TS paths with extensions.
 
 ## tsconfig Starting Points
+
+Treat these as starter baselines, not silent replacements for repo-local
+config. If a repository already has `tsconfig*.json`, that live config is the
+implementation source of truth.
 
 ### Node App (LTS)
 
@@ -175,6 +195,8 @@ function parseExternal(input: unknown): { id: string } {
 2. Run lint and tests if available.
 3. Confirm module behavior under the real runtime or bundler.
 4. Confirm no legacy patterns were introduced.
+5. Record any `OFFICIAL_CONFLICT` or `UNVERIFIED` outcome that materially
+   affected the recommendation.
 
 ## Primary Sources
 

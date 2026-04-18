@@ -34,6 +34,14 @@ Avoid anti-patterns:
 3. internal call-order verification without outcome assertions
 4. giant mixed-behavior increments
 
+Test readability note:
+
+1. prefer DAMP over DRY in tests when a small amount of duplication makes each
+   scenario easier to read independently
+2. avoid helper abstraction that hides setup, trigger, or observed outcome
+3. prefer two explicit tests over one parameterized blur when the scenarios
+   exercise meaningfully different behavior
+
 ## 4) Red-Green-Refactor Loop
 
 ### RED
@@ -57,6 +65,15 @@ Avoid anti-patterns:
 3. rerun full-scope tests
 4. revert/fix immediately if regressions appear
 
+### Common Rationalizations
+
+| Rationalization | Reality |
+| --- | --- |
+| "I already know the bug; I can fix it first" | Regression-first reproduction is the proof that the defect path exists and stays fixed. |
+| "These cases are basically the same" | Merge scenarios only when the observable outcome is truly the same; otherwise keep the tests distinct and readable. |
+| "I will run the strict test-signal check later" | Running it during RED prevents low-signal tests from compounding across increments. |
+| "The full suite is enough" | Narrow checks prove increment intent; broader checks prove regression safety. Both matter. |
+
 ## 5) Required Checkpoints
 
 Pause at:
@@ -64,6 +81,8 @@ Pause at:
 1. increment-list approval before cycle start
 2. RED confirmation per increment
 3. anomalies or strict-gate violations without active bounded exception
+4. repeated rationalization pressure that is pushing the work away from
+   behavior-first, outcome-based checks
 
 ## 6) Increment Closure
 

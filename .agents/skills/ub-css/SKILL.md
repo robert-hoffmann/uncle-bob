@@ -11,8 +11,20 @@ Apply modern CSS platform features with predictable cascade control, token-drive
 
 ## Load References On Demand
 
+- Read `../references/authoring-conventions.md` when adjusting routing
+  guidance or cross-skill authoring conventions.
 - Read `references/modern-css-source.md` for copy-ready patterns and framework bridges (Vue/Nuxt/Quasar/Tailwind).
 - Read `references/browser-support-baseline.md` when deciding fallback policy or feature gating.
+
+## When Not To Use
+
+- Do not use this skill when Tailwind utility workflow, Tailwind setup, or
+  Tailwind migration is the primary change surface; defer that to
+  `ub-tailwind`.
+- Do not use this skill when the main problem is Nuxt runtime behavior, app
+  structure, or Nitro/server concerns; defer that to `ub-nuxt`.
+- Do not use this skill for general Vue component logic when CSS is secondary
+  to component architecture.
 
 ## Core Workflow
 

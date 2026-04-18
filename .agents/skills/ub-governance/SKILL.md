@@ -17,7 +17,7 @@ This skill is self-contained and merges repository, testing, evidence, and share
 ## Operating Modes
 
 1. `repository mode`: repository hygiene, CI/release governance, branch/ruleset policy, deterministic tooling
-2. `testing mode`: testing policy, TG001-TG005 signal controls, behavior-first TDD execution
+2. `testing mode`: testing policy, TG001-TG005 signal controls, regression-first bug-fix flow, and behavior-first TDD execution
 3. `evidence mode`: evidence lifecycle, ADR alignment, claim verification, gate readiness
 4. `core-contract mode`: shared profile, gate semantics, exception metadata, report sections
 5. `full governance audit mode`: run repository + testing + evidence checks in one deterministic sequence
@@ -32,6 +32,8 @@ This skill is self-contained and merges repository, testing, evidence, and share
 
 ### Core Contracts
 
+- Read `../references/authoring-conventions.md` when adjusting routing
+  guidance, output structure, or cross-skill authoring conventions.
 - Read `references/profile-model.md` for profile selection.
 - Read `references/gate-and-report-contract.md` for canonical gate/report semantics.
 - Read `references/exception-contract.md` for canonical exception metadata.
@@ -72,6 +74,17 @@ This skill is self-contained and merges repository, testing, evidence, and share
 5. Apply bounded exceptions only through `references/exception-contract.md`.
 6. Emit gate outcome (`pass`, `fail`, `blocked`) with traceable artifact paths.
 
+## When Not To Use
+
+- Do not use this skill for workflow intake, PRD shaping, roadmap generation,
+  sprint preparation, or resumable initiative orchestration; defer those to
+  `ub-workflow`.
+- Do not use this skill as the primary surface for framework-specific
+  implementation guidance when the task is about code changes rather than
+  governance policy or gate semantics.
+- Do not use this skill as a generic documentation-normalization layer when
+  `ub-quality` is the actual owner of the task.
+
 ## Mode Workflows
 
 ### Repository Mode
@@ -83,17 +96,21 @@ This skill is self-contained and merges repository, testing, evidence, and share
 ### Testing Mode
 
 1. detect stack and test runner
-2. enforce TG001-TG004 as blocking and TG005 as warning
-3. require behavior-first TDD flow for behavior-changing work
-4. ensure deterministic artifact paths for blocking checks
+2. treat reported defects as regression-first work before code fixes are accepted
+3. enforce TG001-TG004 as blocking and TG005 as warning
+4. require behavior-first TDD flow for behavior-changing work and keep increments outcome-oriented
+5. use the testing references to keep test design readable, boundary-aware, and deterministic without turning advisory guidance into new gates
 
 ### Evidence Mode
 
 1. classify `changeType`, `evidenceLevel`, and `profile`
 2. detect high-risk path impact
 3. validate required artifacts and freshness
-4. validate ADR alignment or active waiver
-5. validate claim confidence before blocking policy usage
+4. treat workflow-backed initiative artifacts as the default operational record
+   for Level 1 work, then escalate to ADR alignment only when Level 2 or
+   explicit repository-level governance applies
+5. validate ADR alignment or active waiver when that escalation applies
+6. validate claim confidence before blocking policy usage
 
 ### Core-Contract Mode
 
@@ -115,6 +132,8 @@ This skill is self-contained and merges repository, testing, evidence, and share
 - Blocking governance decisions must rely on deterministic artifacts.
 - Exception metadata must include owner, expiry, and follow-up.
 - Do not duplicate canonical contract definitions across files.
+- Do not imply that repository ADR machinery is the default record for ordinary
+  Level 1 workflow-backed work.
 
 ## Output Requirements
 

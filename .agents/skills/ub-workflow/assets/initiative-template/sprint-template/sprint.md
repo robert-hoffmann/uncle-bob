@@ -22,6 +22,10 @@ sprint-specific plan below.
 
 REPLACE_SPRINT_SCOPE_ITEMS
 
+## Execution Slices
+
+REPLACE_SPRINT_EXECUTION_SLICES
+
 ## Dependencies
 
 1. Roadmap dependency: `REPLACE_SPRINT_DEPENDS_ON`
@@ -52,6 +56,7 @@ begins.
 1. Record the likely affected files, modules, systems, or docs.
 2. Add another affected area if needed.
 3. Save sprint evidence under `REPLACE_SPRINT_EVIDENCE_FOLDER`.
+4. Keep sprint-scoped execution decisions in `./decision-log.md`.
 
 ## Validation Plan
 
@@ -62,6 +67,16 @@ begins.
  sprint can close.
 5. Add TG001-TG005 or equivalent deterministic test-signal checks when tests
  will change.
+
+## Reviewability Check
+
+1. Confirm each execution slice is independently understandable.
+2. Confirm each execution slice names acceptance and verification rather than
+   leaving success implicit.
+3. Confirm dependencies and likely touched areas are explicit where they
+   materially affect planning or review.
+4. Confirm the sprint plan is richer than the roadmap without simply copying
+   roadmap content verbatim.
 
 ## Exit Criteria
 
@@ -98,3 +113,4 @@ This sprint is done only when all of the following are true:
 5. validation evidence is recorded and traceable
 6. governance bridge requirements are satisfied or explicitly marked not applicable
 7. closeout is current and resumable
+8. decision-log is current enough for the next sprint or final audit to trust it

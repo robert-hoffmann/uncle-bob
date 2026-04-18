@@ -12,7 +12,7 @@ needs answered:
 2. which assets are optional enhancements
 3. how custom agents fit into the package
 4. how plugin metadata should stay synchronized
-5. what status `agents/openai.yaml` has in this repository
+5. what status skill-local provider metadata has in this repository
 
 This policy is intentionally minimal. It does not create new mandatory assets
 unless the repository already depends on them operationally.
@@ -86,30 +86,35 @@ Every custom agent under `./.github/agents/` must be represented by a single
 Additional agent support files may exist elsewhere when needed, but the agent
 registry contract for this repository is the `.agent.md` file itself.
 
-## `agents/openai.yaml` Policy
+## Skill-Local Provider Metadata Policy
 
-Status: optional
+Status: optional in principle, currently unused
 
 Decision:
 
-1. `agents/openai.yaml` is an optional per-skill enhancement file.
-2. It is not required for a valid skill package in this repository.
-3. Its absence must not be treated as packaging drift or integrity failure.
+1. provider-specific metadata files such as `agents/openai.yaml` are optional
+   per-skill enhancements
+2. they are not required for a valid skill package in this repository
+3. their absence must not be treated as packaging drift or integrity failure
+4. this repository currently ships no skill-local `agents/openai.yaml` files
 
 Rationale:
 
-1. the repository currently mixes skills with and without `agents/openai.yaml`
-2. the current integrity baseline does not depend on it for package validity
-3. forcing it to be required would create bureaucracy without improving the
+1. the current integrity baseline does not depend on skill-local provider
+   metadata for package validity
+2. forcing it to be required would create bureaucracy without improving the
    core inventory or governance contracts
+3. keeping the path optional preserves flexibility if a future skill develops a
+   real provider-specific need
 
 Operational rule:
 
-1. if a skill needs provider-specific interface metadata, `agents/openai.yaml`
-   may be added
-2. if a skill does not need that metadata, do not add the file just for symmetry
-3. when present, `agents/openai.yaml` should stay lintable and consistent with
-   the skill's actual purpose
+1. if a skill develops a concrete provider-specific interface need,
+   `agents/openai.yaml` or an equivalent metadata file may be added
+2. if a skill does not need that metadata, do not add the file just for
+   symmetry
+3. when present, provider-specific metadata should stay lintable and
+   consistent with the skill's actual purpose
 
 ## Plugin Metadata Synchronization
 
@@ -164,7 +169,7 @@ This policy intentionally does not require:
 
 1. a `references/` directory for every skill
 2. a `tests/` directory for every skill
-3. `agents/openai.yaml` for every skill
+3. skill-local provider metadata for every skill
 4. identical section headings across every `SKILL.md`
 5. repo-wide normalization work unrelated to operational clarity
 

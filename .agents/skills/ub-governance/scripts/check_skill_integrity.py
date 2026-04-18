@@ -19,7 +19,6 @@ LEGACY_SKILL_DIR = REPO_ROOT / ".agents" / "skills" / "governance"
 
 REQUIRED_PATHS = (
     SKILL_DIR / "SKILL.md",
-    SKILL_DIR / "agents" / "openai.yaml",
     SKILL_DIR / "references" / "exception-contract.md",
     SKILL_DIR / "references" / "gate-and-report-contract.md",
     SKILL_DIR / "references" / "profile-model.md",

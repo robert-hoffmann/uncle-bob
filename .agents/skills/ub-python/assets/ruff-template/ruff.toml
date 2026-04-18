@@ -1,0 +1,67 @@
+# Ruff starter profile for repositories adopting the UB Python house style.
+# Adapt target-version, include/exclude paths, and known-first-party modules to
+# the local repository before treating this as active policy.
+#
+# Official docs:
+# https://docs.astral.sh/ruff/configuration/
+
+target-version = "py310"
+line-length = 100
+
+include = ["**/*.py", "**/*.pyi"]
+exclude = [
+  ".git",
+  ".venv",
+  "__pycache__",
+  "*.egg-info",
+]
+
+[lint]
+select = [
+  "E",
+  "W",
+  "F",
+  "I",
+  "N",
+  "UP",
+  "B",
+  "C4",
+  "SIM",
+  "TID",
+  "RUF",
+  "S",
+  "A",
+  "DTZ",
+  "PGH",
+  "FA",
+  "PERF",
+  "PLE",
+  "PLW",
+  "PIE",
+  "RSE",
+  "ISC",
+  "FLY",
+  "FURB",
+]
+
+ignore = [
+  "E501",
+  "E221",
+  "E241",
+  "E251",
+  "E203",
+]
+
+fixable = ["ALL"]
+unfixable = []
+
+[lint.per-file-ignores]
+"**/tests/**/*.py" = [
+  "S101",
+  "S603",
+  "S607",
+]
+
+[lint.isort]
+force-sort-within-sections = true
+known-first-party = []

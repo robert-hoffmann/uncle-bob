@@ -13,34 +13,72 @@ Generate modern patterns for new code and refactor legacy patterns incrementally
 
 Write against the project's currently supported Python version, but structure code so it can move cleanly toward newer stable releases instead of accumulating compatibility layers.
 
+## Bundled Assets
+
+This skill ships reusable Ruff scaffolding under `assets/` and a deterministic
+helper under `scripts/`.
+
+Use them when a repository wants the same Ruff baseline but does not yet have a
+Python lint config of its own.
+
 ## Load References On Demand
 
 - Load and apply `references/python-standards.md` for canonical Python rules and toolchain policy.
 - Load and apply `references/repository-python-workflows.md` for this repository's actual Python validation and packaging-tooling baseline.
+- Load `references/ruff-config-resolution.md` when Ruff config discovery,
+  adaptation points, or scaffolding behavior matters.
+- Use `scripts/scaffold_ruff.py` with `assets/ruff-template/` when a target
+  repository needs a deterministic Ruff starter instead of ad hoc config
+  rewriting.
 
 ## Forward-Compatibility Contract
 
 - Implement for the project's actual supported Python version, runtime, and library floor.
 - Bias design toward the next stable upgrade path rather than preserving older-version behavior by default.
-- Prefer `typing_extensions`, `collections.abc`, and `abc` as forward-compatible tools when they reduce future rewrite cost and avoid custom compatibility layers.
+- Prefer forward-compatible tools such as `typing_extensions`,
+  `collections.abc`, and `abc` when they let the code stay compatible with the
+  current repo floor while aligning with newer stable Python direction.
 - Add backward-compatibility shims, fallbacks, or bridge code only when an explicit support contract or staged migration plan requires them.
+- Do not treat forward-compatibility tools as permission to emit syntax that
+  the repo's active Python floor cannot parse or run.
 
 ## Core Workflow
 
 1. Detect runtime and tooling truth from project files (`pyproject.toml`, lockfiles, CI, existing configs).
 2. Confirm Python scope and version contract before proposing implementation.
-3. Propose at least two viable implementation paths for non-trivial Python work, with concise pros/cons.
-4. Choose the simplest path that satisfies correctness, maintainability, and project constraints.
-5. Write or adjust tests first for behavior changes.
-6. Implement minimal changes to pass tests, then refactor while preserving behavior and boundaries.
-7. Run repository-configured validation after modifying Python code, starting with the smallest relevant scope.
-8. Report outcomes, bounded exceptions, and any missing tooling gaps that materially reduce confidence.
+3. Compare official guidance, repo truth, and observed code reality for
+   non-trivial or version-sensitive recommendations.
+4. Surface `OFFICIAL_CONFLICT` when authoritative sources, repo truth, or live
+   code reality materially disagree on a non-trivial recommendation.
+5. Surface `UNVERIFIED` when a non-trivial claim could not be confirmed in
+   official sources after targeted research.
+6. Propose at least two viable implementation paths for non-trivial Python work, with concise pros/cons.
+7. Choose the simplest path that satisfies correctness, maintainability, and project constraints.
+8. Write or adjust tests first for behavior changes.
+9. Implement minimal changes to pass tests, then refactor while preserving behavior and boundaries.
+10. Run repository-configured validation after modifying Python code, starting with the smallest relevant scope.
+11. Report outcomes, bounded exceptions, any conflict or uncertainty disclosures,
+    and missing tooling gaps that materially reduce confidence.
+12. If a repository wants this Ruff baseline but has no active Ruff config yet,
+    scaffold the bundled starter and explain the required repo-local
+    adaptations instead of embedding policy in prose.
 
 ## Version & Research Policy
 
 - Target the latest stable release of Python for guidance, but implement against the project's actual supported version contract.
 - Detect the project's actual Python version from `pyproject.toml`, `.python-version`, lockfiles, and CI configuration.
 - Use web search to verify current best practices, API availability, and migration guidance against official Python documentation.
+- Treat repo truth as the gold implementation standard when deciding what can
+  actually ship without breaking the current project.
+- Treat official Python docs as the preferred guidance baseline for
+  forward-looking design and migration-ready patterns.
+- If official guidance and repo truth diverge materially on a non-trivial
+  recommendation, surface `OFFICIAL_CONFLICT`, implement the repo-safe path,
+  and explain the forward migration path.
+- If a non-trivial claim cannot be confirmed in official sources after targeted
+  research, mark it `UNVERIFIED` or avoid presenting it as settled guidance.
+- Keep conflict and uncertainty disclosure scoped to non-trivial,
+  version-sensitive, or contested guidance rather than trivial edits.
 - Do not generate syntax or stdlib behavior only available in unreleased Python versions unless the user explicitly requests it.
 - When the project's installed version is behind latest stable, note the version gap, recommend an upgrade path, and prefer patterns that will survive that upgrade cleanly.
 - Refer to AGENTS.md for centralized version policy and default tooling.
@@ -128,6 +166,20 @@ Repository truth note:
   - editor feedback: Pylance (Pyright engine) with `python.analysis.typeCheckingMode = "standard"` when team/editor policy prefers standard-mode diagnostics
 - Keep one-command check workflows discoverable in project docs/automation when possible.
 
+## Config Resolution And Scaffolding
+
+Treat real tool config as the source of truth:
+
+1. inspect `ruff.toml`, `.ruff.toml`, or `[tool.ruff]` in `pyproject.toml`
+   first when they exist
+2. inspect task-runner, CI, and package metadata entrypoints before assuming a
+   command shape
+3. use the bundled Ruff scaffold only when config is absent and the adopting
+   repo wants this house style
+4. treat the scaffold as a starter that still needs local adaptation for
+   target version, include/exclude paths, and first-party package layout
+5. do not silently install dependencies or mutate CI as part of scaffolding
+
 ## Tradeoff Handling
 
 - For major design or tooling choices, always present at least two options with concise pros/cons.
@@ -153,11 +205,21 @@ Migration-aware exception policy:
 When generating or reviewing Python code, include:
 
 1. Environment note: detected runtime, interpreter strategy, and relevant tooling context.
-2. Decision note: chosen approach and at least one alternative.
-3. Tradeoff note: concise pros/cons for chosen and rejected paths.
-4. Legacy note: removed legacy patterns or bounded exceptions with rationale.
-5. Validation note: checks run (lint/type/test/build) and outcomes.
-6. Tooling gap note: missing or weak lint/type/test enforcement that the user should consider adding or wiring in.
+2. Source truth note: repo version/tooling reality and any material gap versus
+   latest stable guidance.
+3. Decision note: chosen approach and at least one alternative.
+4. Tradeoff note: concise pros/cons for chosen and rejected paths.
+5. Legacy note: removed legacy patterns or bounded exceptions with rationale.
+6. Validation note: checks run (lint/type/test/build) and outcomes.
+7. Tooling gap note: missing or weak lint/type/test enforcement that the user should consider adding or wiring in.
+8. Conflict note when relevant: `OFFICIAL_CONFLICT` or `UNVERIFIED` with a
+   concise explanation and the implementation consequence.
+
+When this skill is used to scaffold Ruff into another repository, also include:
+
+1. which files were created or skipped
+2. which repo-local Ruff settings still need adaptation
+3. the exact lint command the target repo should run next
 
 ## References
 
@@ -174,3 +236,7 @@ When generating or reviewing Python code, include:
 - No new legacy output is introduced.
 - Missing lint/type/test enforcement was reported when relevant.
 - Any retained legacy behavior is documented with a migration path.
+- Any material official-source conflict or unverified non-trivial guidance is
+  disclosed explicitly when relevant.
+- Any scaffolded Ruff starter was reported as a starter profile rather than
+  silent repo policy.

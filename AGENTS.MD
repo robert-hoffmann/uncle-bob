@@ -43,18 +43,19 @@ Always load these skills for every task — no exceptions.
 
 ## Skills
 
-| Skill             | Description                                                                                                                      | Path                                                |
-| ----------------- | -------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------- |
-| ub-quality        | Cross-language code quality: design patterns, formatting, documentation, structure, refactoring.                                 | `.agents/skills/ub-quality/SKILL.md`                |
-| ub-css            | Plain CSS & Vue/Nuxt style blocks: design tokens, cascade layers, native nesting, container queries, progressive enhancement.    | `.agents/skills/ub-css/SKILL.md`                    |
-| ub-nuxt           | Nuxt (latest stable): typed composables, SSR/SSG/hybrid rendering, runtime config, Nitro/server routes, app-directory semantics. | `.agents/skills/ub-nuxt/SKILL.md`                   |
-| ub-python         | Python (latest stable): typed patterns, boundary validation, structured error handling, pytest/ruff/mypy workflows.              | `.agents/skills/ub-python/SKILL.md`                 |
-| ub-tailwind       | Tailwind CSS (latest stable): setup, migration, debugging across standalone HTML, Vue + Vite, and Nuxt projects.                 | `.agents/skills/ub-tailwind/SKILL.md`               |
-| ub-ts             | TypeScript (latest stable): typing, module/moduleResolution, compiler flags, tsconfig architecture.                              | `.agents/skills/ub-ts/SKILL.md`                     |
-| ub-vuejs          | Vue (latest stable): SFCs, composables, reactivity, watchers, SSR/hydration, component contracts with strict TypeScript.         | `.agents/skills/ub-vuejs/SKILL.md`                  |
-| ub-governance     | Unified governance: repo governance, testing, evidence/ADR/claim governance, and shared contracts.                               | `.agents/skills/ub-governance/SKILL.md`             |
-| ub-customizations | VS Code Copilot customization builder: creates skills, prompts, agents, hooks, MCP configs, plugins, and bundles.                | `.agents/skills/ub-customizations/SKILL.md`         |
-| ub-workflow       | Initiative planning, roadmap generation, resumable sprint orchestration, and final-audit flow for larger multi-session work.     | `.agents/skills/ub-workflow/SKILL.md`               |
+| Skill             | Description                                                                                                                                    | Path                                          |
+| ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------- |
+| ub-quality        | Cross-language code quality: design patterns, formatting, documentation, structure, refactoring.                                               | `.agents/skills/ub-quality/SKILL.md`          |
+| ub-css            | Plain CSS & Vue/Nuxt style blocks: design tokens, cascade layers, native nesting, container queries, progressive enhancement.                  | `.agents/skills/ub-css/SKILL.md`              |
+| ub-nuxt           | Nuxt (latest stable): typed composables, SSR/SSG/hybrid rendering, runtime config, Nitro/server routes, app-directory semantics.               | `.agents/skills/ub-nuxt/SKILL.md`             |
+| ub-python         | Python (latest stable): typed patterns, boundary validation, structured error handling, pytest/ruff/mypy workflows.                            | `.agents/skills/ub-python/SKILL.md`           |
+| ub-tailwind       | Tailwind CSS (latest stable): setup, migration, debugging across standalone HTML, Vue + Vite, and Nuxt projects.                               | `.agents/skills/ub-tailwind/SKILL.md`         |
+| ub-ts             | TypeScript (latest stable): typing, module/moduleResolution, compiler flags, tsconfig architecture.                                            | `.agents/skills/ub-ts/SKILL.md`               |
+| ub-vuejs          | Vue (latest stable): SFCs, composables, reactivity, watchers, SSR/hydration, component contracts with strict TypeScript.                       | `.agents/skills/ub-vuejs/SKILL.md`            |
+| ub-governance     | Unified governance: repo governance, testing, evidence/ADR/claim governance, and shared contracts.                                             | `.agents/skills/ub-governance/SKILL.md`       |
+| ub-customizations | VS Code Copilot customization builder: creates skills, prompts, agents, hooks, MCP configs, plugins, and bundles.                              | `.agents/skills/ub-customizations/SKILL.md`   |
+| ub-markdown       | Markdown authoring companion for README/AGENTS/skills/docs/workflow files with repo markdownlint alignment and CommonMark/GFM-aware structure. | `.agents/skills/ub-markdown/SKILL.md`         |
+| ub-workflow       | Initiative planning, roadmap generation, resumable sprint orchestration, and final-audit flow for larger multi-session work.                   | `.agents/skills/ub-workflow/SKILL.md`         |
 
 ## Agents
 

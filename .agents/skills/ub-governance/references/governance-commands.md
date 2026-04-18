@@ -10,6 +10,21 @@ Stable governance entrypoints (Pass 2 baseline):
 
 These entrypoints execute the canonical Python implementations directly for cross-platform portability.
 
+Use them as explicit governance tools, not as the default workflow path for
+every change.
+
+Operator intent:
+
+1. `check_test_signal.py` commonly supports testing governance during ordinary
+   implementation work.
+2. `build_adr_registry.py`, `check_adr_gate.py`, and `check_claim_register.py`
+   are primarily for Level 2 or explicit repository-governance runs where ADR
+   alignment, claims, or high-risk gate checks were intentionally activated.
+3. Workflow-backed Level 1 initiatives normally keep their operational record
+   in `prd.md`, `roadmap.md`, `sprint.md`, `closeout.md`, sprint `evidence/`,
+   and bounded initiative `exceptions/` instead of invoking ADR machinery by
+   default.
+
 ## Usage Examples
 
 ```bash

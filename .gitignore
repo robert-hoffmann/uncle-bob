@@ -16,3 +16,4 @@ __pycache__/
 
 # Local tmp scratch
 /tmp
+/.ub-workflows/**

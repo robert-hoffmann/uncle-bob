@@ -23,3 +23,7 @@ If you want to bootstrap a new initiative quickly, use
 3. The scaffold helper can bootstrap the parent operations root and create new initiative roots on demand.
 4. The scaffold helper uses the skill's internal initiative and sprint templates instead of requiring a copied local `initiative-template/` directory.
 5. Historical initiative roots live under `../archive/`.
+
+## Active Lightweight Specs
+
+1. `specs/2026-04-18-ub-workflow-interaction-modes`

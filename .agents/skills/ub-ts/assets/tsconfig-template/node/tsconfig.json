@@ -1,0 +1,17 @@
+{
+  // Node-app starter. Adapt target/lib/types/include to the local runtime.
+  "compilerOptions": {
+    "target": "ES2023",
+    "module": "Node20",
+    "lib": ["ES2023"],
+    "verbatimModuleSyntax": true,
+    "moduleDetection": "force",
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "types": ["node"],
+    "sourceMap": true,
+    "skipLibCheck": true
+  },
+  "include": ["src/**/*.ts", "src/**/*.tsx", "scripts/**/*.ts"]
+}

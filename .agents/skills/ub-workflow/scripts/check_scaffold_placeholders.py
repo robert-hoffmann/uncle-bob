@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check generated initiative artifacts for unresolved scaffold placeholders."""
+"""Check generated workflow artifacts for unresolved scaffold placeholders."""
 
 from __future__ import annotations
 
@@ -27,26 +27,26 @@ SCAFFOLD_MODULE = load_scaffold_module()
 
 
 def build_payload(scan_root: Path) -> dict[str, object]:
-    initiative_roots = SCAFFOLD_MODULE.discover_initiative_roots_for_placeholder_scan(scan_root)
+    workflow_roots = SCAFFOLD_MODULE.discover_generated_roots_for_placeholder_scan(scan_root)
     payload_roots: list[dict[str, object]] = []
     required_count = 0
     advisory_count = 0
 
-    for initiative_root in initiative_roots:
-        findings = SCAFFOLD_MODULE.collect_placeholder_findings(initiative_root)
+    for workflow_root in workflow_roots:
+        findings = SCAFFOLD_MODULE.collect_placeholder_findings(workflow_root)
         root_required = sum(1 for finding in findings if finding.severity == "required")
         root_advisory = len(findings) - root_required
         required_count += root_required
         advisory_count += root_advisory
         payload_roots.append(
             {
-                "initiativeRoot": initiative_root.as_posix(),
+                "root": workflow_root.as_posix(),
                 "requiredCount": root_required,
                 "advisoryCount": root_advisory,
-                "summary": SCAFFOLD_MODULE.format_placeholder_summary(initiative_root, findings),
+                "summary": SCAFFOLD_MODULE.format_placeholder_summary(workflow_root, findings),
                 "findings": [
                     {
-                        "file": finding.file_path.resolve().relative_to(initiative_root.resolve()).as_posix(),
+                        "file": finding.file_path.resolve().relative_to(workflow_root.resolve()).as_posix(),
                         "line": finding.line_number,
                         "category": finding.category,
                         "severity": finding.severity,
@@ -62,7 +62,7 @@ def build_payload(scan_root: Path) -> dict[str, object]:
     return {
         "status": status,
         "scanRoot": scan_root.resolve().as_posix(),
-        "initiativeCount": len(initiative_roots),
+        "rootCount": len(workflow_roots),
         "requiredCount": required_count,
         "advisoryCount": advisory_count,
         "roots": payload_roots,
@@ -74,7 +74,7 @@ def print_text_report(payload: dict[str, object]) -> None:
     if not isinstance(roots, list):
         raise ValueError("Payload roots must be a list")
     if not roots:
-        print("placeholder summary: no initiative roots were found in scope")
+        print("placeholder summary: no workflow roots were found in scope")
         return
     for index, root_payload in enumerate(roots):
         if index:
@@ -87,8 +87,8 @@ def main() -> int:
     parser.add_argument(
         "scan_root",
         nargs="?",
-        default=str(Path(".ub-workflows") / "initiatives"),
-        help="Initiative root, initiatives directory, .ub-workflows root, or repo root to scan",
+        default=str(Path(".ub-workflows")),
+        help="Workflow root, initiatives directory, specs directory, .ub-workflows root, or repo root to scan",
     )
     parser.add_argument(
         "--strict",

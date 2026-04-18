@@ -6,6 +6,12 @@
 
 Map legacy TypeScript patterns to modern alternatives and define bounded migration exception policy.
 
+Prefer forward-compatible modernization paths over compatibility layers or
+legacy fallbacks. When the modern replacement depends on a newer TypeScript
+version or runtime capability than the current project supports, keep the
+repo-safe path, record the migration path, and surface `OFFICIAL_CONFLICT`
+when official guidance and current project truth materially diverge.
+
 ## Replacement Map
 
 | Legacy pattern | Modern replacement | Why replace |

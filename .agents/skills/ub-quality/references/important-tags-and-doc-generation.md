@@ -12,4 +12,6 @@ These principles apply to **ALL** programming languages and file types.
 ## Document generation
 
 - **Do not** create summary documents, manuals, or FAQs, unless the user specifically requests such a file.
-- **Do yes** ask the user if they want a such a document, if the changes are significant enough to warrant it.
+- **Do** ask the user whether they want such a document when the changes are
+  significant enough that a durable summary would reduce reconstruction cost
+  for future maintainers, reviewers, or tool-assisted agents.

@@ -1,6 +1,6 @@
 ---
 name: ub-quality
-description: Portable baseline quality skill for creating, modifying, reviewing, and refactoring code or documents. Load and apply the required references. For touched eligible vertical separator blocks, enforce separator-column alignment.
+description: Portable baseline quality skill for creating, modifying, reviewing, and refactoring code or documents. Load and apply the required references. Favor high-signal documentation that reduces cognitive load for future readers, including tool-assisted agents. For touched eligible vertical separator blocks, enforce separator-column alignment.
 ---
 
 # UB Quality
@@ -83,6 +83,8 @@ The following are non-compliant when a touched block is eligible for alignment:
 - Apply this skill together with the most relevant language/framework skill when available.
 - Treat syntax, runtime, and framework correctness as primary constraints.
 - Do not treat formatter preference or familiar house style as a valid reason to violate the alignment contract.
+- Prefer code and naming to carry mechanics, then use docs and comments for
+  contract, rationale, and non-obvious constraints.
 
 ## Policy Versus Defaults
 
@@ -98,6 +100,8 @@ When generating or modifying code:
 2. Keep solutions simple and avoid overengineering.
 3. Preserve existing behavior unless change is explicitly requested.
 4. Call out any intentionally retained technical debt or deferred cleanup.
+5. Favor high-signal documentation over broad narration, especially in shared
+   guidance and heavily reused code.
 
 ## Completion Gate
 

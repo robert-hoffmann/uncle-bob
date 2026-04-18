@@ -46,6 +46,14 @@ Use this SOP for work that has at least one of these properties:
 Do not use this SOP for small, single-session fixes where a lightweight task
 note is enough.
 
+Before starting this SOP, make a scale decision:
+
+1. direct bounded task when no durable planning artifact is needed
+2. lightweight spec under `./specs/YYYY-MM-DD-slug/spec.md` when the work
+   needs a written contract but not a roadmap and sprint pack
+3. initiative under `./initiatives/YYYY-MM-DD-slug/` when the work needs a
+   PRD, roadmap, and resumable sprint execution
+
 ## Non-Negotiable Rules
 
 1. One initiative uses one initiative root directory.
@@ -124,7 +132,7 @@ State intent:
 <!-- #region Canonical Layout -->
 ## Canonical Directory Layout
 
-Store every initiative under one canonical root.
+Store every initiative or lightweight spec under one canonical root.
 
 ## Path Portability Rules
 
@@ -164,6 +172,9 @@ Generic pattern:
           2026-03-27-example-initiative/
       exceptions/
       retained-note.md
+  specs/
+    <yyyy-mm-dd>-<spec-slug>/
+      spec.md
 ```
 
 The generated operations root does not need a checked-in `initiative-template/`
@@ -207,6 +218,11 @@ may be omitted.
 ### `retained-note.md`
 
 The durable completion record for the initiative.
+
+### `specs/`
+
+Optional lightweight planning roots for work that is bigger than a direct task
+but smaller than a full initiative.
 
 ## Naming Rules
 

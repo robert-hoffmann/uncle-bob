@@ -1,0 +1,21 @@
+{
+  // Library starter. Adapt emit, include, and package export strategy locally.
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "lib": ["ES2022"],
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "verbatimModuleSyntax": true,
+    "moduleDetection": "force",
+    "declaration": true,
+    "declarationMap": true,
+    "emitDeclarationOnly": true,
+    "isolatedModules": true,
+    "isolatedDeclarations": true,
+    "types": []
+  },
+  "include": ["src/**/*.ts", "src/**/*.tsx"]
+}

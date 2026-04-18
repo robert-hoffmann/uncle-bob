@@ -1,7 +1,7 @@
 [project]
 name            = "uncle-bob"
 version         = "1.0.0"
-description     = "Curated GitHub Copilot skills, agents, prompts, and governance workflows."
+description     = "Workflow-first AI coding skills and custom agents for planning, quality, governance, and framework-specific implementation work."
 readme          = "README.md"
 requires-python = ">=3.10,<4"
 dependencies    = [

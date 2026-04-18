@@ -1,4 +1,0 @@
-interface:
-  display_name: "UB TS"
-  short_description: "Modern TypeScript guardrails (latest stable)"
-  default_prompt: "Use $ub-ts to modernize TypeScript code and tsconfig settings with strict modern patterns and migration-aware guardrails."

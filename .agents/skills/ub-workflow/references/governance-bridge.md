@@ -35,8 +35,13 @@ Recommended coordination:
 
 1. use governance-aligned closeout sections
 2. reference repo validation commands explicitly
-3. ask whether follow-up audits or refactors are wanted at final audit time
-4. record the selected bridge level in `README.md` or `prd.md`
+3. treat `prd.md`, `roadmap.md`, per-sprint `sprint.md`, `closeout.md`, sprint
+   `evidence/`, and bounded initiative `research/` or `exceptions/` as the
+   default operational record
+4. keep repository ADR machinery optional unless a repository-level decision or
+   explicit escalation trigger applies
+5. ask whether follow-up audits or refactors are wanted at final audit time
+6. record the selected bridge level in `README.md` or `prd.md`
 
 ### Level 2: Full Governance Bridge
 
@@ -46,6 +51,8 @@ Appropriate when:
 
 1. the repository uses evidence levels, profile selection, or ADR alignment
 2. the final audit should map cleanly to governance review expectations
+3. a decision is durable beyond one initiative or changes repository-wide
+   contracts
 
 Recommended coordination:
 
@@ -55,6 +62,8 @@ Recommended coordination:
 4. record bounded exceptions using the canonical governance exception metadata
 5. record governance bridge level and profile in `README.md`, `prd.md`, and
    the final retained note
+6. escalate into `docs/adr/` only for repository-level or cross-initiative
+   durable decisions, not for routine sprint execution choices
 
 ## Recording Locations
 
@@ -78,6 +87,8 @@ Escalate from Level 1 to Level 2 when any of these are true:
 2. high-risk path changes require durable governance reasoning
 3. confidence or release-style audit mapping is needed
 4. governance exceptions must be recorded with canonical metadata
+5. the decision is durable beyond one initiative or changes repository-wide
+   contracts
 
 Use the `lean` profile by default.
 
@@ -100,3 +111,10 @@ Treat initiative gates and governance gates as adjacent but distinct:
 - governance gates answer whether repository-level controls were satisfied
 
 Use both when needed, but do not collapse one into the other.
+
+Treat workflow-native decision memory and repository ADRs as adjacent but
+distinct as well:
+
+- workflow artifacts are the default operational record for Level 1 work
+- repository ADRs are the escalated durable record for Level 2 or
+  repository-wide decisions

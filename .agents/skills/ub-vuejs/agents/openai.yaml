@@ -1,4 +1,0 @@
-interface:
-  display_name: "UB VueJS"
-  short_description: "Modern Vue TypeScript guardrails (latest stable)"
-  default_prompt: "Use $ub-vuejs to implement and review Vue component/composable code with script setup, strict TypeScript, and modern Vue APIs."
