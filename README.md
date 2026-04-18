@@ -57,6 +57,42 @@ If you want guided help choosing the right lane, start with the
 `ub-workflow` agent or the workflow quick start in
 [quick-start.md](./.agents/skills/ub-workflow/docs/quick-start.md).
 
+## How The Workflow Feels
+
+The main value of this repo is not that it gives an agent more prompts.
+It gives the work a better shape.
+
+The intended rhythm looks like this:
+
+1. start with rough R&D, discovery, or problem framing
+   Capture what is unclear, what needs to be true, and what level of planning
+   the work actually deserves.
+2. choose the smallest planning surface that will hold
+   Use direct work for very small tasks, a spec for bounded one-offs, and an
+   initiative when the work needs a PRD, roadmap, and staged delivery.
+3. turn bigger work into explicit sprints
+   Instead of one long fuzzy thread, the work gets broken into prepared sprint
+   slices with validation focus, dependencies, and likely touched surfaces.
+4. execute with durable handoffs
+   Each sprint is designed to be resumable. Decisions, evidence, closeout, and
+   rollup artifacts make it easier to stop, resume, review, or hand the work
+   to another human or agent later.
+5. validate and close intentionally
+   The workflow is built around proving what changed, surfacing risks, and
+   finishing with a final audit instead of letting bigger work fade out in chat
+   history.
+
+That is why the workflow layer matters so much here.
+It turns agent use into a delivery system:
+
+- research and planning before blind execution
+- explicit scope before broad refactors
+- sprints for bigger impact areas instead of one sprawling session
+- handoffs and validation so progress survives across time, tools, and people
+
+If the work is small, this stays lightweight.
+If the work is important, it becomes structured without becoming bureaucratic.
+
 ## Core Drivers
 
 These are the three surfaces that explain how the repo actually works:
