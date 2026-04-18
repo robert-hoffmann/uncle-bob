@@ -1136,27 +1136,29 @@ def resolve_resume_file_order(initiative_root: Path, sprint_path: Path | None = 
     """Return the minimal file order needed to resume an initiative safely."""
 
     roadmap_path = initiative_root / "roadmap.md"
-    rollup_path = initiative_root / "rollup.md"
     readme_path = initiative_root / "README.md"
     prd_path = initiative_root / "prd.md"
     target_sprint = sprint_path or resolve_resume_target(initiative_root, roadmap_path)
 
     ordered: list[Path] = [roadmap_path]
-    if rollup_path.exists():
-        ordered.append(rollup_path)
+    previous_closeout: Path | None = None
     if target_sprint is not None:
         previous_closeout = previous_closeout_for_sprint(initiative_root, target_sprint)
         if previous_closeout is not None:
             ordered.append(previous_closeout)
         if target_sprint.exists():
             ordered.append(target_sprint)
-            decision_log = target_sprint.with_name("decision-log.md")
-            if decision_log.exists():
-                ordered.append(decision_log)
     ordered.append(readme_path)
     if (
         prd_path.exists()
-        and (target_sprint is None or not target_sprint.exists() or sprint_document_has_blocking_placeholders(target_sprint))
+        and (
+            target_sprint is None
+            or not target_sprint.exists()
+            or (
+                sprint_document_has_blocking_placeholders(target_sprint)
+                and previous_closeout is None
+            )
+        )
     ):
         ordered.append(prd_path)
     return ordered
