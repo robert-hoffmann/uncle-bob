@@ -125,6 +125,48 @@ It turns agent use into a delivery system:
 If the work is small, this stays lightweight.
 If the work is important, it becomes structured without becoming bureaucratic.
 
+## Prompt-Driven Initiative Flow
+
+If you already have a PRD, the workflow can be driven almost entirely through
+prompts while still keeping the work structured and resumable.
+
+The usual progression is:
+
+1. scaffold the initiative from the PRD
+   Start by invoking `ub-workflow` once and giving it the PRD. The first prompt
+   is simply to scaffold a new initiative from that PRD. That creates the
+   working structure and establishes `prd.md` as the source of truth.
+2. generate and review the roadmap
+   Next, ask it to generate the roadmap from the PRD. Review the roadmap before
+   moving forward so the sprint sequence, dependencies, and planned slices are
+   correct before execution starts.
+3. prepare and initialize the sprint set
+   Once the roadmap looks right, ask it to prepare the sprints from that
+   roadmap and then initialize them so the sprint structure is ready for
+   execution. `reviewed` or `flow` mode is usually the cleanest fit here.
+4. execute Sprint 01 with the generated artifacts as context
+   Start Sprint 01, work through the sprint using the prepared artifacts as the
+   context system, then close out the sprint and prepare the handoff into the
+   next one.
+5. repeat sprint by sprint until final audit
+   From there, the flow becomes intentionally simple: start the next sprint,
+   complete the work, close it out, and move forward. When the delivery work is
+   done, run the final audit, write the retained note, and archive
+   intentionally.
+
+In other words, the prompts drive the workflow, but the artifacts hold the
+state. That is the key difference.
+
+You are not relying on one long chat thread to remember what the plan was.
+The PRD, roadmap, sprint pack, decision logs, closeouts, and rollups carry the
+context forward.
+
+Practical note:
+
+- after a cold restart, it is usually worth resuming in a more context-heavy
+  mode first, or simply reusing the existing session when possible, so the
+  agent reloads the initiative state before continuing execution
+
 ## Core Drivers
 
 These are the three surfaces that explain how the repo actually works:
