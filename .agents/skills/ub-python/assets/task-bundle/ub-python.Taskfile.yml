@@ -1,0 +1,15 @@
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+
+version: "3"
+
+vars:
+  RUFF: ruff
+
+tasks:
+  lint-py:
+    desc: Run Ruff on the repository Python files
+    cmd: "{{.RUFF}} check ."
+
+  lint-py-files:
+    desc: Run Ruff on explicit files or paths (pass args after --)
+    cmd: "{{.RUFF}} check {{.CLI_ARGS}}"

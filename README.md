@@ -39,6 +39,16 @@ That is why `ub-workflow` is the main driver: it decides whether the work should
 stay direct, become a lightweight spec, or grow into a full initiative with a
 PRD, roadmap, sprint preparation, execution, and final audit.
 
+## Tooling Footnote
+
+For repository Python commands, prefer `uv run python ...`.
+
+Use `python3 ...` only for short ad hoc local inspection when `uv` is not
+needed, and do not assume bare `python` exists on `PATH`.
+
+When the repo already exposes a Taskfile entrypoint, prefer that wrapper over a
+custom shell command.
+
 ## Workflow At A Glance
 
 The planning model in this repo is intentionally tiered:

@@ -1,0 +1,11 @@
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+
+version: "3"
+
+vars:
+  TSC: npx tsc
+
+tasks:
+  typecheck:
+    desc: Run the TypeScript compiler in no-emit mode
+    cmd: "{{.TSC}} --noEmit"

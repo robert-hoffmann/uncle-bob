@@ -17,22 +17,14 @@ Use these sources in order:
 3. CI workflows that show the enforced command shape
 4. official Ruff docs when local config does not answer the question
 
-## Repo Truth In This Repository
+## How To Inspect Live Repo Truth
 
-Current repository truth:
+Inspect the target repository directly for:
 
-1. active Ruff config is in `ruff.toml`
-2. Python packaging and dev dependencies live in `pyproject.toml`
-3. common local validation uses `uv run ruff check .`
-4. CI also runs Ruff directly
-
-Useful inspection commands:
-
-```bash
-sed -n '1,240p' ruff.toml
-sed -n '1,220p' pyproject.toml
-rg -n "ruff" Taskfile.yml .github/workflows
-```
+1. the active Ruff config file location
+2. the package or environment manager that owns Python tooling
+3. the lint command shape used in local automation
+4. whether CI runs Ruff directly or through a wrapper
 
 ## Bundled Starter Assets
 

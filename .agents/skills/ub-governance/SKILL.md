@@ -11,8 +11,10 @@ metadata:
 
 ## Overview
 
-Use this skill as the single owner for governance in this repository.
-This skill is self-contained and merges repository, testing, evidence, and shared contract governance.
+Use this skill as the single owner for governance in the current repository or
+project where it is adopted.
+This skill is self-contained and merges repository, testing, evidence, and
+shared contract governance.
 
 ## Operating Modes
 

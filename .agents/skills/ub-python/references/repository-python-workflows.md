@@ -1,60 +1,79 @@
 # Repository Python Workflows
 
-This reference records the Python tooling and validation truth for this
-repository.
+Use this reference to resolve a repository's actual Python runtime, packaging,
+and validation truth before recommending commands or tooling.
+
+It should help the agent inspect local reality, not hardcode one repository's
+workflow into a distributable skill.
 
 ## Runtime and Packaging Baseline
 
-Current repository truth:
+Inspect the target repository for:
 
-1. `pyproject.toml` declares `requires-python = ">=3.10,<4"`
-2. repository dependency management uses `uv`
-3. the repository is not packaged as an installable Python library; `tool.uv`
-   sets `package = false`
-4. Python support in this repository is primarily for helper scripts,
-   governance tooling, and workflow tooling
-5. active Ruff policy lives in `ruff.toml`
+1. `requires-python` or equivalent version floors in `pyproject.toml`,
+   `.python-version`, runtime manifests, or CI
+2. the active environment and dependency manager such as `uv`, `pip`, `poetry`,
+   `pdm`, or a plain virtualenv workflow
+3. whether the repo is an application, a library, a tooling repo, or a mixed
+   workspace
+4. the active Ruff config location, if any
+5. the actual execution surfaces for scripts, tests, and helper tooling
 
 ## Enforced Validation Baseline
 
-Current enforced Python-oriented checks:
+Treat the repository's wired checks as the real baseline.
+Inspect task runners, package scripts, pre-commit, and CI for the actual
+Python-oriented gates.
 
-1. `uv run ruff check .`
-2. targeted `uv run python -m unittest ...` for governance and workflow suites
-3. direct script execution via `uv run python <script>.py` for integrity and
-   workflow helper checks
+Common examples:
+
+1. Ruff linting
+2. targeted or full test commands
+3. direct script execution through the repo's chosen environment tool
+4. optional type checking or build validation
 
 ## Not Yet Repository-Wired
 
-These tools may still be good recommendations in general, but they are not
-currently enforced repository gates here:
+Recommend extra tools only as explicit gaps when they are not already wired
+into the repository.
+
+Typical examples:
 
 1. `mypy`
 2. `pyright`
 3. `pytest`
 
-When advising users inside this repository:
+When advising users inside any repository:
 
-1. treat Ruff and targeted `unittest` runs as the actual baseline
-2. recommend mypy or pytest only as a tooling-gap suggestion, not as existing
-   repository truth
-3. keep Python guidance consistent with helper-script and repository-tooling use
-   rather than service-backend assumptions
-4. treat the detected repo Python floor as the shipping constraint even when
+1. treat the detected Python floor as the shipping constraint even when
    official docs describe newer features
-5. prefer forward-compatible helpers such as `typing_extensions` when they let
+2. recommend missing tools as improvements, not as if they were already part
+   of the enforced baseline
+3. keep guidance consistent with the repo's actual workload instead of
+   assuming a service-backend shape
+4. prefer forward-compatible helpers such as `typing_extensions` when they let
    the repo stay on its current floor while reducing future migration work
-6. do not recommend backward-compatibility layers or parser-incompatible newer
-   syntax as if they were currently shippable in this repository
+5. do not recommend backward-compatibility layers or parser-incompatible newer
+   syntax as if they were currently shippable in that repository
 
 ## Practical Command Patterns
 
-Use these command shapes by default in this repository:
+Use the command shape that matches the target repository's tooling.
 
-1. `uv run ruff check <scope>`
-2. `uv run python -m unittest discover -s <suite-dir> -p 'test_*.py' -v`
-3. `uv run python <script-path>`
-4. `task check` when a full repository validation pass is needed
+Recommended resolution order:
+
+1. a repo wrapper such as `task`, `make`, `npm run`, or another documented
+   helper entrypoint
+2. the repo's environment-aware Python runner such as `uv run python`,
+   `poetry run python`, or an activated venv with `python -m ...`
+3. direct script or test commands only after confirming they match the local
+   interpreter and dependency environment
+
+Shell-entrypoint guidance:
+
+1. prefer interpreter-explicit commands such as `python -m ...`
+2. follow the repo's active environment tool instead of assuming `uv`
+3. do not assume bare `python` exists on `PATH`
 
 ## Starter Scaffolding
 
@@ -69,10 +88,12 @@ after scaffolding.
 
 ## Packaging Guidance
 
-Because this repository ships Copilot skills and tooling rather than a Python
-application package:
+Because many adopting repositories use Python mainly for tooling, scripts, or
+automation rather than application packaging:
 
-1. prefer small, direct scripts over unnecessary framework layering
-2. keep script CLIs deterministic and easy to run with `uv run python`
-3. align generated Python with Ruff's configured rule set, including security,
+1. prefer small, direct scripts over unnecessary framework layering when that
+   matches repo scope
+2. keep script CLIs deterministic and easy to run with the repo's chosen
+   environment tool
+3. align generated Python with the active Ruff rule set, including security,
    datetime, and modernization rules

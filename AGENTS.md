@@ -6,6 +6,18 @@
 
 Skills MUST NOT hardcode version numbers. Detect the project's actual versions from `package.json`, lockfiles, and `pyproject.toml`. Use web search to verify latest stable patterns. When the project's version differs from latest stable, note the gap and recommend an upgrade path.
 
+## Shell Entry Points
+
+Use these command-entry defaults when working in this repository:
+
+1. use `uv run python ...` for repository Python scripts, tests, and helper
+   tooling
+2. use `python3 ...` only for short ad hoc local inspection when `uv` is not
+   needed
+3. do not assume bare `python` exists on `PATH`
+4. prefer `task` wrappers when the repository already exposes a check or helper
+   through `Taskfile.yml`
+
 ## Policy Versus Defaults
 
 This repository is intentionally opinionated, but not every opinion has the

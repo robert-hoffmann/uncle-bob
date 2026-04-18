@@ -33,9 +33,7 @@ def main() -> int:
             f"Target root does not exist or is not a directory: {target_root}"
         )
 
-    results = [
-        copy_if_missing(template_root / "ruff.toml", target_root / "ruff.toml")
-    ]
+    results = [copy_if_missing(template_root / "ruff.toml", target_root / "ruff.toml")]
 
     for line in results:
         print(line)
@@ -45,6 +43,7 @@ def main() -> int:
     print("1. Adapt target-version, include/exclude, and known-first-party settings.")
     print("2. Ensure Ruff is installed or declared in the target repository.")
     print("3. Run: ruff check .")
+    print("4. Optional Task adoption bundle: see references/task-bundle.md")
 
     return 0
 

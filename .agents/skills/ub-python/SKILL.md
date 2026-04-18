@@ -24,9 +24,12 @@ Python lint config of its own.
 ## Load References On Demand
 
 - Load and apply `references/python-standards.md` for canonical Python rules and toolchain policy.
-- Load and apply `references/repository-python-workflows.md` for this repository's actual Python validation and packaging-tooling baseline.
+- Load and apply `references/repository-python-workflows.md` for resolving the
+  target repository's actual Python validation and packaging-tooling baseline.
 - Load `references/ruff-config-resolution.md` when Ruff config discovery,
   adaptation points, or scaffolding behavior matters.
+- Read `references/task-bundle.md` only when the target repository wants an
+  optional Task-based automation overlay for this skill's starter profile.
 - Use `scripts/scaffold_ruff.py` with `assets/ruff-template/` when a target
   repository needs a deterministic Ruff starter instead of ad hoc config
   rewriting.
@@ -89,7 +92,9 @@ Python lint config of its own.
 - Volatility: high
 - Review recommendation: review on touch and during periodic maintenance, targeting a quarterly rhythm when practical.
 - Trigger signals: Python release changes, tooling maturity shifts, packaging guidance updates, or repository validation changes that alter the real enforced baseline.
-- Enforcement: advisory only; freshness should highlight review targets without pretending missing mypy or pytest wiring is a blocker in this repository.
+- Enforcement: advisory only; freshness should highlight review targets without
+  pretending missing mypy or pytest wiring is automatically a blocker in every
+  adopting repository.
 - Stable core: strong typing, boundary validation, structured errors, and repository-truth validation remain the durable baseline even when tooling preferences evolve.
 
 ## Implementation Rules
@@ -139,9 +144,13 @@ Python lint config of its own.
 
 Repository truth note:
 
-- Current repository baseline is `uv` + `ruff` + stdlib `unittest` plus workflow-specific direct script checks.
-- `mypy` and `pytest` are preferred patterns for Python-heavy repos, but they are not currently repository-wired gates here.
-- When working in this repository, report that gap explicitly instead of pretending those checks are already part of the enforced baseline.
+- Detect the host repository's actual lint, typecheck, and test baseline before
+  presenting a command or gate as established truth.
+- `mypy` and `pytest` are often strong recommendations for Python-heavy repos,
+  but they should be presented as active gates only when the host repository
+  has actually wired them.
+- If lint, typecheck, or test expectations are weak or absent, report that gap
+  explicitly instead of pretending those checks are already enforced.
 
 ### Tooling Gap Warning Policy
 

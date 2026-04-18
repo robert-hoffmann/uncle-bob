@@ -48,7 +48,7 @@ VS Code supports 8 lifecycle events:
     "PostToolUse": [
       {
         "type": "command",
-        "command": "./scripts/run-eslint-on-edits.sh",
+        "command": "node ./scripts/run-eslint-on-edits.mjs",
         "timeout": 30
       }
     ]
@@ -64,14 +64,14 @@ VS Code supports 8 lifecycle events:
     "SessionStart": [
       {
         "type": "command",
-        "command": "cat .github/session-context.md",
+        "command": "node ./scripts/emit-session-context.mjs",
         "timeout": 10
       }
     ],
     "PreToolUse": [
       {
         "type": "command",
-        "command": "./scripts/block-destructive.sh",
+        "command": "node ./scripts/block-destructive.mjs",
         "timeout": 5,
         "toolNames": ["execute/runInTerminal"]
       }
@@ -79,7 +79,7 @@ VS Code supports 8 lifecycle events:
     "PostToolUse": [
       {
         "type": "command",
-        "command": "./scripts/lint-after-edit.sh",
+        "command": "node ./scripts/lint-after-edit.mjs",
         "timeout": 30,
         "toolNames": ["edit/editFiles", "edit/createFile"]
       }
@@ -105,7 +105,7 @@ Custom agents can define hooks in their frontmatter:
 hooks:
   PostToolUse:
     - type: command
-      command: "./scripts/validate.sh"
+      command: "node ./scripts/validate.mjs"
       timeout: 15
 ```
 
@@ -121,7 +121,7 @@ hooks:
     "PostToolUse": [
       {
         "type": "command",
-        "command": "npx eslint --fix ${TOOL_OUTPUT_FILE:-}",
+        "command": "node ./scripts/run-eslint-on-edits.mjs",
         "timeout": 30,
         "toolNames": ["edit/editFiles", "edit/createFile"]
       }
@@ -138,7 +138,7 @@ hooks:
     "PreToolUse": [
       {
         "type": "command",
-        "command": "./scripts/block-destructive.sh",
+        "command": "node ./scripts/block-destructive.mjs",
         "timeout": 5,
         "toolNames": ["execute/runInTerminal"]
       }
@@ -147,16 +147,18 @@ hooks:
 }
 ```
 
-Example `scripts/block-destructive.sh`:
+Example `scripts/block-destructive.mjs`:
 
-```bash
-#!/bin/bash
-# Block dangerous commands — exit non-zero to prevent execution
-BLOCKED_PATTERNS="rm -rf|drop table|truncate|format c:|del /f"
-if echo "$TOOL_INPUT" | grep -qiE "$BLOCKED_PATTERNS"; then
-  echo "BLOCKED: Destructive command detected. Requires manual approval."
-  exit 1
-fi
+```js
+const blockedPatterns = /rm -rf|drop table|truncate|format c:|del \/f/i;
+const toolInput = process.env.TOOL_INPUT ?? "";
+
+if (blockedPatterns.test(toolInput)) {
+  console.error(
+    "BLOCKED: Destructive command detected. Requires manual approval.",
+  );
+  process.exit(1);
+}
 ```
 
 ### Pattern 3: Session Context Injection
@@ -167,7 +169,7 @@ fi
     "SessionStart": [
       {
         "type": "command",
-        "command": "cat .github/session-context.md",
+        "command": "node ./scripts/emit-session-context.mjs",
         "timeout": 10
       }
     ]
@@ -194,6 +196,8 @@ fi
 ## Generation Defaults
 
 - Prefer **small wrapper scripts** over giant inline shell one-liners.
+- Prefer **cross-platform wrapper languages** such as JavaScript, TypeScript,
+  or Python over Bash-specific scripts when the hook is meant to be portable.
 - Set **conservative timeouts** (10-30 seconds for most hooks).
 - Add **comments** about expected stdin/stdout behavior.
 - Make destructive blocks **explicit and reviewable**.
@@ -212,7 +216,7 @@ VS Code hook support is simpler than Claude/Gemini hook systems. Treat VS Code h
 - [ ] Command is small and reviewable
 - [ ] Conservative timeout set
 - [ ] `toolNames` filter applied when hook is tool-specific
-- [ ] Helper scripts are executable and tested
+- [ ] Helper commands or scripts are executable and tested
 - [ ] No hardcoded secrets in commands
 - [ ] Destructive blocks are explicit, not silent
 - [ ] Preview features noted where applicable

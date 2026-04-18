@@ -18,17 +18,11 @@ Use these sources in order:
 5. official TypeScript, ESLint, and typescript-eslint docs when local config
    does not answer the question
 
-## Repo Truth In This Repository
+## Practical Interpretation
 
-Current repository truth:
-
-1. there is no live root TypeScript project surface here
-2. there is no root `package.json`
-3. there is no active `eslint.config.*`
-4. there is no active `tsconfig*.json`
-
-That means the bundled assets in this skill are strong-default starter profiles
-for downstream repos, not current repository-enforced TypeScript policy.
+If the target repository lacks live TypeScript or ESLint config, treat the
+bundled assets in this skill as strong-default starter profiles rather than as
+already-enforced repository policy.
 
 ## Bundled Starter Assets
 

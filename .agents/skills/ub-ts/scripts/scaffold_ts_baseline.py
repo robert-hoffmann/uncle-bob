@@ -68,8 +68,10 @@ def main() -> int:
     if args.with_eslint:
         print("2. Install eslint, @eslint/js, typescript, and typescript-eslint.")
         print("3. Run: npx eslint .")
+        print("4. Optional Task adoption bundle: see references/task-bundle.md")
     else:
         print("2. Run: npx tsc --noEmit")
+        print("3. Optional Task adoption bundle: see references/task-bundle.md")
 
     return 0
 

@@ -1,0 +1,16 @@
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+
+version: "3"
+
+vars:
+  TSC: npx tsc
+  ESLINT: npx eslint
+
+tasks:
+  typecheck:
+    desc: Run the TypeScript compiler in no-emit mode
+    cmd: "{{.TSC}} --noEmit"
+
+  lint-eslint:
+    desc: Run ESLint on the repository files
+    cmd: "{{.ESLINT}} ."

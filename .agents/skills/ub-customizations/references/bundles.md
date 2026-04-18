@@ -72,7 +72,7 @@ Most real-world workflows need **multiple artifacts working together**. The buil
 ```text
 .github/agents/code-reviewer.agent.md
 .github/hooks/post-tool-use.json
-scripts/lint-after-edit.sh
+scripts/lint-after-edit.mjs
 ```
 
 ### Bundle E: Instructions + Skill

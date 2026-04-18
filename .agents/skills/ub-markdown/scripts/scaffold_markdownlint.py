@@ -46,6 +46,7 @@ def main() -> int:
     print("Next steps:")
     print("1. Adapt .markdownlintignore for repo-specific generated or fixture paths.")
     print('2. Run: npx --yes markdownlint-cli2 "**/*.md"')
+    print("3. Optional Task adoption bundle: see references/task-bundle.md")
 
     return 0
 

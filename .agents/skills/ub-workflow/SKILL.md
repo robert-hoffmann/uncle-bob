@@ -22,7 +22,9 @@ Use this skill as the canonical workflow intake, initiative-planning, and
 sprint-orchestration layer for work that is too large, risky, or stateful to
 run safely from chat history alone.
 
-In this repository, the default operating surface is `./.ub-workflows/`.
+When this skill is adopted in a repository or project, the default operating
+surface is `./.ub-workflows/` unless the host intentionally chooses a
+different operations root.
 
 Use that operations root for three lanes:
 
@@ -274,7 +276,7 @@ Rules:
    and `rollup.md` as the readable initiative-level carry-forward surface.
 7. Keep `research/` and `exceptions/` visibly secondary to those main workflow
    artifacts.
-8. Keep the skill useful outside this repository by keeping the canonical
+8. Keep the skill useful across adopting repositories by keeping the canonical
    templates internal to the skill rather than requiring copied local
    scaffolding directories.
 9. Treat roadmap approval and archive readiness as human-owned checkpoints,

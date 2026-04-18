@@ -1,85 +1,62 @@
 # Repo Markdownlint Resolution
 
-Use this reference first when editing Markdown in this repository.
+Use this reference first when editing Markdown in a repository that already
+has markdownlint or wants to adopt the bundled starter profile.
 
-Its job is not to duplicate repo style in prose.
-Its job is to show where the real Markdown lint policy lives and how to read
-it.
+Its job is not to duplicate live repo style in prose.
+Its job is to show where the real Markdown lint policy lives and how to
+resolve it without hardcoding one repository's commands.
 
 ## Policy Source Of Truth
 
-Use these files in order:
+Use these inputs in order:
 
-1. `.markdownlint.jsonc` or another repo-local `.markdownlint.*` file for the
-   active rule set
+1. `.markdownlint.jsonc`, `.markdownlint-cli2.*`, or another repo-local
+   `.markdownlint.*` file for the active rule set
 2. `.markdownlintignore` for excluded paths
-3. `Taskfile.yml` or other task runner files for the lint entrypoints and
-   target globs
+3. local task-runner, package-script, or CI entrypoints for the enforced
+   command shape and target globs
 4. CommonMark, GFM, and markdownlint docs when local config does not answer the
    question
 
 If a repo does not yet have Markdown lint config but wants this house style,
 scaffold the bundled files first and then adapt them to local repo truth.
 
-## Active Linter Entry Points
+## Common Entry Point Shapes
 
-Primary repo command:
+The exact command depends on the adopting repository.
+Resolve it from local automation first.
 
-```bash
-npx --yes markdownlint-cli2
-```
+Common patterns:
 
-Task entrypoint from `Taskfile.yml`:
+1. a repo wrapper such as `task lint-md`, `npm run lint:md`, or `make lint-md`
+2. a targeted-file wrapper such as `task lint-md-files -- path/to/file.md`
+3. a direct CLI call such as
+   `npx --yes markdownlint-cli2 "docs/**/*.md"` when the repo uses
+   `markdownlint-cli2` directly
 
-```bash
-task lint-md
-```
-
-Current Markdown lint targets:
-
-- `AGENTS.md`
-- `README.md`
-- `docs/**/*.md`
-- `.github/agents/**/*.md`
-- `.agents/skills/*/SKILL.md`
-- `.agents/skills/*/references/**/*.md`
-- `.agents/skills/*/assets/**/*.md`
-- `.ub-workflows/**/*.md`
-
-Ignored paths from `.markdownlintignore`:
-
-- `tmp/**`
-- `tests/skills/ub-governance/fixtures/repo_integrity/**`
-
-Reusable scaffold assets shipped with this skill:
+This skill ships portable scaffold assets:
 
 - `assets/markdownlint-template/.markdownlint.jsonc`
 - `assets/markdownlint-template/.markdownlintignore`
 - `scripts/scaffold_markdownlint.py`
 
 Use the scaffolded files as a starting point in new repositories, then adapt
-the ignore paths and lint target globs to local repo truth.
+ignore paths, target globs, and automation entrypoints to local repo truth.
 
 ## How To Inspect The Live Repo Profile
 
 Use the config files directly instead of trusting a secondary summary.
 
-Useful reads:
-
-```bash
-sed -n '1,240p' .markdownlint.jsonc
-sed -n '1,120p' .markdownlintignore
-rg -n "lint-md|markdownlint" Taskfile.yml package.json .github
-```
-
 What to look for:
 
 1. heading, list, code-fence, link, and formatting rules in
-   `.markdownlint.jsonc`
-2. repo-specific generated, fixture, or temp exclusions in
-   `.markdownlintignore`
-3. which Markdown paths are actually linted by default from task-runner or CI
-   commands
+   `.markdownlint.*`
+2. generated, fixture, cache, or temp exclusions in `.markdownlintignore`
+3. which Markdown paths are actually linted by default from task-runner, CI,
+   or package-script commands
+4. which local wrapper or direct CLI entrypoint the repository expects users
+   and automation to run
 
 ## Practical Interpretation
 
@@ -135,15 +112,17 @@ Bad:
 
 ````markdown
 ```
-task lint-md
+name: Example
+enabled: true
 ```
 ````
 
 Good:
 
 ````markdown
-```bash
-task lint-md
+```yaml
+name: Example
+enabled: true
 ```
 ````
 

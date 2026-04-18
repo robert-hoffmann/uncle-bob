@@ -58,6 +58,8 @@ instead of rewriting the config by hand.
   entrypoints without duplicating policy in prose.
 - Read `references/official-markdown-foundations.md` when parser behavior,
   Markdown syntax interpretation, or tool behavior matters.
+- Read `references/task-bundle.md` only when the target repository wants an
+  optional Task-based automation overlay for this skill's starter profile.
 - Use `scripts/scaffold_markdownlint.py` with
   `assets/markdownlint-template/` when a target repository needs the lint
   profile scaffolded deterministically.
@@ -67,8 +69,8 @@ instead of rewriting the config by hand.
 1. Detect whether the task is editing a Markdown file that is covered by the
    repo lint targets.
 2. Inspect the repository Markdown lint profile before writing:
-   `.markdownlint.jsonc`, `.markdownlintignore`, and `Taskfile.yml` when
-   relevant.
+   `.markdownlint.jsonc`, `.markdownlintignore`, and any local task-runner,
+   package-script, or CI entrypoints when relevant.
 3. Follow the repo profile first, then use CommonMark and GFM behavior to
    resolve syntax questions.
 4. Write Markdown in a lint-friendly structure from the start:
@@ -89,7 +91,7 @@ Treat the actual linter files as the style source of truth:
 1. `.markdownlint.jsonc` or another repo-local `.markdownlint.*` file defines
    the active rule profile
 2. `.markdownlintignore` defines excluded paths
-3. `Taskfile.yml`, package scripts, or other task runners define repo lint
+3. task-runner files, package scripts, or CI entrypoints define repo lint
    entrypoints and target globs
 4. if config is absent and the user wants this house style, scaffold the
    bundled lint files first instead of embedding policy in Markdown docs
@@ -109,7 +111,7 @@ What it scaffolds:
 1. `.markdownlint.jsonc`
 2. `.markdownlintignore`
 
-It does not install packages or mutate the target repo's task runner.
+It does not install packages or mutate existing task-runner wiring.
 After scaffolding, use the current recommended command:
 
 ```bash

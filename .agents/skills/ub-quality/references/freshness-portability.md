@@ -49,6 +49,31 @@ When adapting this repository's guidance elsewhere:
 3. do not copy strong defaults as if they were portable requirements without
    checking the downstream environment first
 
+## Internal-First Distribution Model
+
+This catalog is internal-first and distributable-second.
+
+That means:
+
+1. strong opinions and standardized internal workflows are expected
+2. internal standardization is a valid reason to ship deterministic starter
+   assets and opinionated helper scripts
+3. distributable skill content still needs a clean portability boundary
+4. portable skill surfaces are the files shipped inside `.agents/skills`,
+   especially `SKILL.md`, `references/`, `assets/`, and skill-owned `scripts/`
+5. repo-root wiring such as task runners, CI layout, local wrappers, and
+   shell-specific inspection habits are repository truth, not portable skill
+   contract
+
+Practical rule:
+
+1. ship opinionated assets when they can be scaffolded cross-platform
+2. allow small broadly portable runtime assumptions such as Python or
+   Node/`npx` when the skill-owned scaffold genuinely depends on them
+3. keep repo-local automation names and Unix-specific command examples out of
+   distributable skill references unless the skill itself recreates that
+   surface for adopters
+
 ## Freshness Boundary
 
 Freshness review for volatile skills is advisory only in this repository.

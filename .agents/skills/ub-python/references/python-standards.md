@@ -1,15 +1,18 @@
-# Python Standards (Project-Specific, Non-Formatting, Latest Stable)
+# Python Standards (Portable, Non-Formatting, Latest Stable)
 
 > Verify these standards against the latest official Python documentation via web search.
 
-This reference codifies Python standards for this repository and is aligned to
-official Python and tooling guidance.
+This reference codifies Python standards for the target repository or project
+after local runtime and tooling truth has been inspected.
+It is aligned to official Python and tooling guidance without assuming one
+specific host repository.
 
 ## 1. Platform and Environment
 
 - Runtime baseline: latest stable Python (detect from project files and verify via web search).
 - Use a project-local virtual environment and interpreter-explicit commands.
-- Prefer `python -m ...` or `uv run ...` for command consistency.
+- Prefer `python -m ...` or the host project's environment-aware runner for
+  command consistency.
 - Prefer `pathlib.Path` for filesystem paths, and keep Windows portability in mind.
 
 ## 2. Implementation Strategy
@@ -23,13 +26,14 @@ official Python and tooling guidance.
 
 ## 2A. Source Truth And Disclosure
 
-- Treat repo truth as the shipping constraint: detect the active Python floor,
-  runtime, and tooling before recommending implementation details.
+- Treat target-project truth as the shipping constraint: detect the active
+  Python floor, runtime, and tooling before recommending implementation
+  details.
 - Treat official Python docs and official tool docs as the preferred guidance
   baseline for forward-looking design and migration-ready patterns.
-- If official docs, repo truth, or live code reality materially disagree on a
-  non-trivial recommendation, surface `OFFICIAL_CONFLICT`, implement the
-  repo-safe path, and explain the forward migration path.
+- If official docs, target-project truth, or live code reality materially
+  disagree on a non-trivial recommendation, surface `OFFICIAL_CONFLICT`,
+  implement the project-safe path, and explain the forward migration path.
 - If a non-trivial claim cannot be confirmed in official sources after targeted
   research, mark it `UNVERIFIED` or avoid presenting it as settled guidance.
 - Keep these disclosures scoped to non-trivial, version-sensitive, or contested

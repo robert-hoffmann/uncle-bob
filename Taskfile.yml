@@ -19,9 +19,17 @@ tasks:
     desc: Install or update local Python tooling via uv
     cmd: uv sync
 
+  py:
+    desc: Run repository Python through uv (pass args after --)
+    cmd: "{{.UV}} python {{.CLI_ARGS}}"
+
   lint-md:
     desc: Run markdownlint-cli2 via npx
     cmd: "{{.MARKDOWNLINT}} {{.MARKDOWN_TARGETS}}"
+
+  lint-md-files:
+    desc: Run markdownlint-cli2 on explicit files or globs (pass args after --)
+    cmd: "{{.MARKDOWNLINT}} {{.CLI_ARGS}}"
 
   lint-py:
     desc: Run Ruff

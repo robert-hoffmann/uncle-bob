@@ -28,6 +28,8 @@ yet have active TypeScript config of its own.
 - Read `references/ts-legacy-to-modern-migration.md` for old-to-new migrations, banned patterns, and exception handling.
 - Read `references/ts-config-resolution.md` when local TypeScript config
   discovery, starter scaffolding, or optional ESLint support matters.
+- Read `references/task-bundle.md` only when the target repository wants an
+  optional Task-based automation overlay for this skill's starter profile.
 - Use `scripts/scaffold_ts_baseline.py` with `assets/tsconfig-template/` and
   `assets/eslint-template/` when a target repository needs a deterministic
   starter instead of ad hoc config creation.

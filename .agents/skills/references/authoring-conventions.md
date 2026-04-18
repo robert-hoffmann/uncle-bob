@@ -129,6 +129,26 @@ Reference-writing rule:
   adaptation points instead
 - keep exact version/date snapshots in evidence or audits when they matter,
   not in evergreen skill references by default
+- keep distributable skill references portable
+- do not encode one repository's exact task names, target globs, ignore paths,
+  or wrapper commands inside a shared skill unless the skill also owns a
+  scaffolding mechanism that recreates that surface for adopters
+- avoid shell-specific inspection snippets such as `sed`, `rg`, or Bash-only
+  pipelines in portable references; describe what to inspect instead
+- repository-specific live truth belongs in repo-root docs, config files, CI,
+  and automation entrypoints; skill references should explain how to discover
+  that truth
+
+Portable-assumption rule:
+
+- a distributable skill may assume only a small cross-platform baseline when
+  that baseline is necessary for skill-owned assets or scaffolding to work
+- acceptable assumptions are things like Python or Node/`npx` when the skill
+  actually ships a helper or config for that ecosystem
+- do not treat Bash, `Taskfile.yml`, `make`, `sed`, `rg`, or one repository's
+  automation layout as part of the portable baseline
+- if a skill needs more than the small portable baseline, document that
+  dependency explicitly and keep repo-local wiring outside the skill bundle
 
 ### 7. Interactive Agent UX Baseline
 
@@ -170,6 +190,43 @@ Required behavior:
    full manual
 5. explain lane or mode choices in plain language before using repo-specific
    jargon
+
+### 8. Optional Adoption Bundles
+
+Use this pattern when a skill has useful secondary adoption material that is
+helpful for some repositories but should not bloat the main skill contract.
+
+Good candidates:
+
+- optional Task automation overlays
+- optional hook bundles
+- optional repo wiring examples that build on the skill's core assets
+
+Core rule:
+
+- keep the main `SKILL.md` lean
+- keep optional adoption material in a dedicated reference such as
+  `references/task-bundle.md`
+- keep bundle files inside the owning skill's `assets/`
+- treat bundle assets as source material the agent may help adopt, not as a
+  default runtime dependency
+
+Required behavior:
+
+1. explain when the bundle should be used
+2. explain when the bundle should be skipped
+3. explain what files the bundle ships
+4. explain how to reconcile with existing host-repo automation
+5. avoid silently overwriting repo-global files such as root `Taskfile.yml`
+6. avoid making installed skill paths part of the portable live contract
+
+Reference-writing rule:
+
+- do not let the optional bundle dominate the main skill narrative
+- mention the bundle briefly in `SKILL.md`, then defer to the dedicated
+  reference
+- keep direct CLI or config-only adoption as the default fallback when the
+  bundle is not adopted
 
 ## Authoring Guardrails
 

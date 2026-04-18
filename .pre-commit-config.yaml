@@ -7,7 +7,7 @@ repos:
       - id: lint-markdown
         name: Markdown lint (staged files)
         language: system
-        entry: npx --yes markdownlint-cli2
+        entry: task lint-md-files --
         files: \.md$
 
       - id: lint-python
