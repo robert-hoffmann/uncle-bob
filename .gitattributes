@@ -104,4 +104,5 @@ Dockerfile   text eol=lf
 .editorconfig    export-ignore
 .gitattributes   export-ignore
 .gitignore       export-ignore
-.github/         export-ignore
+.github/workflows/ export-ignore
+.github/.gitkeep    export-ignore
