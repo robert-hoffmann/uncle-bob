@@ -21,36 +21,12 @@ Not every section is needed for every artifact. Use the sections that apply.
 
 ## Description-Writing Formula for Skills
 
-Skill descriptions are **routing metadata**, not marketing copy. They control when the skill triggers.
+The shared skill-description routing formula now lives in
+[`../../ub-authoring/references/authoring-conventions.md`](../../ub-authoring/references/authoring-conventions.md).
 
-### Pattern
-
-> Use this skill when the user wants **X**, **Y**, or **Z**; when the task involves **A/B/C**; or when they ask for related outcomes even if they do not use exact terminology. Do not use it for simple one-step cases that built-in tools handle directly.
-
-### Rules
-
-- Put the highest-signal **user intents first**.
-- Focus on **user intent**, not internal implementation.
-- Include **trigger keywords, adjacent phrasings, and neighboring task language** the user might use.
-- Mention both **what it does** and **when to use it**.
-- Include at least one **clear non-use boundary** so the skill does not over-trigger.
-- Keep short enough to avoid context bloat, but specific enough to route reliably (usually 2-4 sentences).
-
-### Good Example
-
-> Use this skill when the user wants to create, run, debug, review, or organize browser-based tests with Playwright; when the task involves selectors, fixtures, tracing, retries, or cross-browser behavior; or when they ask for related end-to-end browser automation outcomes even without naming Playwright directly. Do not use it for simple unit tests or generic front-end debugging that does not involve Playwright.
-
-### Bad Example
-
-> This skill helps with testing. *(Too vague — won't trigger correctly.)*
-
-### Description Failure Modes to Avoid
-
-- Descriptions that say only what the artifact contains, not when to use it.
-- Descriptions with no exclusion boundary.
-- Descriptions that depend on internal jargon the user is unlikely to say.
-- Descriptions that are so broad they compete with built-in tools or unrelated skills.
-- Descriptions that are so narrow they miss common adjacent phrasings.
+Use that shared reference for reusable description guidance.
+Keep this file focused on prompt, instruction, and artifact-structure guidance
+that is specific to customization work.
 
 ## Instruction-Writing Rules
 
@@ -133,7 +109,8 @@ When generating any artifact, include:
 
 ### Why This Matters
 
-"Show desired output patterns" is 10x more useful than "follow best practices."
+This is the customization-specific extension of the shared authoring rule that
+examples beat vague admonitions.
 
 Models follow examples more reliably than abstract instructions:
 
@@ -152,8 +129,8 @@ Write clear and descriptive commit messages following best practices.
 
 ## Naming Conventions (All Artifact Types)
 
-- **Lowercase** letters, digits, and hyphens only.
-- **Normalize** user titles to hyphen-case: "Plan Mode" → `plan-mode`.
-- Under **64 characters**.
-- Prefer short, **verb-led phrases** for action-oriented artifacts.
-- **Namespace** by tool when it improves clarity: `gh-address-comments`.
+Use the shared naming conventions in
+[`../../ub-authoring/references/authoring-conventions.md`](../../ub-authoring/references/authoring-conventions.md).
+
+For customization artifacts specifically, namespace by tool when it improves
+clarity, for example `gh-address-comments`.

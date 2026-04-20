@@ -11,7 +11,7 @@ Apply modern CSS platform features with predictable cascade control, token-drive
 
 ## Load References On Demand
 
-- Read `../references/authoring-conventions.md` when adjusting routing
+- Read `../ub-authoring/references/authoring-conventions.md` when adjusting routing
   guidance or cross-skill authoring conventions.
 - Read `references/modern-css-source.md` for copy-ready patterns and framework bridges (Vue/Nuxt/Quasar/Tailwind).
 - Read `references/browser-support-baseline.md` when deciding fallback policy or feature gating.

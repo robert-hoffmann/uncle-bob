@@ -1,6 +1,6 @@
 {
   "name": "uncle-bob",
-  "description": "Workflow-first AI coding skills and custom agents for planning, quality, governance, Markdown, and framework-specific implementation work.",
+  "description": "Workflow-first AI coding skills and custom agents for planning, quality, governance, authoring, and framework-specific implementation work.",
   "version": "1.0.0",
   "skills": ".agents/skills/",
   "agents": ".github/agents/"

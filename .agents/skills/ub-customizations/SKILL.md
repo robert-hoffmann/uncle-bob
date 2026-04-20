@@ -28,8 +28,20 @@ default.
   `ub-workflow`.
 - Do not use this skill for governance-only policy or evidence questions;
   defer those to `ub-governance`.
+- Do not use this skill as the owner of reusable cross-skill authoring
+  conventions; defer those to `ub-authoring`.
 - Do not use this skill when the user only needs normal code implementation in
   an existing stack rather than Copilot customization artifacts.
+
+## Coordination
+
+- Use `ub-customizations` to choose and generate the right customization
+  primitive.
+- Use `ub-authoring` when the task is about reusable cross-skill conventions
+  such as routing-quality descriptions, non-use boundaries, naming, or shared
+  authoring structure.
+- Use both only when a customization task also changes the shared installable
+  authoring contract.
 
 ## Artifact Selection Matrix
 
@@ -149,9 +161,10 @@ State assumptions, file tree, and rationale. For the artifact type being generat
 | Plugins | [references/plugins.md](references/plugins.md) |
 | Cross-vendor exports | [references/cross-vendor.md](references/cross-vendor.md) |
 
-For writing quality guidance, read [references/prompt-engineering.md](references/prompt-engineering.md).
-When changing shared routing or authoring structure, read
-[`../references/authoring-conventions.md`](../references/authoring-conventions.md).
+For customization-artifact writing guidance, read
+[references/prompt-engineering.md](references/prompt-engineering.md).
+For reusable cross-skill authoring conventions, read
+[`../ub-authoring/references/authoring-conventions.md`](../ub-authoring/references/authoring-conventions.md).
 
 Before generating non-trivial or platform-sensitive customizations, compare
 official guidance, repo truth, and target host reality and surface
@@ -161,8 +174,8 @@ official guidance, repo truth, and target host reality and surface
 
 Create the files following the loaded reference. Apply these defaults:
 
-- **Naming**: lowercase, hyphens, verb-led, under 64 characters.
-- **Progressive disclosure**: keep main files lean; move detail to references.
+- **Shared authoring contract**: rely on `ub-authoring` for reusable naming,
+  routing, and shared structure conventions.
 - **Least privilege**: expose only necessary tools; minimize dangerous defaults.
 - **No hardcoded secrets**: use MCP `inputs`, environment variables, or `.env` references.
 - **Concise descriptions**: optimize for triggering and discovery, not marketing.
@@ -223,13 +236,14 @@ Structure every generation response as:
 ## Anti-Patterns to Avoid
 
 - Do NOT default to a skill when an instruction file or prompt file is a better fit.
+- Do NOT treat this skill as the owner of cross-catalog authoring conventions
+  now that `ub-authoring` exists.
 - Do NOT generate giant monolithic files — use progressive disclosure and references.
 - Do NOT copy vendor-specific features (Claude `context: fork`, Gemini hook semantics) into VS Code outputs.
 - Do NOT use hooks for soft guidance — hooks are for deterministic lifecycle actions.
 - Do NOT use MCP for trivial local tasks — MCP is for real external capabilities.
 - Do NOT grant all-tools access by default — use least privilege.
 - Do NOT generate plugin packaging unless distribution is explicitly requested.
-- Do NOT write vague output like "follow best practices" — use explicit steps, criteria, and examples.
 
 ## Freshness Review
 
@@ -237,4 +251,6 @@ Structure every generation response as:
 - Review recommendation: review on touch and during periodic maintenance, targeting a quarterly rhythm when practical.
 - Trigger signals: VS Code Copilot customization-surface changes, new agent or hook capabilities, MCP schema changes, or portability model changes across supported vendors.
 - Enforcement: advisory only; freshness warnings should not block unrelated customization work by default.
-- Stable core: smallest-sufficient artifact choice, least privilege, progressive disclosure, and explicit validation remain the durable guidance even when platform features evolve quickly.
+- Stable core: smallest-sufficient artifact choice, least privilege, and
+  explicit validation remain the durable guidance even when platform features
+  evolve quickly. Reusable authoring conventions now live in `ub-authoring`.

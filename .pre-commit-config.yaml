@@ -4,12 +4,6 @@
 repos:
   - repo: local
     hooks:
-      - id: lint-markdown
-        name: Markdown lint (staged files)
-        language: system
-        entry: task lint-md-files --
-        files: \.md$
-
       - id: lint-python
         name: Python lint (authoritative Taskfile scope)
         language: system
@@ -27,8 +21,7 @@ repos:
       - id: governance-integrity
         name: Governance integrity checks
         language: system
-        entry: uv run python
-          .agents/skills/ub-governance/scripts/check_skill_integrity.py
+        entry: uv run python scripts/repo-maintenance/check_skill_integrity.py
         pass_filenames: false
         always_run: true
 

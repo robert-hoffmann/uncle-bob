@@ -5,14 +5,14 @@
     "email": "robert-hoffmann@users.noreply.github.com"
   },
   "metadata": {
-    "description": "Workflow-first AI coding skills and custom agents for planning, quality, governance, Markdown, and framework-specific implementation work.",
+    "description": "Workflow-first AI coding skills and custom agents for planning, quality, governance, authoring, and framework-specific implementation work.",
     "version": "1.0.0",
     "pluginRoot": "."
   },
   "plugins": [
     {
       "name": "uncle-bob",
-      "description": "11 domain skills (workflow, quality, governance, customizations, Markdown, CSS, Tailwind, TypeScript, Python, Vue, Nuxt) and 4 custom agents (workflow, governance, customizations, teacher).",
+      "description": "11 domain skills (workflow, quality, authoring, governance, customizations, CSS, Tailwind, TypeScript, Python, Vue, Nuxt) and 1 custom agent (teacher).",
       "version": "1.0.0",
       "author": {
         "name": "robert-hoffmann",
@@ -23,7 +23,6 @@
         "workflow",
         "quality",
         "governance",
-        "markdown",
         "typescript",
         "python",
         "vue",

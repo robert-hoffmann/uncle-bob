@@ -34,7 +34,7 @@ Python lint config of its own.
 
 ## Load References On Demand
 
-- Read `../references/authoring-conventions.md` when adjusting shared routing
+- Read `../ub-authoring/references/authoring-conventions.md` when adjusting shared routing
   guidance, output structure, or cross-skill authoring conventions.
 - Load and apply `references/python-standards.md` for canonical Python rules and toolchain policy.
 - Load and apply `references/repository-python-workflows.md` for resolving the

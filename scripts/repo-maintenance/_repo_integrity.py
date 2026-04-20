@@ -7,13 +7,13 @@ from typing import Any
 
 import yaml
 
-REPO_ROOT = Path(__file__).resolve().parents[4]
+REPO_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_OUTPUT_ENCODING = "utf-8"
 LOCAL_LINK_PATTERN = re.compile(r"\[[^\]]+\]\(([^)#]+)(?:#[^)]+)?\)")
-READ_REF_PATTERN = re.compile(r"- Read `([^`]+)`")
+READ_REF_PATTERN = re.compile(r"- (?:`[^`]+`\s+)?Read `([^`]+)`")
 PYPROJECT_VERSION_PATTERN = re.compile(r'^version\s*=\s*"([^"]+)"$', re.MULTILINE)
 COUNT_CLAIM_PATTERN = re.compile(
-    r"(?P<skills>\d+)\s+domain skills.*?and\s+(?P<agents>\d+)\s+custom agents",
+    r"(?P<skills>\d+)\s+domain skills.*?and\s+(?P<agents>\d+)\s+custom agent(?:s)?",
     re.IGNORECASE | re.DOTALL,
 )
 

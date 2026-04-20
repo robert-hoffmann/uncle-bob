@@ -1,73 +1,25 @@
-// markdownlint configuration — https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md
-// Applied automatically on save via VS Code markdownlint extension (source.fixAll.markdownlint)
+// markdownlint configuration used only for local save-time assistance.
+// Markdown is no longer a pre-commit or CI gate in this repository.
 {
-    // ── Headings ──────────────────────────────────────────────────────────────
+    // Keep only structural or auto-fix-friendly rules that still help while editing.
 
     // MD001 — headings must only increment by one level at a time
     "MD001": true,
 
-    // MD003 — enforce ATX-style headings (## Heading, not underline-style)
+    // MD003 — enforce ATX-style headings
     "MD003": { "style": "atx" },
+
+    // MD009 — no trailing spaces
+    "MD009": { "br_spaces": 0 },
+
+    // MD010 — no hard tabs
+    "MD010": true,
 
     // MD022 — headings must be surrounded by blank lines
     "MD022": true,
 
     // MD023 — headings must start at the beginning of the line
     "MD023": true,
-
-    // MD024 — no duplicate heading text within the same document
-    "MD024": { "siblings_only": true },
-
-    // MD025 — only one top-level (H1) heading per document
-    "MD025": true,
-
-    // MD026 — no trailing punctuation in headings
-    "MD026": true,
-
-    // MD036 — do not use emphasis (bold/italic) as a substitute for a heading
-    "MD036": true,
-
-    // MD041 — first line should be a top-level heading
-    "MD041": true,
-
-    // ── Lists ─────────────────────────────────────────────────────────────────
-
-    // MD004 — unordered lists must use a consistent marker (dash)
-    "MD004": { "style": "dash" },
-
-    // MD005 — list indentation levels must be consistent
-    "MD005": true,
-
-    // MD007 — unordered list indentation: 2 spaces (matches .editorconfig web indent)
-    "MD007": { "indent": 2 },
-
-    // MD029 — ordered list item prefix: use an incrementing sequence (1. 2. 3.)
-    "MD029": { "style": "ordered" },
-
-    // MD030 — spaces after list markers (1 space for unordered, 1 for ordered single-line)
-    "MD030": true,
-
-    // MD032 — lists must be surrounded by blank lines
-    "MD032": true,
-
-    // ── Whitespace / formatting ───────────────────────────────────────────────
-
-    // MD009 — no trailing spaces (markdownlint auto-fixes this)
-    "MD009": { "br_spaces": 0 },
-
-    // MD010 — no hard tabs
-    "MD010": true,
-
-    // MD012 — no multiple consecutive blank lines (max 1)
-    "MD012": { "maximum": 1 },
-
-    // MD013 — line length disabled; skills/references intentionally keep some long instruction lines
-    "MD013": false,
-
-    // MD047 — files must end with a single newline (matches .editorconfig insert_final_newline)
-    "MD047": true,
-
-    // ── Code ──────────────────────────────────────────────────────────────────
 
     // MD031 — fenced code blocks must be surrounded by blank lines
     "MD031": true,
@@ -81,45 +33,12 @@
     // MD048 — fenced code block delimiter: backticks (not tildes)
     "MD048": { "style": "backtick" },
 
-    // ── Links & images ────────────────────────────────────────────────────────
-
-    // MD034 — no bare URLs; wrap them in angle brackets or use proper link syntax
-    "MD034": true,
-
-    // MD039 — no spaces inside link text: [link text](url)
-    "MD039": true,
-
     // MD042 — no empty links
     "MD042": true,
 
     // MD045 — images must have alt text
     "MD045": true,
 
-    // MD051 — link fragments (#anchor) must point to an existing heading
-    "MD051": true,
-
-    // MD053 — unused link/image reference definitions
-    "MD053": true,
-
-    // ── Inline formatting ─────────────────────────────────────────────────────
-
-    // MD037 — no spaces inside emphasis markers (* text * → *text*)
-    "MD037": true,
-
-    // MD038 — no spaces inside code spans (` text ` → `text`)
-    "MD038": true,
-
-    // MD049 — emphasis style: consistent asterisks
-    "MD049": { "style": "asterisk" },
-
-    // MD050 — strong style: consistent double asterisks
-    "MD050": { "style": "asterisk" },
-
-    // ── Misc ──────────────────────────────────────────────────────────────────
-
-    // MD033 — allow a small set of HTML tags commonly needed in docs
-    "MD033": { "allowed_elements": ["br", "details", "summary", "kbd", "sup", "sub", "table", "tr", "td", "img"] },
-
-    // MD035 — horizontal rule style: consistent dashes
-    "MD035": { "style": "---" }
+    // MD047 — files must end with a single newline
+    "MD047": true
 }

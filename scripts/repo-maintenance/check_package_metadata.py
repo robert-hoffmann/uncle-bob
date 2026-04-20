@@ -34,7 +34,7 @@ def main() -> int:
     parser.add_argument("--output")
     args = parser.parse_args()
 
-    repo_root = Path(args.repo_root).resolve() if args.repo_root else Path(__file__).resolve().parents[4]
+    repo_root = Path(args.repo_root).resolve() if args.repo_root else Path(__file__).resolve().parents[2]
     errors: list[str] = []
 
     plugin_path = repo_root / "plugin.json"

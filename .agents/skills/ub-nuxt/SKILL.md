@@ -15,7 +15,7 @@ layouts, outdated recipes, or compatibility-layer drift by default.
 
 ## Load References On Demand
 
-- Read `../references/authoring-conventions.md` when adjusting routing
+- Read `../ub-authoring/references/authoring-conventions.md` when adjusting routing
   guidance or cross-skill authoring conventions.
 - Read `references/nuxt-vue-patterns.md` for architecture, data-fetching, routing, server, and rendering guidance.
 - Read `references/typescript-modern.md` for strict TypeScript defaults, typing patterns, and anti-pattern checks.

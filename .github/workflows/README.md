@@ -13,7 +13,7 @@ Use this file as the source of truth for:
 
 | Workflow File | Workflow Name | Purpose | Local Parity |
 | ------------- | ------------- | ------- | ------------ |
-| `quality.yml` | `quality` | Repository quality gates: Markdown, Python, YAML, governance integrity, and governance regression checks. | `task check` |
+| `quality.yml` | `quality` | Repository quality gates: Python, YAML, repository integrity, and regression checks. | `task check` |
 | `decision-governance.yml` | `decision-governance` | Pull-request governance gate for ADR, claim-register, and decision-report enforcement. | Partial: individual governance scripts, not a single Taskfile task |
 
 ## Quality Workflow
@@ -33,24 +33,23 @@ This workflow is the main fast-feedback quality gate for the repository. It is d
 
 The workflow uses multiple jobs instead of one large serial job.
 
-- `markdownlint`
-  Runs Markdown linting through `task lint-md`.
 - `python-quality` matrix
-  Runs four independent Python-backed checks:
+  Runs ten independent Python-backed checks:
   - `task lint-py`
   - `task lint-yaml`
-  - `task test-integrity`
+  - `task test-repo-catalog`
+  - `task test-package-metadata`
+  - `task test-repo-paths`
+  - `task test-skill-schema`
+  - `task test-governance-integrity`
   - `task test-governance`
+  - `task test-repo-maintenance`
+  - `task test-workflow`
 
 This keeps job output focused, preserves parallelism, and still centralizes the actual commands in the Taskfile.
 
 ### Runtime Setup
 
-- Markdown job:
-  - checks out the repo
-  - installs Node 22
-  - installs Task with `arduino/setup-task`
-  - runs `task lint-md`
 - Python-backed jobs:
   - check out the repo
   - install Python 3.12
@@ -63,11 +62,17 @@ This keeps job output focused, preserves parallelism, and still centralizes the 
 
 - Full parity check: `task check`
 - Individual checks:
-  - `task lint-md`
   - `task lint-py`
   - `task lint-yaml`
-  - `task test-integrity`
+  - `task test-repo-catalog`
+  - `task test-package-metadata`
+  - `task test-repo-paths`
+  - `task test-skill-schema`
+  - `task test-governance-integrity`
   - `task test-governance`
+  - `task test-repo-maintenance`
+  - `task test-workflow`
+  - `task test-integrity`
 
 ### Why This Workflow Uses Taskfile
 
@@ -131,9 +136,9 @@ There is no single `task` command for this workflow because part of its behavior
 
 The closest local commands are the underlying governance scripts:
 
-- `python3 .agents/skills/ub-governance/scripts/build_adr_registry.py`
-- `python3 .agents/skills/ub-governance/scripts/check_adr_gate.py`
-- `python3 .agents/skills/ub-governance/scripts/check_claim_register.py`
+- `uv run python .agents/skills/ub-governance/scripts/build_adr_registry.py`
+- `uv run python .agents/skills/ub-governance/scripts/check_adr_gate.py`
+- `uv run python .agents/skills/ub-governance/scripts/check_claim_register.py`
 
 Use `task check` for normal quality validation, and use the governance scripts directly when you need to reproduce decision-gate behavior outside GitHub Actions.
 

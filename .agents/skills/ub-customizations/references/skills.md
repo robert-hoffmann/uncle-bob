@@ -52,44 +52,12 @@ Skills follow the Agent Skills open standard (agentskills.io). They work across 
 
 ## Description-Writing Formula
 
-The description is the most critical field. It controls whether the skill activates at all, so write it like routing logic, not like marketing copy or an internal implementation note.
+The shared routing formula, non-use-boundary rules, and description failure
+modes now live in
+[`../../ub-authoring/references/authoring-conventions.md`](../../ub-authoring/references/authoring-conventions.md).
 
-Follow this pattern:
-
-> Use this skill when the user wants **X**, **Y**, or **Z**; when the task involves **A/B/C**; or when they ask for related outcomes even if they do not use exact terminology. Do not use it for simple one-step cases that built-in tools handle directly.
-
-**Rules:**
-
-- Put the highest-signal **user intents first**.
-- Focus on **what the user is trying to achieve**, not internal implementation details.
-- Include **trigger keywords, adjacent phrasings, and neighboring task language** the user might use.
-- State both **what it does** and **when to use it**.
-- Include at least one **clear non-use boundary** so the skill does not over-trigger.
-- Keep it short enough to avoid context bloat, but specific enough to route reliably (usually 2-4 sentences).
-
-### Weak vs Strong Descriptions
-
-Weak:
-
-> Helps with BigQuery workflows and reusable resources.
-
-Why it fails:
-
-- It describes the implementation vaguely instead of the user intent.
-- It has no trigger phrases, adjacent phrasings, or exclusion boundary.
-- It gives the model almost no signal for when to activate the skill.
-
-Strong:
-
-> Use this skill when the user wants to create, review, debug, migrate, or explain BigQuery queries, datasets, schemas, jobs, or warehouse workflows; when the task involves BigQuery SQL, permissions, costs, or query optimization; or when they ask for related analytics outcomes even without saying BigQuery explicitly. Do not use it for generic SQL tasks that do not touch BigQuery.
-
-### Description Failure Modes to Avoid
-
-- Descriptions that say only what the skill contains, not when to use it.
-- Descriptions that rely on internal terms the user is unlikely to say.
-- Descriptions with no exclusion boundary.
-- Descriptions that are so broad they compete with built-in tools or unrelated skills.
-- Descriptions that are so narrow they miss common adjacent phrasings.
+Use that shared reference for reusable description guidance.
+Keep this file focused on skill-specific structure, anatomy, and packaging.
 
 ## Progressive Disclosure
 
@@ -146,14 +114,8 @@ For simple edits, modify the XML directly.
 - Move variant-specific details to separate reference files; keep only core workflow in SKILL.md.
 - Avoid duplication between SKILL.md and reference files.
 
-## Naming Conventions
-
-- Lowercase letters, digits, and hyphens only.
-- Normalize user titles to hyphen-case: "Plan Mode" → `plan-mode`.
-- Under 64 characters.
-- Prefer short, **verb-led phrases** that describe the action.
-- Namespace by tool when it improves clarity: `gh-address-comments`, `linear-address-issue`.
-- Name the skill folder exactly after the skill name.
+For shared naming guidance, use
+[`../../ub-authoring/references/authoring-conventions.md`](../../ub-authoring/references/authoring-conventions.md).
 
 ## Bundled Resources
 
@@ -230,6 +192,6 @@ Use this skill for browser-based testing tasks, not for simple unit tests.
 - [ ] SKILL.md body is under 500 lines
 - [ ] References are one level deep and clearly linked from SKILL.md
 - [ ] No auxiliary documentation files (README, CHANGELOG, etc.)
-- [ ] Naming: lowercase, hyphens, verb-led, under 64 chars
+- [ ] Naming follows the shared authoring conventions reference
 - [ ] Scripts tested if included
 - [ ] No hardcoded secrets or sensitive data

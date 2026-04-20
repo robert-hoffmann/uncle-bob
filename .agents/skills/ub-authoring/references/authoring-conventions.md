@@ -9,7 +9,33 @@ where they become boilerplate.
 
 ## Shared Conventions Worth Reusing
 
-### 1. Explicit "When Not To Use" Guidance
+### 1. Description-Writing As Routing Logic
+
+Treat a skill description as routing metadata, not marketing copy.
+
+Preferred pattern:
+
+> Use this skill when the user wants X, Y, or Z; when the task involves A, B,
+> or C; or when they ask for related outcomes even if they do not use the
+> exact terminology. Do not use it for D or E.
+
+Keep the emphasis on user intent first.
+
+Good descriptions:
+
+1. lead with what the user is trying to do
+2. include adjacent phrasings the user might actually say
+3. include at least one explicit non-use boundary
+4. stay short enough to remain high-signal
+
+Failure modes to avoid:
+
+1. describing only what the skill contains instead of when to use it
+2. relying on internal jargon the user is unlikely to say
+3. omitting the non-use boundary entirely
+4. writing something so broad that it competes with unrelated skills
+
+### 2. Explicit "When Not To Use" Guidance
 
 Add or strengthen a `When Not To Use` section when:
 
@@ -24,7 +50,7 @@ Keep it concise:
 - avoid duplicating what the description already makes obvious unless the
   confusion is common in practice
 
-### 2. Clear Output Expectations
+### 3. Clear Output Expectations
 
 Non-trivial skills should expose a stable output expectation, typically through
 `Output Requirements` or `Output Contract`.
@@ -42,7 +68,29 @@ For high-impact skills, keep this section easy to find near the end of the
 skill so readers can scan the expected reporting shape quickly without reading
 the whole file first.
 
-### 3. Load References On Demand
+### 4. Examples Over Abstract Admonitions
+
+Use examples when an abstract instruction could be followed in multiple ways.
+
+Good examples:
+
+1. show the desired output or wording pattern directly
+2. stay short and close to the rule they clarify
+3. include an anti-example only when misuse is likely
+
+Avoid guidance like:
+
+1. `follow best practices`
+2. `write clear descriptions`
+3. `improve the prompt`
+
+Prefer guidance like:
+
+1. `Use this skill when ... Do not use it for ...`
+2. `Add one observable-outcome assertion beside the interaction assertion`
+3. `Name the next action and one rejected alternative`
+
+### 5. Load References On Demand
 
 Use `Load References On Demand` when the skill depends on deeper supporting
 material.
@@ -54,7 +102,19 @@ Keep the list targeted:
 - use a shared reference only when the skill actually participates in the
   shared convention being described
 
-### 4. Anti-Patterns And Anti-Rationalization Notes
+### 6. Naming Conventions
+
+For shared installable artifacts such as skills, prompts, and related guidance:
+
+1. use lowercase, digits, and hyphens only when the host surface allows it
+2. prefer short, verb-led or action-revealing names
+3. keep names under 64 characters when practical
+4. normalize titles into stable hyphen-case for installable artifacts
+
+Do not introduce naming ceremony where the host surface does not actually use
+or benefit from it.
+
+### 7. Anti-Patterns And Anti-Rationalization Notes
 
 Use short anti-pattern sections only when the skill is especially vulnerable to
 misclassification, unsafe defaults, or cargo-cult behavior.
@@ -70,7 +130,7 @@ Poor candidates:
 - stable skills where the warnings would just restate the overview
 - skills where misuse is already obvious from narrow scope and examples
 
-### 5. Optional High-Volatility Disclosure Conventions
+### 8. Optional High-Volatility Disclosure Conventions
 
 Conventions such as `OFFICIAL_CONFLICT` and `UNVERIFIED` are optional
 high-volatility patterns, not universal catalog rules.
@@ -83,7 +143,7 @@ Use them for targeted skills where:
 
 Do not propagate them into stable shared skills by default.
 
-### 6. Config-Aware Scaffolding
+### 9. Config-Aware Scaffolding
 
 Use config-aware scaffolding when a skill owns a stable tool or project-config
 surface and downstream adopters would benefit from a deterministic starter.
@@ -154,7 +214,7 @@ Portable-assumption rule:
 - if a skill needs more than the small portable baseline, document that
   dependency explicitly and keep repo-local wiring outside the skill bundle
 
-### 7. Interactive Agent UX Baseline
+### 10. Interactive Agent UX Baseline
 
 Use this pattern for interactive custom agents that users invoke directly and
 may need help discovering.
@@ -187,7 +247,7 @@ Do not use this pattern as:
 
 Required behavior:
 
-1. keep the agent’s first-use framing short and action-oriented
+1. keep the agent's first-use framing short and action-oriented
 2. make the help path visible in routing, arguments, or handoffs
 3. keep the quick-start shorter than the deeper guide
 4. let README-level discoverability stay concise instead of turning it into a
@@ -195,7 +255,7 @@ Required behavior:
 5. explain lane or mode choices in plain language before using repo-specific
    jargon
 
-### 8. Optional Adoption Bundles
+### 11. Optional Adoption Bundles
 
 Use this pattern when a skill has useful secondary adoption material that is
 helpful for some repositories but should not bloat the main skill contract.
@@ -249,12 +309,3 @@ emphasizes:
 - short, self-contained instructions
 - reasoning-backed non-obvious rules
 - scoped specialization over giant uniform prompts
-
-Primary references reviewed during Sprint 08:
-
-- VS Code custom instructions:
-  <https://code.visualstudio.com/docs/copilot/customization/custom-instructions>
-- GitHub custom skills:
-  <https://docs.github.com/copilot/how-tos/copilot-sdk/use-copilot-sdk/custom-skills>
-- GitHub custom agents:
-  <https://docs.github.com/en/copilot/how-tos/copilot-sdk/use-copilot-sdk/custom-agents>

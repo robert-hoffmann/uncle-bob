@@ -22,51 +22,67 @@ Use this skill as the canonical workflow intake, initiative-planning, and
 sprint-orchestration layer for work that is too large, risky, or stateful to
 run safely from chat history alone.
 
-When this skill is adopted in a repository or project, the default operating
-surface is `./.ub-workflows/` unless the host intentionally chooses a
-different operations root.
+The default operating surface is `./.ub-workflows/` unless the host
+intentionally chooses a different operations root.
 
-Use that operations root for three lanes:
+This skill owns three lanes only:
 
 1. direct bounded work when no durable planning artifact is needed
 2. lightweight specs under `./.ub-workflows/specs/` when the work needs a
    written contract but not a roadmap and sprint pack
 3. initiatives under `./.ub-workflows/initiatives/` when the work needs a
-   full PRD, roadmap, and resumable sprint execution
+   PRD, roadmap, and resumable sprint execution
 
-Use the deterministic helper to bootstrap that operations root when it is
-missing, scaffold dated initiative roots under `./.ub-workflows/initiatives/`,
-scaffold dated lightweight specs under `./.ub-workflows/specs/`, materialize
-sprint directories from an approved roadmap, and archive completed initiatives
-on explicit request. Prepare sprint content before execution, whether that
-preparation is done directly in the artifacts or through a helper-supported
-flow.
+If the work is a bounded one-off, prefer a lightweight spec.
+If the work is multi-session, cross-cutting, risky, or needs staged delivery,
+use an initiative.
 
-## Core Principle
+## Embedded Contract
 
-Drive work through this ordered flow:
+These rules are the base contract of this skill and must not depend on a
+secondary document to be applied correctly.
+
+1. Make the lane choice explicit before opening durable artifacts: direct
+   bounded work, lightweight spec, or initiative.
+2. Do not route small direct code changes into durable workflow artifacts when
+   they can be executed safely without them.
+3. For initiatives, make `prd.md` self-contained before generating
+   `roadmap.md`.
+4. Treat `roadmap.md` as the durable post-plan artifact.
+5. Do not prepare sprint content, initialize sprint folders, or begin sprint
+   execution until `roadmap_ready: pass`.
+6. Prepare each sprint as a standalone `sprint.md` before the sprint begins.
+7. Sprint execution never starts from placeholder-only sprint shells.
+8. In `reviewed` mode, a request like `Start the next sprint.` opens preview
+   only. It does not start execution in the same user turn.
+9. In `reviewed` mode, execution begins only after a later approval message.
+10. End every initiative with a final audit and a retained note, then stop for
+    human review before archive.
+
+## Initiative Lifecycle
+
+Drive initiative work through this ordered flow:
 
 1. intake classification
-2. direct bounded task, lightweight spec, or full initiative chosen explicitly
-3. research and discovery when the work needs durable planning
-4. execution-ready PRD for full initiatives
-5. initiative scaffold and durable planning baseline
-6. durable roadmap generated and approved in one pass
+2. lane choice
+3. research and discovery when durable planning is needed
+4. execution-ready PRD
+5. initiative scaffold and planning baseline
+6. roadmap generation and approval
 7. sprint-content preparation
 8. sprint materialization and start readiness
-9. standalone resumable sprint execution
-10. running sprint decision memory and initiative rollup updates
-11. sprint closeout with explicit handoff and review pause
-12. final audit and review pause
-13. retained note and archive decision
+9. ordered sprint execution
+10. sprint closeout with explicit handoff and review pause
+11. final audit and review pause
+12. retained note and archive decision
 
 ## Initiative-Level Gates
 
-Use these lifecycle gates for initiative work:
+Use these lifecycle gates for initiatives:
 
-1. `prd_ready`
-2. `roadmap_ready`
-3. `research_ready`
+1. `research_ready`
+2. `prd_ready`
+3. `roadmap_ready`
 4. `sprint_content_ready`
 5. `sprint_start_ready`
 6. `sprint_closeout`
@@ -79,47 +95,34 @@ Allowed states:
 2. `fail`
 3. `blocked`
 
-These are initiative workflow gates, not repository governance gates.
+These are workflow gates, not repository governance gates.
 
 ## Interaction Modes
 
-Interaction mode controls how visible and autonomous `ub-workflow` feels once
-the current workflow lane is actually ready.
-
-Interaction mode does not change lane readiness requirements.
-
-Lane decides required artifacts and readiness checks.
-Mode decides user-facing visibility, pause behavior, and interruption
-behavior.
-
-Modes:
+Interaction mode changes visibility, pause behavior, and interruption behavior.
+It does not weaken readiness rules.
 
 1. `reviewed`
    - default mode
-   - user-facing pre-sprint preview as a distinct sprint-start checkpoint
-   - follow the canonical reviewed-mode pre-sprint preview pattern in
-     `references/workflow-contract.md`
-   - explicit human approval before execution or `sprint_start_ready: pass`
+   - user-facing pre-sprint preview as a distinct checkpoint
+   - explicit human approval before execution
    - user-facing post-execution reporting with considerations and watchouts
    - mandatory pause between sprints or bounded execution chunks
 2. `flow`
-   - short user-facing pre-execution note, but no mandatory pre-execution stop
-   - richer user-facing post-execution reporting with considerations and
-     watchouts
+   - short pre-execution note
+   - richer post-execution reporting
    - manual advancement after each sprint or bounded execution chunk
 3. `auto`
    - internal pre-execution analysis by default
-   - concise user-facing post-execution reporting
+   - concise post-execution reporting
    - automatic advancement unless interruption conditions are met
 4. `continuous`
    - user-facing alias: `yolo`
    - internal analysis and artifact updates still required
-   - no routine user-facing pre/post-execution reporting
    - no routine pause between sprints or bounded execution chunks
-   - interrupt only when a major blocker or conflict requires aborting or
-     pausing the work
+   - interrupt only when a major blocker or conflict requires user resolution
 
-Persistence and precedence:
+Mode precedence:
 
 1. explicit user turn override
 2. persisted artifact mode
@@ -133,43 +136,47 @@ Persistence by lane:
 
 Question handling:
 
-1. prefer `AskUserQuestion` / `vscode/askQuestions` when the host exposes it
+1. prefer `AskUserQuestion` / `vscode/askQuestions` when available
 2. always allow a custom reply path
-3. when the question tool is unavailable, fall back to the same text pattern:
-   `(*)` on the best qualitative fit, a short explanation under every option in
-   `(...)`, and a final `Custom` option.
-4. for reviewed-mode pre-sprint previews, keep the same decision structure as
-   the canonical reviewed-mode pre-sprint preview pattern in
-   `references/workflow-contract.md`, not just the same typography.
-5. In `reviewed` mode, resolve the questions that change the sprint path plus
-   the explicit start-approval question when sprint execution is about to begin.
-   A request like `Start the next sprint.` opens the preview, but it does not
-   count as sprint-start approval in the same user turn.
+3. when the question tool is unavailable, use the same text pattern:
+   `(*)` on the best qualitative fit, a short explanation under every option
+   in `(...)`, and a final `Custom` option
 
-## Load References On Demand
+For non-trivial `reviewed`-mode sprints, the preview should lead with:
 
-- Read `../references/authoring-conventions.md` when adjusting routing
-  guidance, shared output structure, or cross-skill authoring conventions.
-- Read `docs/quick-start.md` when the user needs first-use workflow help,
-  lane selection guidance, or a compact explanation of how specs and
-  initiatives differ in practice.
-- Read `references/workflow-contract.md` for the canonical lifecycle and
-  stop-resume rules.
-- Read `references/artifact-contracts.md` for the required files and section
-  contracts.
-- Read `references/scaffold-adaptation.md` for placeholder policy and
-  repository adaptation rules.
-- Read `references/scaffold-helper.md` when using the deterministic helper or
-  validating scaffold, sync, and archive behavior.
-- Read `references/placeholder-contract.md` when validating generated
-  initiative output for unresolved placeholders or deciding whether strict
-  placeholder enforcement should block progress.
-- Read `references/governance-bridge.md` when explicit governance alignment,
-  evidence depth, or audit mapping is needed.
-- Read `references/validation-and-completion.md` for per-phase exit criteria,
-  validation gates, and completion checks.
-- Read `docs/user-guide.md` for the deeper human-facing guide, richer usage
-  examples, handoff guidance, and smoke prompts.
+1. `What Repo Truth Says`
+2. `Inference`
+3. `Implementation Paths`
+4. `Recommendation`
+
+Artifact or validation bookkeeping is secondary unless it is itself the repo
+truth that materially shapes the sprint.
+
+## Load References By Trigger
+
+Use these load tiers literally.
+If a trigger is not active, do not read the reference just because it exists.
+
+- `[phase:lifecycle-detail]` Read `references/workflow-contract.md` for the
+  detailed lifecycle, reviewed-mode preview pattern, and stop-resume rules.
+- `[phase:artifact-create|artifact-validate]` Read
+  `references/artifact-contracts.md` when creating or validating initiative or
+  lightweight-spec artifacts.
+- `[phase:gate-eval|closeout|readiness]` Read
+  `references/validation-and-completion.md` when evaluating readiness, gate
+  transitions, closeout, or completion.
+- `[edge:helper-use]` Read `references/scaffold-helper.md` only when using or
+  explaining the deterministic helper.
+- `[edge:governance-escalation]` Read `references/governance-bridge.md` only
+  when explicit governance alignment, evidence depth, or audit mapping is in
+  play.
+- `[edge:strict-placeholder-validation]` Read
+  `references/placeholder-contract.md` only when strict placeholder validation
+  or the placeholder checker is relevant.
+- `[edge:authoring-conventions]` Read `../ub-authoring/references/authoring-conventions.md`
+  only when adjusting shared routing or cross-skill authoring structure.
+
+Do not treat human help docs as operational dependencies.
 
 ## Bundled Assets
 
@@ -182,12 +189,14 @@ preferred over manual copying.
 
 Rules:
 
-1. Bootstrap `./.ub-workflows/` when it is missing instead of asking the user to create it by hand.
-2. Do not require a copied local `initiative-template/` inside the generated operations root.
+1. Bootstrap `./.ub-workflows/` when it is missing instead of asking the user
+   to create it by hand.
+2. Do not require a copied local `initiative-template/` inside the generated
+   operations root.
 3. Do not edit the canonical asset templates for one specific initiative.
 4. Replace placeholders explicitly; do not leave repository-specific facts
    implied.
-5. Do not set approval gates on behalf of the human unless the workflow explicitly says the gate is agent-owned.
+5. Do not set human-owned approval gates on behalf of the user.
 
 ## When Not To Use
 
@@ -195,19 +204,19 @@ Rules:
   execution; defer those to `ub-governance`.
 - Do not use this skill when the work is already a small direct code change
   that does not need durable planning artifacts.
-- Do not use this skill as a substitute for language/framework implementation
-  guidance once the workflow lane and execution surface are already clear.
+- Do not use this skill as a substitute for language or framework
+  implementation guidance once the execution surface is already clear.
 
 ## Coordination With Sibling Skills
 
-- Load and apply `ub-quality` whenever creating or editing initiative
-  documents.
+- Load and apply `ub-quality` whenever creating or editing workflow documents.
 - Workflow artifacts explicitly required by this skill are allowed outputs
   under ub-quality's document-generation policy, but they still must satisfy
   ub-quality formatting and structure rules.
-- Load `ub-governance` when the repository wants explicit governance alignment,
-  evidence depth, or audit mapping.
-- Do not require ub-governance for basic scaffolding or PRD generation.
+- Load `ub-governance` only when the repository wants explicit governance
+  alignment, evidence depth, or audit mapping.
+- Do not require ub-governance for basic scaffolding, PRD generation, or
+  ordinary lightweight-spec work.
 
 ## Core Workflow
 
@@ -216,154 +225,76 @@ Rules:
    initialization, sprint execution support, or final audit.
 2. Inspect repository truth before writing repository-specific validation or
    adaptation details.
-3. Start rough ideas with explicit assumption surfacing and a scale decision:
-   direct bounded task, lightweight spec, or full initiative.
-4. If `./.ub-workflows/` does not exist, bootstrap it first through
+3. Make the scale decision explicit.
+4. If `./.ub-workflows/` does not exist, bootstrap it through
    `scripts/scaffold_initiative.py`.
-5. When the work is below initiative scale but still needs a durable contract,
-   create or refine a lightweight spec under
-   `./.ub-workflows/specs/YYYY-MM-DD-slug/spec.md`.
-6. Scaffold new initiatives under `./.ub-workflows/initiatives/YYYY-MM-DD-slug/`
-   only when the work truly needs a PRD, roadmap, and sprint execution model.
-7. When the user provides a source PRD, copy that file into the initiative root
-   as `./prd.md` without rewriting or summarizing it.
-8. Make `prd.md` self-contained before generating a roadmap.
-9. Generate the full roadmap in one pass before sprint execution starts.
-10. Treat the completed `roadmap.md` as the durable post-plan artifact.
-11. Surface a review checklist for sprint breakdown completeness, ordering and
-  dependencies, scope boundaries and non-goals, and validation/docs
-  expectations before `roadmap_ready: pass` can be set.
-12. Do not prepare sprint content, initialize sprint folders, or begin sprint
-   execution until `roadmap_ready: pass`.
-13. Make the roadmap explicit about every planned sprint from `Sprint 01`
-   through `Sprint NN`, then keep the final audit as the last roadmap item.
-14. Prepare each planned sprint as a standalone execution-ready `sprint.md`
-   before Sprint 01 or any later sprint begins.
-15. Initialize or repair all planned sprint folders from the canonical
-   `ub-workflow` sprint template only after roadmap approval and in a way that
-   preserves the prepared sprint content.
-16. When a sprint needs additional context refresh before execution, record the
-   checkpoint explicitly before the sprint begins.
-17. Keep each `sprint.md` standalone so execution does not depend on reopening
-   the master PRD.
-18. Resolve the active interaction mode before execution and keep it consistent
-   with the current lane.
-19. For initiatives, require the same readiness prerequisites in every mode:
-   approved roadmap, prepared sprint pack, execution-ready current sprint, and
-   no unresolved blockers that prevent safe execution.
-20. In `reviewed` mode, surface a distinct pre-sprint preview checkpoint before
-   execution begins.
-   Follow the canonical reviewed-mode pre-sprint preview pattern in
-   `references/workflow-contract.md` so the preview stays consistent across
-   users, agents, and sprint artifacts.
-21. Record that preview in the active `sprint.md`, make explicit that the
-   sprint has not started yet, and do not advance `sprint_start_ready: pass`
-   or begin execution until the human explicitly approves starting that sprint
-   after the preview questions are resolved.
-22. In `reviewed` mode, for non-trivial sprints, lead the user-facing preview
-   with the sprint analysis itself:
-   `What Repo Truth Says`, `Inference`, `Implementation Paths`,
-   `Recommendation`, then the questions that change the sprint path.
-   Treat artifact-sync or validation notes as secondary unless those notes are
-   themselves the repo truth that materially shapes the sprint.
-23. In `reviewed` mode, that approval must arrive in a later user reply after
-   the preview is shown.
-   Do not infer sprint-start approval from the same user turn that asked to
-   start the sprint.
-24. Execute the active sprint according to the active interaction mode,
-   updating `roadmap.md`, `README.md`, `rollup.md`, the active
-   `decision-log.md`, and the active `closeout.md` as state changes.
-25. `reviewed` and `flow` stop after each sprint so the human can review before
-   any next sprint work.
-26. `auto` may continue between sprints when no interruption condition exists:
-   hard blocker, material ambiguity, repo-truth conflict, or a decision that
-   would materially reshape later sprints.
-27. When the active mode surfaces post-execution reporting, write a recoverable
-    post-execution summary into the active `closeout.md` before the workflow
-    pauses or advances.
-28. `continuous` / `yolo` may continue without routine user-facing reporting,
-   but must abort or pause when a major blocker or conflict requires explicit
-   user resolution, and that interruption must be documented clearly in the
-   workflow artifacts.
-29. Treat validation, documentation synchronization, and completion evidence
-   as gating conditions for both sprint closeout and initiative completion.
-30. End every initiative with a final audit and `retained-note.md`, then stop
-   for human review before any archive action.
-31. Archive only when the user explicitly asks for it and the completion
-   controls pass.
+5. Create or refine a lightweight spec when the work needs a durable contract
+   without roadmap and sprint overhead.
+6. Scaffold a new initiative only when the work truly needs a PRD, roadmap,
+   and sprint execution model.
+7. Copy a source PRD into `./prd.md` without rewriting it.
+8. Generate the full roadmap in one pass before sprint execution starts.
+9. Surface a review checklist before `roadmap_ready: pass` can be set.
+10. Prepare each planned sprint as a standalone execution-ready `sprint.md`.
+11. Initialize sprint folders only after roadmap approval and in a way that
+    preserves prepared sprint content.
+12. Execute only the active sprint according to the active interaction mode,
+    updating `roadmap.md`, `README.md`, `rollup.md`, `decision-log.md`, and
+    `closeout.md` as state changes.
+13. Treat validation, documentation synchronization, and completion evidence
+    as gating conditions for both sprint closeout and initiative completion.
+14. Archive only when the user explicitly asks for it and the completion
+    controls pass.
 
 ## Repository Defaults
 
-1. Treat `./.ub-workflows/initiatives/README.md`, `operation-guide.md`, and
-   `user-guide.md` as the workflow entry surfaces for creating or resuming
-   initiatives.
-2. Treat `./.ub-workflows/specs/` as the default home for lightweight specs.
-3. Treat `roadmap.md` as the smallest live progress document for an initiative.
-4. Keep roadmap sprint entries rich enough to prevent omissions: path, goal,
+1. Treat `./.ub-workflows/specs/` as the default home for lightweight specs.
+2. Treat `roadmap.md` as the smallest live progress document for an
+   initiative.
+3. Keep roadmap sprint entries rich enough to prevent omissions: path, goal,
    dependencies, validation focus, subtasks, and evidence folder.
-5. Treat sprint preparation as a distinct lifecycle phase; do not treat
-  initialized directories or placeholder sprint shells as execution-ready by
-  default.
-6. Treat sprint `decision-log.md` as the default running sprint-memory surface
-   and `rollup.md` as the readable initiative-level carry-forward surface.
-7. Keep `research/` and `exceptions/` visibly secondary to those main workflow
+4. Treat sprint preparation as a distinct lifecycle phase; do not treat
+   initialized directories or placeholder sprint shells as execution-ready.
+5. Treat sprint `decision-log.md` as the default sprint-memory surface and
+   `rollup.md` as the initiative-level carry-forward surface.
+6. Keep `research/` and `exceptions/` visibly secondary to the main workflow
    artifacts.
-8. Keep the skill useful across adopting repositories by keeping the canonical
-   templates internal to the skill rather than requiring copied local
-   scaffolding directories.
-9. Treat roadmap approval and archive readiness as human-owned checkpoints,
-   not automatic agent transitions.
-10. Default new initiatives and lightweight specs to interaction mode
-    `reviewed` until the user explicitly changes it.
-11. In user-facing execution notes, include a concise mode reference so the
-    user can see the available modes without opening the docs.
+7. Treat roadmap approval and archive readiness as human-owned checkpoints.
+8. Default new initiatives and lightweight specs to interaction mode
+   `reviewed` until the user explicitly changes it.
+9. In user-facing execution notes, include a concise mode reference so the
+   user can see the available modes without opening extra docs.
 
 ## Output Requirements
 
-Treat this section as the stable output expectation for non-trivial workflow
-work in this catalog.
+When using this skill for non-trivial workflow work, include:
 
-When using this skill to plan or scaffold an initiative, include:
-
-1. `phase_note`      : current lifecycle phase
-2. `mode_note`       : active interaction mode plus a concise mode reference
-3. `scope_note`      : what the initiative or sprint covers
-4. `decision_note`   : chosen path plus one rejected alternative
-5. `artifact_note`   : which files were created, updated, or expected
-6. `gate_note`       : initiative-level gate state and rationale
-7. `validation_note` : checks run or still required
-8. `next_action_note` : the next concrete step
+1. `phase_note`
+2. `mode_note`
+3. `scope_note`
+4. `decision_note`
+5. `artifact_note`
+6. `gate_note`
+7. `validation_note`
+8. `next_action_note`
 
 ## Completion Checklist
 
+- The lane choice is explicit.
 - The lifecycle phase is explicit.
 - The current initiative-level gate is explicit.
 - Discovery and PRD readiness are explicit before roadmap generation.
 - The PRD is self-contained before roadmap generation.
-- The roadmap is the durable approved planning artifact before sprint initialization begins.
+- The roadmap is the durable approved planning artifact before sprint
+  initialization begins.
 - `roadmap_ready: pass` is set only after explicit human approval.
 - Sprint content is prepared before sprint execution begins.
-- Validation expectations and documentation touch points are explicit.
-- The roadmap ends with a final audit step.
-- When the lightweight-spec lane is used, `spec.md` is self-contained enough
-  for another operator to continue without chat history.
-- The active interaction mode is explicit when a durable workflow artifact
-  exists.
-- All sprint folders are initialized only after `roadmap_ready: pass` and in a
-  way that preserves prepared sprint content.
 - Sprint execution never starts without an explicit user request.
 - Sprint execution never starts from a placeholder-only sprint shell.
-- `reviewed` and `flow` pause after sprint execution; `auto` and `continuous`
-  only continue when their interruption rules allow it.
+- `reviewed` and `flow` pause after sprint execution; `auto` and
+  `continuous` only continue when their interruption rules allow it.
 - The workflow still stops after final audit for human review before archive.
 - Each sprint document is standalone and resumable.
 - Archive readiness is surfaced explicitly before any archive action.
 - Touched workflow documents satisfy ub-quality formatting and structure rules.
 - The retained note captures durable outcomes after completion.
-
-## Deferred Work
-
-For planned follow-on improvements beyond the initial implementation, use
-`roadmap.md` in this skill folder as the durable pickup document.
-
-For a human-oriented operating guide, use `docs/user-guide.md`.

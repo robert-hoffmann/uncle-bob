@@ -1,6 +1,14 @@
 ---
 name: ub-governance
-description: Unified governance skill for repository governance, testing and TDD governance, evidence and ADR/claim governance, and shared governance contracts. Use when defining, auditing, or executing deterministic governance gates and bounded exception-aware controls.
+description: >-
+   Use this skill when the user wants to review governance rules, check testing
+   posture, decide whether ADR or claim evidence is needed, evaluate
+   repository or release controls, or understand exception and gate behavior;
+   when the task involves governance modes, test-signal review, evidence
+   levels, or decision-memory boundaries; or when they ask whether work needs
+   governance escalation. Do not use it for workflow planning, framework
+   implementation, or this repository's repo-maintenance catalog, path, and
+   skill-integrity checks.
 metadata:
   desktop-portfolio-help-topics: "overview,evidence,testing,repository,core,glossary,combos,invoke"
   desktop-portfolio-help-aliases: "repo=repository"
@@ -11,70 +19,125 @@ metadata:
 
 ## Overview
 
-Use this skill as the single owner for governance in the current repository or
-project where it is adopted.
-This skill is self-contained and merges repository, testing, evidence, and
-shared contract governance.
+Use this skill as the owner for governance in the current repository or project
+where it is adopted.
+
+This skill should stay lean for ordinary workflow-backed work and should only
+activate heavier controls when the selected mode or scope actually requires
+them.
+
+## Embedded Contract
+
+These rules are the base contract of this skill and must not depend on a
+secondary document to be applied correctly.
+
+1. Default to the `lean` profile unless the user explicitly requests
+   `advanced` with rationale.
+2. Use only these governance gate states: `pass`, `fail`, `blocked`.
+3. Every bounded exception must include `owner`, `rationale`, `created_at`,
+   `expires_at`, and `follow_up`.
+4. For ordinary Level 1 workflow-backed work, treat workflow artifacts as the
+   default durable operational record.
+5. Escalate to ADR and claim machinery only when the decision is durable
+   beyond one initiative, repository-wide, high-risk, or explicitly governed
+   at Level 2.
+6. Keep blocking governance decisions tied to deterministic artifacts.
 
 ## Operating Modes
 
-1. `repository mode`: repository hygiene, CI/release governance, branch/ruleset policy, deterministic tooling
-2. `testing mode`: testing policy, TG001-TG005 signal controls, regression-first bug-fix flow, and behavior-first TDD execution
-3. `evidence mode`: evidence lifecycle, ADR alignment, claim verification, gate readiness
-4. `core-contract mode`: shared profile, gate semantics, exception metadata, report sections
-5. `full governance audit mode`: run repository + testing + evidence checks in one deterministic sequence
+1. `repository mode`: repository hygiene, CI and release governance,
+   branch or ruleset policy, deterministic tooling
+2. `testing mode`: behavior-first TDD governance and low-signal testing
+   anti-pattern review
+3. `evidence mode`: evidence lifecycle, ADR alignment, claim verification,
+   and gate readiness
+4. `core-contract mode`: shared profile, gate, exception, and report
+   semantics
+5. `full governance audit mode`: run repository, testing, and evidence checks
+   in one deterministic sequence
 
-## Mode Selection
+## Testing Signal Model
 
-- Select exactly one mode for focused tasks.
-- Use `full governance audit mode` only for end-to-end governance assessment or release/merge readiness.
-- Default to `lean` profile unless the user explicitly requests `advanced`.
+Use descriptive names in normal guidance.
+Keep the numeric IDs as stable internal codes for tooling and compatibility.
 
-## Load References On Demand
+Blocking signals:
 
-### Core Contracts
+1. `Type Redundancy` (`TG001`): runtime tests that restate type-system
+   guarantees
+2. `Interaction Without Outcome` (`TG002`): interaction assertions without
+   observable outcome assertions
+3. `Pass-Through Test` (`TG003`): trivial getter or setter pass-through tests
+4. `Happy-Path-Only Suite` (`TG004`): repeated happy-path focus without
+   boundary or error representation
 
-- Read `../references/authoring-conventions.md` when adjusting routing
-  guidance, output structure, or cross-skill authoring conventions.
-- Read `references/profile-model.md` for profile selection.
-- Read `references/gate-and-report-contract.md` for canonical gate/report semantics.
-- Read `references/exception-contract.md` for canonical exception metadata.
-- Read `references/vocabulary.md` for normalized governance vocabulary.
-- Read `references/governance-commands.md` for stable command entrypoints.
+Warning-only signal:
 
-### Repository Governance
+1. `Internal-Detail Bias` (`TG005`): probable verification of internal details
+   over public behavior
 
-- Read `references/repository-baseline.md` for repository defaults.
-- Read `references/github-implementation-playbook.md` for GitHub implementation patterns.
-- Read `references/release-please-playbook.md` for release automation policy.
+## Load References By Trigger
 
-### Testing Governance
+Use these load tiers literally.
+If a trigger is not active, do not read the reference just because it exists.
 
-- Read `references/testing-policy-and-signals.md` for TG001-TG005 and TDD policy.
-- Read `references/execution-playbook.md` for Red-Green-Refactor execution.
-- Read `references/ci-artifact-contract.md` for required test artifacts.
-- Read `references/stack-baseline.md` for lean testing stack defaults.
-
-### Evidence Governance
-
-- Read `references/evidence-baseline.md` for default evidence controls.
-- Read `references/evidence-lifecycle.md` for evidence freshness and retention.
-- Read `references/evidence-artifact-taxonomy.md` for risk-tiered artifact requirements.
-- Read `references/decision-memory-and-claims.md` for ADR/claim decision rules.
-- Read `references/high-risk-paths.yaml` for high-risk scope detection.
-- Read `references/agent-validation-record.schema.json` for validation-record schema.
-- Read `references/adr-registry.schema.json` for ADR registry schema.
-- Read `references/claim-register.schema.json` for claim-register schema.
-- Read `references/adr-template-madr.md` for ADR authoring structure.
+- `[phase:decision-boundary]` Read
+  `references/decision-memory-and-claims.md` when deciding whether workflow
+  artifacts are sufficient or ADR and claim escalation is required.
+- `[phase:testing-mode]` Read
+  `references/testing-policy-and-signals.md` when reviewing testing policy or
+  applying the testing anti-pattern model.
+- `[phase:testing-mode]` Read `references/execution-playbook.md` when the task
+  is about TDD execution order, regression-first bug fixing, or testing
+  workflow hygiene.
+- `[phase:command-or-audit]` Read `references/governance-commands.md` when the
+  user asks how to run checks or an audit path is being executed.
+- `[edge:glossary-or-normalization]` Read `references/vocabulary.md` only when
+  glossary help or wording normalization matters.
+- `[edge:repository-mode]` Read `references/repository-baseline.md`,
+  `references/github-implementation-playbook.md`, and
+  `references/release-please-playbook.md` only when repository governance is
+  actually in scope.
+- `[edge:evidence-level-2]` Read `references/evidence-baseline.md`,
+  `references/evidence-lifecycle.md`, `references/evidence-artifact-taxonomy.md`,
+  `references/ci-artifact-contract.md`, and `references/stack-baseline.md`
+  only when explicit Level 2 or evidence-heavy governance is active.
+- `[edge:schema-or-data]` Read `references/high-risk-paths.yaml`,
+  `references/agent-validation-record.schema.json`,
+  `references/adr-registry.schema.json`,
+  `references/claim-register.schema.json`, and
+  `references/adr-template-madr.md` only when those concrete artifacts are
+  being authored or validated.
+- `[edge:authoring-conventions]` Read `../ub-authoring/references/authoring-conventions.md`
+  only when adjusting routing or shared authoring structure.
 
 ## Core Workflow
 
-1. Detect requested mode and evaluated scope from repository truth.
-2. Select profile (`lean` default, `advanced` only with explicit rationale).
-3. Propose at least two implementation paths for non-trivial governance decisions with concise pros/cons.
-4. Run mode-specific controls and keep outputs deterministic.
-5. Apply bounded exceptions only through `references/exception-contract.md`.
-6. Emit gate outcome (`pass`, `fail`, `blocked`) with traceable artifact paths.
+1. Detect the requested governance mode and evaluated scope from repository
+   truth.
+2. Select profile: `lean` by default, `advanced` only with explicit rationale.
+3. For ordinary workflow-backed work, prefer the Level 1 fast path and keep
+   the durable record in workflow artifacts.
+4. Escalate only when the decision scope, risk, or explicit governance run
+   requires it.
+5. Run the selected mode's controls and keep outputs deterministic.
+6. Apply bounded exceptions only through the canonical exception contract.
+7. Emit a traceable gate outcome with artifact paths.
+
+## Quick Examples
+
+1. `Does this auth change need an ADR or claim work?`
+   Use `evidence mode` and the decision-boundary reference to decide whether
+   ordinary workflow artifacts are sufficient or whether the change is truly
+   repository-wide, high-risk, or Level 2.
+2. `Are these tests mostly checking mock calls without user-visible outcome
+   assertions?`
+   Use `testing mode`, apply the test-signal model, and treat likely `TG002`
+   findings as blocking only when the suite is asserting interaction without
+   externally observable outcome.
+3. `Show me the repo-maintenance checks for README, AGENTS, and skill schema.`
+   Do not route that through governance. Those checks belong to the
+   development repository's `scripts/repo-maintenance/` surface.
 
 ## When Not To Use
 
@@ -98,20 +161,20 @@ shared contract governance.
 ### Testing Mode
 
 1. detect stack and test runner
-2. treat reported defects as regression-first work before code fixes are accepted
-3. enforce TG001-TG004 as blocking and TG005 as warning
-4. require behavior-first TDD flow for behavior-changing work and keep increments outcome-oriented
-5. use the testing references to keep test design readable, boundary-aware, and deterministic without turning advisory guidance into new gates
+2. treat reported defects as regression-first work before code fixes are
+   accepted
+3. enforce `TG001` through `TG004` as blocking and `TG005` as warning-only
+4. require behavior-first TDD flow for behavior-changing work
+5. keep testing guidance readable, boundary-aware, and deterministic without
+   turning advisory guidance into new gates
 
 ### Evidence Mode
 
 1. classify `changeType`, `evidenceLevel`, and `profile`
-2. detect high-risk path impact
-3. choose the lightest durable record that matches the decision scope before
-   asking for heavier governance artifacts
+2. detect high-risk path impact when the scope requires it
+3. choose the lightest durable record that matches the decision scope
 4. treat workflow-backed initiative artifacts as the default operational record
-   for ordinary Level 1 work, including sprint-local evidence and closeout
-   notes
+   for ordinary Level 1 work
 5. escalate to ADR alignment only when Level 2, repository-wide durable
    decisions, or explicit high-risk governance applies
 6. require claim-register validation only when blocking rationale depends on
@@ -133,24 +196,22 @@ shared contract governance.
 
 ## Rules
 
-- Keep this skill self-contained and do not require other governance skills.
 - Keep defaults lean and activate advanced controls explicitly.
-- Blocking governance decisions must rely on deterministic artifacts.
-- Exception metadata must include owner, expiry, and follow-up.
-- Do not duplicate canonical contract definitions across files.
-- Do not imply that repository ADR machinery is the default record for ordinary
-  Level 1 workflow-backed work.
+- Do not imply that repository ADR machinery is the default record for
+  ordinary Level 1 workflow-backed work.
+- Exception metadata must stay bounded, explicit, and time-limited.
+- Do not duplicate canonical contract definitions across files when the main
+  skill already embeds the short rule.
+- Repository-maintenance tooling is not automatically the same thing as lean
+  governance guidance.
 
 ## Output Requirements
 
-Treat this section as the stable output expectation for non-trivial governance
-work in this catalog.
-
-When producing governance output, include:
+When producing non-trivial governance output, include:
 
 1. `environment_note`
 2. `scope_note`
-3. `decision_note` (chosen path plus one alternative with pros/cons)
+3. `decision_note`
 4. `gate_note`
 5. `exception_note`
 6. `validation_note`
@@ -158,13 +219,14 @@ When producing governance output, include:
 Add mode-specific sections when applicable:
 
 1. `quality_gate_note` for testing mode
-2. `evidence_inventory`, decision-note extensions, and `claim_note` for evidence mode
+2. `evidence_inventory` and `claim_note` for evidence mode
 
 ## Completion Checklist
 
 - Selected mode is explicit.
 - Profile choice is explicit (`lean` or `advanced`).
+- The ordinary Level 1 fast path versus Level 2 escalation path is explicit.
 - Required deterministic artifacts are present or explicitly missing.
 - Gate result is traceable and reproducible.
-- Exceptions use canonical contract and remain bounded.
+- Exceptions use the canonical fields and remain bounded.
 - Governance guidance stays self-contained and internally consistent.

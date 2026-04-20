@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate unified governance skill integrity after hard cutover."""
+"""Validate repository-maintenance integrity for the governance skill surface."""
 
 from __future__ import annotations
 
@@ -13,9 +13,10 @@ class Violation:
     message: str
 
 
-REPO_ROOT = Path(__file__).resolve().parents[4]
+REPO_ROOT = Path(__file__).resolve().parents[2]
 SKILL_DIR = REPO_ROOT / ".agents" / "skills" / "ub-governance"
 LEGACY_SKILL_DIR = REPO_ROOT / ".agents" / "skills" / "governance"
+REPO_MAINTENANCE_DIR = REPO_ROOT / "scripts" / "repo-maintenance"
 
 REQUIRED_PATHS = (
     SKILL_DIR / "SKILL.md",
@@ -26,18 +27,19 @@ REQUIRED_PATHS = (
     SKILL_DIR / "scripts" / "build_adr_registry.py",
     SKILL_DIR / "scripts" / "check_adr_gate.py",
     SKILL_DIR / "scripts" / "check_claim_register.py",
-    SKILL_DIR / "scripts" / "check_package_metadata.py",
-    SKILL_DIR / "scripts" / "check_repo_catalog.py",
-    SKILL_DIR / "scripts" / "check_repo_paths.py",
-    SKILL_DIR / "scripts" / "check_skill_schema.py",
     SKILL_DIR / "scripts" / "check_test_signal.py",
-    SKILL_DIR / "scripts" / "check_skill_integrity.py",
+    REPO_MAINTENANCE_DIR / "_repo_integrity.py",
+    REPO_MAINTENANCE_DIR / "check_package_metadata.py",
+    REPO_MAINTENANCE_DIR / "check_repo_catalog.py",
+    REPO_MAINTENANCE_DIR / "check_repo_paths.py",
+    REPO_MAINTENANCE_DIR / "check_skill_schema.py",
+    REPO_MAINTENANCE_DIR / "check_skill_integrity.py",
 )
 
 LEGACY_SUFFIXES = ("core", "repository", "testing", "evidence")
 PATH_REF_PATTERN = re.compile(r"\.agents/skills/governance(?:[-/][^\s`\"']+)?")
 EXCEPTION_TEMPLATE_PATTERN = re.compile(r"^(governance_exception:|tdd_exception:|adr_waiver_exception:)")
-READ_REF_PATTERN = re.compile(r"- Read `([^`]+)`")
+READ_REF_PATTERN = re.compile(r"- (?:`[^`]+`\s+)?Read `([^`]+)`")
 
 
 def read_text(path: Path) -> str | None:
@@ -155,7 +157,7 @@ def main() -> int:
             print(violation.message)
         return 1
 
-    print("Unified governance skill integrity checks passed.")
+    print("Repository-maintenance governance-surface checks passed.")
     return 0
 
 

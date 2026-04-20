@@ -62,18 +62,18 @@ class ScaffoldInitiativeScriptTests(unittest.TestCase):
             target = ops_root / "initiatives" / "2026-04-01-my-new-initiative"
             self.assertTrue((ops_root / "initiatives" / "README.md").exists())
             self.assertTrue((ops_root / "initiatives" / "operation-guide.md").exists())
-            self.assertTrue((ops_root / "initiatives" / "user-guide.md").exists())
             self.assertTrue((ops_root / "initiatives" / "AGENTS.md").exists())
             self.assertTrue((target / "README.md").exists())
             self.assertTrue((target / "roadmap.md").exists())
             self.assertFalse((target / "sprint-template").exists())
 
             root_readme = (ops_root / "initiatives" / "README.md").read_text(encoding="utf-8")
-            ops_user_guide = (ops_root / "initiatives" / "user-guide.md").read_text(encoding="utf-8")
             readme = (target / "README.md").read_text(encoding="utf-8")
             roadmap = (target / "roadmap.md").read_text(encoding="utf-8")
 
             self.assertIn("`initiatives/2026-04-01-my-new-initiative`", root_readme)
+            self.assertIn("`operation-guide.md`", root_readme)
+            self.assertNotIn("`user-guide.md`", root_readme)
             self.assertIn("My New Initiative", readme)
             self.assertIn("2026-04-01", readme)
             self.assertIn("Scaffold valid for PRD authoring; PRD import pending", readme)
@@ -81,12 +81,6 @@ class ScaffoldInitiativeScriptTests(unittest.TestCase):
             self.assertIn("unassigned", readme)
             self.assertIn("Master PRD imported into `./prd.md`", roadmap)
             self.assertIn("- Next sprint: `define after roadmap approval`", roadmap)
-            self.assertIn("Start the next sprint.", ops_user_guide)
-            self.assertIn("preview only; execution begins only after", ops_user_guide)
-            self.assertIn("later approval message", ops_user_guide)
-            self.assertIn("What Repo Truth Says", ops_user_guide)
-            self.assertIn("Implementation Paths", ops_user_guide)
-            self.assertIn("artifact or validation", ops_user_guide)
 
     def test_create_uses_prd_source_slug_and_copies_prd_without_rewriting(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

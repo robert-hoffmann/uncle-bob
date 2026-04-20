@@ -7,7 +7,6 @@ Applies to this operations root and its descendants.
 ## Local Rules
 
 - `operation-guide.md` is the formal workflow contract for this operations root.
-- `user-guide.md` is the human-facing explanation of the same workflow.
 - `roadmap.md` is the small live progress document for an initiative and should
   be the first file read when resuming work.
 - `spec.md` is the first file to read when resuming a lightweight spec root.

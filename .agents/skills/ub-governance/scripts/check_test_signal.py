@@ -100,6 +100,14 @@ RULE_TG003 = "TG003"
 RULE_TG004 = "TG004"
 RULE_TG005 = "TG005"
 
+RULE_LABELS = {
+    RULE_TG001 : "Type Redundancy",
+    RULE_TG002 : "Interaction Without Outcome",
+    RULE_TG003 : "Pass-Through Test",
+    RULE_TG004 : "Happy-Path-Only Suite",
+    RULE_TG005 : "Internal-Detail Bias",
+}
+
 INTERNAL_DETAIL_KEYWORDS = (
     "private",
     "internal",
@@ -260,7 +268,8 @@ def happy_keyword_count(names: Iterable[str]) -> int:
 
 
 def rule_message(rule_id: str, message: str, location: str | None = None) -> str:
-    prefix = f"[{rule_id}]"
+    label = RULE_LABELS.get(rule_id)
+    prefix = f"[{rule_id} {label}]" if label else f"[{rule_id}]"
     if location:
         return f"{prefix} {location} -> {message}"
     return f"{prefix} {message}"

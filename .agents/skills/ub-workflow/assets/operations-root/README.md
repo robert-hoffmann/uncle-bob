@@ -3,8 +3,8 @@
 This directory is the canonical initiative index for work managed under the
 repository operations root.
 
-Start with `operation-guide.md` for the formal SOP and `user-guide.md` for the
-human workflow, then open the initiative root you want to work on.
+Start with `operation-guide.md` for the durable workflow SOP, then open the
+initiative root you want to work on.
 
 Use each initiative's `roadmap.md` as the small live progress document when
 resuming work.
@@ -26,7 +26,6 @@ REPLACE_ACTIVE_LIGHTWEIGHT_SPECS
 ## Current State
 
 1. The operation guide lives here as the canonical SOP for initiative work.
-2. The human-facing workflow guide lives here as `user-guide.md`.
-3. The scaffold helper can bootstrap the parent operations root and create new initiative roots or lightweight specs on demand.
-4. The scaffold helper uses the skill's internal initiative, lightweight-spec, and sprint templates instead of requiring copied local scaffolding directories.
-5. Historical initiative roots live under `../archive/`.
+2. The scaffold helper can bootstrap the parent operations root and create new initiative roots or lightweight specs on demand.
+3. The scaffold helper uses the skill's internal initiative, lightweight-spec, and sprint templates instead of requiring copied local scaffolding directories.
+4. Historical initiative roots live under `../archive/`.

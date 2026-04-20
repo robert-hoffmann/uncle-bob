@@ -155,7 +155,6 @@ Generic pattern:
     AGENTS.md
     README.md
     operation-guide.md
-    user-guide.md
     <yyyy-mm-dd>-<initiative-slug>/
       AGENTS.md
       README.md

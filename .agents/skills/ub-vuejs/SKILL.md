@@ -15,7 +15,7 @@ patterns or outdated guidance by default.
 
 ## Load References On Demand
 
-- Read `../references/authoring-conventions.md` when adjusting routing
+- Read `../ub-authoring/references/authoring-conventions.md` when adjusting routing
   guidance or cross-skill authoring conventions.
 - Read `references/vue-modern-patterns.md` for the canonical modern Vue recipes and API usage patterns.
 - Read `references/vue-legacy-to-modern-migration.md` for migration mapping, compatibility exceptions, and modernization sequence.

@@ -15,7 +15,7 @@ legacy configuration habits or compatibility layers by default.
 
 ## Load References On Demand
 
-- Read `../references/authoring-conventions.md` when adjusting routing
+- Read `../ub-authoring/references/authoring-conventions.md` when adjusting routing
   guidance or cross-skill authoring conventions.
 - Read `references/tailwind-guardrails.md` for strict do/don't rules, deprecated syntax traps, and review checklists.
 - Read `references/framework-recipes.md` for environment-specific setup paths (standalone HTML/CDN, Vue + Vite, Nuxt).

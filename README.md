@@ -7,7 +7,7 @@
 </td>
 <td>
 
-Uncle Bob is a practical collection of skills and custom agents for GitHub Copilot in VS Code, Copilot CLI, Claude Code, and Codex users. It gives agentic coding tools stronger defaults for planning, quality, governance, and implementation work without forcing a heavy framework around day-to-day development.
+Uncle Bob is a practical collection of skills and a focused teaching agent for GitHub Copilot in VS Code, Copilot CLI, Claude Code, and Codex users. It gives agentic coding tools stronger defaults for planning, quality, governance, authoring, and implementation work without forcing a heavy framework around day-to-day development.
 
 I use these skills in an actual corporate production environment for supply-chain management in the aerospace industry.
 
@@ -63,9 +63,9 @@ The planning model in this repo is intentionally tiered:
 In practice, specs are the preferred small planning surface, while initiatives
 plus sprints are the main driver for bigger impact areas.
 
-If you want guided help choosing the right lane, start with the
-`ub-workflow` agent or the workflow quick start in
-[quick-start.md](./.agents/skills/ub-workflow/docs/quick-start.md).
+If you want guided help choosing the right lane, ask the main coding agent to
+explain `ub-workflow` from its skill contract and choose the smallest correct
+planning surface.
 
 ## Interaction Modes
 
@@ -191,31 +191,30 @@ These are the three surfaces that explain how the repo actually works:
 3. `ub-governance`
    The control layer. It defines how evidence, testing posture, ADR usage,
    repository constraints, and exception handling should work.
+   The extracted repo-maintenance checks in this development repository are a
+   separate surface, not part of the distributable governance command path.
 
 The other skills are implementation specialists that become useful after the
 workflow and quality baselines have already done their job.
 
 ## What's Included
 
-| Skill             | Description                                                                                               |
-| ----------------- | --------------------------------------------------------------------------------------------------------- |
-| ub-workflow       | Main planning driver: direct work, specs, initiatives, roadmaps, resumable sprints, final audit, archive. |
-| ub-quality        | Mandatory baseline for code quality, formatting, documentation, and refactoring.                          |
-| ub-governance     | Repository, testing, evidence, and decision-memory governance with shared contracts.                      |
-| ub-customizations | Builder skill for Copilot skills, agents, prompts, instructions, hooks, MCP, and plugin bundles.          |
-| ub-markdown       | Markdown authoring with repo markdownlint alignment for README, skills, agents, docs, and workflow files. |
-| ub-python         | Typed Python patterns, boundary validation, structured error handling, and Ruff-aware repo truth.         |
-| ub-ts             | TypeScript typing, module resolution, compiler flags, tsconfig baselines, and optional ESLint starters.   |
-| ub-css            | CSS and Vue/Nuxt styling with design tokens, cascade layers, and progressive enhancement.                 |
-| ub-vuejs          | Vue SFCs, composables, reactivity, SSR and hydration, and strict TypeScript contracts.                    |
-| ub-nuxt           | Nuxt patterns for typed composables, rendering modes, runtime config, and server routes.                  |
-| ub-tailwind       | Tailwind setup, migration, and debugging across HTML, Vue, and Nuxt.                                      |
+| Skill             | Description                                                                                                         |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------- |
+| ub-workflow       | Main planning driver: direct work, specs, initiatives, roadmaps, resumable sprints, audit, archive.                 |
+| ub-quality        | Mandatory baseline for code quality, formatting, documentation, and refactoring.                                    |
+| ub-authoring      | Shared authoring conventions for routing, non-use boundaries, naming, and progressive disclosure.                   |
+| ub-governance     | Governance routing for testing posture, evidence, ADR or claim decisions, repository controls, and exceptions.      |
+| ub-customizations | Builder skill for Copilot skills, agents, prompts, instructions, hooks, MCP, and plugin bundles.                    |
+| ub-python         | Typed Python patterns, boundary validation, structured error handling, and Ruff-aware repo truth.                   |
+| ub-ts             | TypeScript typing, module resolution, compiler flags, tsconfig baselines, and optional ESLint starters.             |
+| ub-css            | CSS and Vue/Nuxt styling with design tokens, cascade layers, and progressive enhancement.                           |
+| ub-vuejs          | Vue SFCs, composables, reactivity, SSR and hydration, and strict TypeScript contracts.                              |
+| ub-nuxt           | Nuxt patterns for typed composables, rendering modes, runtime config, and server routes.                            |
+| ub-tailwind       | Tailwind setup, migration, and debugging across HTML, Vue, and Nuxt.                                                |
 
 | Agent             | Description                                                                          |
 | ----------------- | ------------------------------------------------------------------------------------ |
-| ub-workflow       | Interactive workflow guide for specs, initiatives, sprints, and what-next decisions. |
-| ub-governance     | Interactive guide for repository, testing, and evidence governance.                  |
-| ub-customizations | Interactive builder for Copilot customization artifacts.                             |
 | ub-teacher        | Beginner-friendly explanations and code walkthroughs.                                |
 
 ## Install Options
@@ -335,9 +334,12 @@ Skills and custom agents do not currently have the same portability story.
   ecosystem. This repo is usable there today, but its most polished packaging
   remains Copilot-first plus `skills.sh`.
 
-For most real work, the best starting point is still the `ub-workflow` agent.
+For most real work, the best starting point is the main coding agent with
+`ub-workflow` available in the repo.
 It helps decide whether the work should stay direct, become a lightweight
 spec, or become a full initiative.
+
+Use `ub-teacher` when you want explanation-first help instead of execution.
 
 ## Philosophy
 

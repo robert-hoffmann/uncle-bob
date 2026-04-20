@@ -37,7 +37,7 @@ def main() -> int:
     parser.add_argument("--output")
     args = parser.parse_args()
 
-    repo_root = Path(args.repo_root).resolve() if args.repo_root else Path(__file__).resolve().parents[4]
+    repo_root = Path(args.repo_root).resolve() if args.repo_root else Path(__file__).resolve().parents[2]
     skills_root = repo_root / ".agents" / "skills"
     errors: list[str] = []
     checked_skills: list[str] = []
