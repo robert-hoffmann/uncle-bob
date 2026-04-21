@@ -48,12 +48,14 @@ secondary document to be applied correctly.
    references.
 5. Keep shared authoring guidance portable across installed skill payloads and
    avoid repo-local live truth in the reusable contract.
+6. Keep reusable choice-question UX contracts in shared authoring guidance
+   instead of re-encoding the same multiple-choice rules in each skill.
 
 ## Load References On Demand
 
 - Read `references/authoring-conventions.md` when shaping shared skill
-  structure, cross-skill wording, routing quality, or reusable authoring
-  patterns.
+  structure, cross-skill wording, routing quality, reusable choice-question
+  UX, or other reusable authoring patterns.
 
 ## Core Workflow
 
@@ -61,8 +63,9 @@ secondary document to be applied correctly.
    single skill's local content.
 2. Keep portable shared guidance in this skill and domain-specific guidance in
    the owning skill.
-3. Normalize descriptions, examples, and non-use boundaries only where the
-   changed surfaces actually benefit from them.
+3. Normalize descriptions, examples, non-use boundaries, and shared
+   choice-question behavior only where the changed surfaces actually benefit
+   from them.
 4. Keep reusable references installable and avoid dead links into repo-only
    docs.
 

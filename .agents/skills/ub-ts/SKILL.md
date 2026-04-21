@@ -134,8 +134,10 @@ Treat real project config as the source of truth:
 
 ### Tradeoff Handling
 
-- Always propose at least two implementation paths for major TypeScript decisions.
-- State concise pros and cons for each option (correctness, compatibility, DX, and migration cost).
+- Use the shared `ub-quality` decision-analysis baseline for major TypeScript
+  decisions.
+- State TypeScript-specific pros and cons for each option, especially around
+  correctness, compatibility, DX, and migration cost.
 - Default to the safest modern option unless user constraints indicate otherwise.
 
 ## Legacy-Avoidance Guardrails

@@ -69,11 +69,26 @@ The following are non-compliant when a touched block is eligible for alignment:
 - Skipping alignment because of convenience, omission, or surrounding local style.
 - Normalizing unrelated blocks outside the touched logical scope.
 
+## Decision Analysis Baseline
+
+For planning, design, architecture, implementation direction, and other
+choice-bearing guidance:
+
+- Surface `2+` plausible approaches by default.
+- Prefer a curated set of `2-4` options instead of exhaustive enumeration.
+- Include concise pros/cons for each option and identify the recommended path.
+- If only one path is materially meaningful, say that explicitly and explain
+  why the alternatives are not meaningfully different instead of fabricating a
+  fake option set.
+- Leave sibling skills free to add domain-specific tradeoff dimensions when
+  they add real value.
+
 ## Core Workflow
 
 1. Inspect the task scope and touched files.
 2. Load and apply the required references before writing.
-3. Propose at least two implementation approaches for non-trivial work, with concise pros and cons.
+3. Apply the decision-analysis baseline for planning, design, architecture,
+   implementation direction, and other choice-bearing guidance.
 4. Choose the simplest approach that preserves behavior and constraints.
 5. Apply formatting, documentation, and structure rules only in touched logical blocks.
 6. Validate behavior and explain any intentional exceptions allowed by the required references.
@@ -96,7 +111,8 @@ The following are non-compliant when a touched block is eligible for alignment:
 
 When generating or modifying code:
 
-1. Include short pros/cons for major implementation choices.
+1. Include concise pros/cons and a recommendation for meaningful implementation
+   choices.
 2. Keep solutions simple and avoid overengineering.
 3. Preserve existing behavior unless change is explicitly requested.
 4. Call out any intentionally retained technical debt or deferred cleanup.

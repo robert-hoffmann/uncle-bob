@@ -91,10 +91,9 @@ begins.
 7. If the active mode is `reviewed` and the sprint is non-trivial, do not
    lead the preview with artifact-update or validation bookkeeping unless that
    bookkeeping is itself the repo truth that materially changes the sprint.
-8. If the active mode is `reviewed`, preserve the exact text-fallback question
-   shape when questions are needed:
-   `(*)` on the best qualitative fit, a short explanation under every option
-   in `(...)`, and a final `Custom` option.
+8. If the active mode is `reviewed`, follow the shared `ub-authoring`
+   choice-question contract when questions are needed and preserve the same
+   decision structure inside the sprint preview.
 9. If the active mode is not `reviewed`, record why a pre-execution stop is
    not required for this sprint.
 10. Record the expected post-execution reporting shape so the closeout can

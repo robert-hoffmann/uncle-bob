@@ -204,7 +204,10 @@ Treat real tool config as the source of truth:
 
 ## Tradeoff Handling
 
-- For major design or tooling choices, always present at least two options with concise pros/cons.
+- Use the shared `ub-quality` decision-analysis baseline for major design or
+  tooling choices.
+- When Python-specific tradeoffs matter, call out compatibility, policy,
+  delivery, and modernization cost explicitly in the option pros/cons.
 - Default to the safest modern option unless compatibility, policy, or delivery constraints justify an alternative.
 - Document any intentionally deferred cleanup or technical debt retained for compatibility.
 

@@ -116,15 +116,12 @@ Canonical modes:
 
 Question handling:
 
-1. prefer `AskUserQuestion` / `vscode/askQuestions` when the host exposes it
-2. always allow a custom reply path
-3. when the question tool is unavailable, use the same text structure:
-   `(*)` on the best qualitative fit, a short explanation under every option
-   in `(...)`, and a final `Custom` option.
-4. when text questions are used for a reviewed-mode pre-sprint preview, keep
+1. for multiple-choice user prompts, follow the shared choice-question
+   contract in `../ub-authoring/references/authoring-conventions.md`
+2. when text questions are used for a reviewed-mode pre-sprint preview, keep
    the same decision structure as the canonical reviewed-mode pre-sprint
    preview pattern below.
-5. In `reviewed` mode, resolve the questions that change the sprint path
+3. In `reviewed` mode, resolve the questions that change the sprint path
    before the explicit start-approval question.
    A request like `Start the next sprint.` opens the preview, but it does not
    count as sprint-start approval in the same turn.

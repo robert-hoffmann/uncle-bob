@@ -71,7 +71,10 @@ Classify the request BEFORE generating anything.
 
 ## Deep Classification Interview
 
-Before generating anything, interview the user with targeted questions. Use `askQuestions` when available. Cover these areas — skip questions whose answers are already clear from context:
+Before generating anything, interview the user with targeted questions. Use
+`askQuestions` when available, and follow the shared `ub-authoring`
+choice-question contract for any multiple-choice prompts. Cover these areas —
+skip questions whose answers are already clear from context:
 
 ### Core Questions (always ask)
 

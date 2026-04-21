@@ -136,11 +136,12 @@ Persistence by lane:
 
 Question handling:
 
-1. prefer `AskUserQuestion` / `vscode/askQuestions` when available
-2. always allow a custom reply path
-3. when the question tool is unavailable, use the same text pattern:
-   `(*)` on the best qualitative fit, a short explanation under every option
-   in `(...)`, and a final `Custom` option
+1. for multiple-choice user prompts, follow the shared choice-question
+   contract in `../ub-authoring/references/authoring-conventions.md`
+2. in `reviewed` mode, keep the same decision structure as the canonical
+   reviewed-mode pre-sprint preview pattern
+3. resolve the questions that change the sprint path before the explicit
+   start-approval question
 
 For non-trivial `reviewed`-mode sprints, the preview should lead with:
 

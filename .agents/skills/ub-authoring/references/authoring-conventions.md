@@ -214,7 +214,58 @@ Portable-assumption rule:
 - if a skill needs more than the small portable baseline, document that
   dependency explicitly and keep repo-local wiring outside the skill bundle
 
-### 10. Interactive Agent UX Baseline
+### 10. Shared Choice-Question Contract
+
+Use this pattern when a skill or related agent behavior asks the user to choose
+between multiple options or paths.
+
+Core rule:
+
+- every multiple-choice prompt must preserve a custom or free-form reply path
+
+Use this pattern when:
+
+- the user is choosing between materially different implementation,
+  planning, or workflow paths
+- the agent needs a lightweight classification choice but still needs to allow
+  a better custom answer
+- the host exposes a question UI and the choice can be expressed cleanly there
+
+Required behavior:
+
+1. prefer `AskUserQuestion` / `vscode/askQuestions` or the equivalent host
+   question UI when available
+2. preserve a custom or free-form reply path for every multiple-choice prompt
+3. keep the curated choice set to `2-4` plausible options when practical
+4. mark the recommended option with `(*)` when a best fit exists
+5. include a short explanation under every option in `(...)`
+6. when the host question UI is unavailable, preserve the same structure in
+   text with a final `Custom` option
+7. use lightweight confirmations for simple confirmations and reserve the full
+   option pattern for choices that materially change direction
+
+Anti-patterns to avoid:
+
+1. forcing the user into bare `A/B/C` or `1/2/3` replies with no custom path
+2. listing every conceivable option instead of curating the most plausible
+   choices
+3. turning a simple confirmation into a bloated decision tree
+
+Text fallback shape:
+
+```text
+Which path should we use?
+
+`A` (*) recommended option
+(Best fit because ...)
+
+`B` alternative option
+(Pros: ... Cons: ...)
+
+`Custom`
+```
+
+### 11. Interactive Agent UX Baseline
 
 Use this pattern for interactive custom agents that users invoke directly and
 may need help discovering.
@@ -255,7 +306,7 @@ Required behavior:
 5. explain lane or mode choices in plain language before using repo-specific
    jargon
 
-### 11. Optional Adoption Bundles
+### 12. Optional Adoption Bundles
 
 Use this pattern when a skill has useful secondary adoption material that is
 helpful for some repositories but should not bloat the main skill contract.
