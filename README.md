@@ -53,10 +53,11 @@ custom shell command.
 
 The planning model in this repo is intentionally tiered:
 
-1. direct bounded work for small tasks that do not need a durable planning
-   artifact
-2. lightweight specs for bounded one-offs that still need assumptions, scope,
-   and validation written down
+1. direct bounded work for truly small tasks that do not need a durable
+   planning artifact
+2. lightweight specs for bounded work that has become planning-heavy enough to
+   need assumptions, scope, options, validation, or an execution shape written
+   down
 3. initiatives for broader, higher-impact work where PRD, roadmap, sprint
    preparation, sprint execution, and final audit improve delivery quality
 

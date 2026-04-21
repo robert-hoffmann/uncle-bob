@@ -8,15 +8,71 @@ safety, and a durable completion record.
 Start rough work by choosing the smallest lane that can still hold the needed
 decisions and validation.
 
-1. direct bounded task: use when the work can be executed safely without a
-   durable planning artifact
-2. lightweight spec: use when the work needs assumptions, scope, options, and
-   validation written down, but does not justify a roadmap and sprint pack
-3. initiative: use when the work is multi-session, risky, cross-cutting, or
-   needs a PRD, roadmap, and resumable sprint execution model
+1. direct bounded task: use when the work is a truly small fix or bounded task
+   with straightforward execution and no need for a durable planning artifact
+2. lightweight spec: use when the work is still bounded, but now needs
+   assumptions, scope, options, validation, or an execution shape written down
+   without justifying a roadmap and sprint pack
+3. initiative: use when the work is multi-session, risky, cross-cutting,
+   staged, or likely to benefit from a PRD, roadmap, and resumable sprint
+   execution model
 
 The lifecycle below applies to initiative work. Lightweight specs are a
 bounded alternative path, not a weakened initiative lane.
+
+## Lane Promotion Heuristics
+
+Use these heuristics to keep direct bounded work narrow without making lane
+selection mechanical.
+
+Stay in direct bounded work when:
+
+1. the task is a truly small bounded fix
+2. execution is straightforward enough that a durable artifact would add more
+   ceremony than clarity
+3. another operator could still execute the work safely from the live context
+   without reconstructing assumptions, options, or validation
+
+Promote to a lightweight spec when:
+
+1. brainstorming has become real planning, even before implementation starts
+2. the work now needs explicit goals, non-goals, assumptions, alternatives, or
+   validation written down
+3. the agent is forming a concrete execution plan that should survive chat
+   loss, handoff, or pause
+4. the work has multiple moving parts but still does not need roadmap-driven
+   sequencing or sprint preparation
+
+Common triggers:
+
+1. planning-heavy conversation
+2. multiple meaningful options
+3. likely cross-file or cross-surface coordination
+4. explicit execution plan formation
+5. repeated clarifications that are shaping the contract of the work
+6. likely multi-session continuation
+
+Promote to an initiative when:
+
+1. the work now needs PRD-level decomposition
+2. sequencing or dependencies matter enough to need a roadmap
+3. execution likely spans sessions or contributors
+4. the change is clearly cross-cutting enough that sprint preparation would
+   reduce risk
+
+Bias:
+
+1. prefer a lightweight spec over an initiative for medium planning work
+2. escalate to an initiative earlier once staged execution is clearly emerging
+
+Promotion visibility:
+
+1. keep lane choice lightweight for true small direct work
+2. when promoting from direct bounded work to a lightweight spec or from a
+   lightweight spec to an initiative, surface a short promotion note
+3. that note should name the new lane, explain why the prior lane is no longer
+   the smallest safe surface, and explain why the chosen lane is sufficient
+   without over-escalating
 
 ## Lifecycle
 
@@ -242,80 +298,91 @@ No files were edited in this pre-sprint evaluation step.
    self-contained before advancing `prd_ready: pass`.
 2. Make the scale decision explicit before opening initiative artifacts:
    direct bounded task, lightweight spec, or initiative.
-3. Do not route rough ideas into a full initiative when a direct bounded task
+3. Keep direct bounded work narrow; do not stay direct once the conversation
+   becomes planning-heavy, medium-sized, execution-shaped, or clearly useful
+   enough that another operator would benefit from a durable mini-contract.
+4. Do not route rough ideas into a full initiative when a direct bounded task
    or lightweight spec is sufficient.
-4. Use a lightweight spec under `./.ub-workflows/specs/YYYY-MM-DD-slug/spec.md`
-   when the work needs a durable contract without roadmap and sprint overhead.
-5. Treat `roadmap.md` as the durable post-plan artifact.
-6. Generate the full roadmap in one pass.
-7. Surface the roadmap review checklist and wait for explicit human approval
+5. Use a lightweight spec under `./.ub-workflows/specs/YYYY-MM-DD-slug/spec.md`
+   when the work is still bounded but now needs assumptions, scope, options,
+   validation, or an execution plan written down.
+6. Planning-heavy brainstorming is enough to justify a lightweight spec when it
+   has become real execution shaping rather than casual chat.
+7. Prefer a lightweight spec over an initiative for medium planning work, but
+   escalate to an initiative as soon as the work clearly needs PRD-level
+   decomposition, roadmap sequencing, or staged execution.
+8. When lane promotion happens, surface a short promotion note that explains
+   why the prior lane is no longer the smallest safe surface.
+9. Treat `roadmap.md` as the durable post-plan artifact.
+10. Generate the full roadmap in one pass.
+11. Surface the roadmap review checklist and wait for explicit human approval
    before setting `roadmap_ready: pass`.
-8. Do not prepare sprint content, initialize sprint folders, or begin sprint
+12. Do not prepare sprint content, initialize sprint folders, or begin sprint
    execution until `roadmap_ready: pass`.
-9. Prepare each planned sprint as a standalone execution-ready `sprint.md`
+13. Prepare each planned sprint as a standalone execution-ready `sprint.md`
    before Sprint 01 or any later sprint begins.
-10. During sprint preparation, expand roadmap subtasks into richer execution
+14. During sprint preparation, expand roadmap subtasks into richer execution
     slices in the sprint plan rather than leaving the sprint as a flat checklist.
-11. Use named pending handoff markers only in sprint fields that legitimately
+15. Use named pending handoff markers only in sprint fields that legitimately
    depend on prior closeout truth.
-12. Materialize or repair sprint folders only after roadmap approval and in a
+16. Materialize or repair sprint folders only after roadmap approval and in a
    way that preserves the prepared sprint content.
-13. When a fresh or resumed sprint needs additional context refresh, record that
+17. When a fresh or resumed sprint needs additional context refresh, record that
    checkpoint explicitly before advancing `sprint_start_ready: pass`.
-14. In `reviewed` mode, surface a distinct pre-sprint preview checkpoint before
+18. In `reviewed` mode, surface a distinct pre-sprint preview checkpoint before
     execution begins.
-15. That preview must make explicit that no implementation has started yet,
+19. That preview must make explicit that no implementation has started yet,
     explain what the sprint would do if started now, surface alternatives when
     the sprint is non-trivial, and ask any questions that change the sprint
     path needed to calibrate the sprint path.
-16. For non-trivial reviewed-mode sprints, that preview should lead with the
+20. For non-trivial reviewed-mode sprints, that preview should lead with the
     sprint analysis itself:
     `What Repo Truth Says`, `Inference`, `Implementation Paths`,
     `Recommendation`, then the questions that change the sprint path.
     Do not lead the user-facing preview with artifact-update or validation
     bookkeeping.
-17. Wait for explicit human approval only after the reviewed-mode preview and
+21. Wait for explicit human approval only after the reviewed-mode preview and
     its questions are resolved, then advance `sprint_start_ready: pass` or
     start the sprint.
-18. In `reviewed` mode, that approval must come in a later user reply after
+22. In `reviewed` mode, that approval must come in a later user reply after
     the preview is shown.
     Do not infer sprint-start approval from the same user turn that requested
     the sprint start.
-19. Stop after sprint-pack preparation and wait for an explicit user request
+23. Stop after sprint-pack preparation and wait for an explicit user request
     before Sprint 01 or any later sprint begins.
-20. Keep sprint execution ordered unless the roadmap explicitly allows parallel
+24. Keep sprint execution ordered unless the roadmap explicitly allows parallel
     work.
-21. Resolve and honor the active interaction mode before execution begins.
-22. For initiative sprint execution, every mode requires the same readiness
+25. Resolve and honor the active interaction mode before execution begins.
+26. For initiative sprint execution, every mode requires the same readiness
     prerequisites: approved roadmap, prepared sprint pack, execution-ready
     current sprint, and no unresolved blockers preventing safe execution.
-23. Use each sprint's `decision-log.md` as the running sprint-level memory
+27. Use each sprint's `decision-log.md` as the running sprint-level memory
     surface and use `rollup.md` as the readable initiative-level carry-forward
     summary.
-24. Keep `research/` supportive and cross-sprint in character, and keep
+28. Keep `research/` supportive and cross-sprint in character, and keep
     `exceptions/` bounded and explicit instead of treating either folder as a
     generic note dump.
-25. Update `roadmap.md`, the initiative `README.md`, and `rollup.md` whenever
+29. Update `roadmap.md`, the initiative `README.md`, and `rollup.md` whenever
     state changes materially affect later resume work.
-26. Keep the active sprint's `decision-log.md` and `closeout.md` current before
+30. Keep the active sprint's `decision-log.md` and `closeout.md` current before
     pausing.
-27. When the active mode surfaces post-execution reporting, write a recoverable
+31. When the active mode surfaces post-execution reporting, write a recoverable
     post-execution summary into `closeout.md` before the workflow pauses or
     advances.
-28. Materialize newly introduced additive workflow files in existing sprint
+32. Materialize newly introduced additive workflow files in existing sprint
     folders from the canonical `ub-workflow` sprint template when it evolves,
     without overwriting prepared sprint content.
-29. `reviewed` and `flow` stop after every sprint closeout so the human can
+33. `reviewed` and `flow` stop after every sprint closeout so the human can
     review before the next sprint begins.
-30. `auto` may continue after sprint closeout unless a hard blocker, material
+34. `auto` may continue after sprint closeout unless a hard blocker, material
     ambiguity, repo-truth conflict, or later-sprint-shaping decision requires
     interruption.
-31. `continuous` / `yolo` may continue without routine user-facing reporting,
+35. `continuous` / `yolo` may continue without routine user-facing reporting,
     but must abort or pause when a major blocker or conflict requires explicit
     user resolution, and that interruption must be documented clearly.
-32. End the roadmap with a final audit step, then stop for explicit review
+36. End the roadmap with a final audit step, then stop for explicit review
     before `archive_ready: pass` or any archive action.
-33. Treat the number of implementation sprints as PRD-driven; the roadmap can
+37. Treat the number of implementation sprints as PRD-driven; the roadmap can
     contain `Sprint 01` through `Sprint NN` before the final audit.
 
 ## Operations Root Bootstrap

@@ -27,11 +27,14 @@ intentionally chooses a different operations root.
 
 This skill owns three lanes only:
 
-1. direct bounded work when no durable planning artifact is needed
-2. lightweight specs under `./.ub-workflows/specs/` when the work needs a
-   written contract but not a roadmap and sprint pack
+1. direct bounded work when the work is a truly small fix or bounded task that
+   can be executed safely without a durable planning artifact
+2. lightweight specs under `./.ub-workflows/specs/` when the work is still
+   bounded but now needs a durable contract for assumptions, scope, options,
+   validation, or a concrete execution plan
 3. initiatives under `./.ub-workflows/initiatives/` when the work needs a
-   PRD, roadmap, and resumable sprint execution
+   PRD, roadmap, and resumable sprint execution because it is multi-session,
+   staged, risky, or clearly cross-cutting
 
 If the work is a bounded one-off, prefer a lightweight spec.
 If the work is multi-session, cross-cutting, risky, or needs staged delivery,
@@ -44,19 +47,29 @@ secondary document to be applied correctly.
 
 1. Make the lane choice explicit before opening durable artifacts: direct
    bounded work, lightweight spec, or initiative.
-2. Do not route small direct code changes into durable workflow artifacts when
-   they can be executed safely without them.
-3. For initiatives, make `prd.md` self-contained before generating
+2. Keep direct bounded work narrow: do not stay direct once the conversation
+   becomes planning-heavy, medium-sized, execution-shaped, or useful enough
+   that another operator would benefit from a durable mini-contract.
+3. Promote to a lightweight spec when brainstorming becomes real planning,
+   even before implementation starts, if the work now needs durable
+   assumptions, scope, options, validation, or an execution shape.
+4. Promote to an initiative once the work clearly needs PRD-level
+   decomposition, sequencing, stop-resume safety, or staged delivery rather
+   than a bounded spec alone.
+5. Surface a short promotion note when the lane changes so the user can see
+   why direct bounded work or a lightweight spec is no longer the smallest safe
+   surface.
+6. For initiatives, make `prd.md` self-contained before generating
    `roadmap.md`.
-4. Treat `roadmap.md` as the durable post-plan artifact.
-5. Do not prepare sprint content, initialize sprint folders, or begin sprint
+7. Treat `roadmap.md` as the durable post-plan artifact.
+8. Do not prepare sprint content, initialize sprint folders, or begin sprint
    execution until `roadmap_ready: pass`.
-6. Prepare each sprint as a standalone `sprint.md` before the sprint begins.
-7. Sprint execution never starts from placeholder-only sprint shells.
-8. In `reviewed` mode, a request like `Start the next sprint.` opens preview
+9. Prepare each sprint as a standalone `sprint.md` before the sprint begins.
+10. Sprint execution never starts from placeholder-only sprint shells.
+11. In `reviewed` mode, a request like `Start the next sprint.` opens preview
    only. It does not start execution in the same user turn.
-9. In `reviewed` mode, execution begins only after a later approval message.
-10. End every initiative with a final audit and a retained note, then stop for
+12. In `reviewed` mode, execution begins only after a later approval message.
+13. End every initiative with a final audit and a retained note, then stop for
     human review before archive.
 
 ## Initiative Lifecycle
@@ -226,13 +239,16 @@ Rules:
    initialization, sprint execution support, or final audit.
 2. Inspect repository truth before writing repository-specific validation or
    adaptation details.
-3. Make the scale decision explicit.
+3. Make the scale decision explicit and promote out of direct bounded work as
+   soon as the conversation needs a durable planning surface.
 4. If `./.ub-workflows/` does not exist, bootstrap it through
    `scripts/scaffold_initiative.py`.
-5. Create or refine a lightweight spec when the work needs a durable contract
-   without roadmap and sprint overhead.
-6. Scaffold a new initiative only when the work truly needs a PRD, roadmap,
-   and sprint execution model.
+5. Create or refine a lightweight spec when the work is still bounded but now
+   needs assumptions, scope, options, validation, or an execution plan written
+   down.
+6. Bias medium planning work toward a lightweight spec first, but scaffold a
+   new initiative as soon as the work clearly needs a PRD, roadmap, or staged
+   execution model.
 7. Copy a source PRD into `./prd.md` without rewriting it.
 8. Generate the full roadmap in one pass before sprint execution starts.
 9. Surface a review checklist before `roadmap_ready: pass` can be set.
@@ -265,6 +281,11 @@ Rules:
    `reviewed` until the user explicitly changes it.
 9. In user-facing execution notes, include a concise mode reference so the
    user can see the available modes without opening extra docs.
+10. Surface lane choice routinely only when promotion happens or when the user
+    explicitly asks, so very small direct work stays lightweight.
+11. Bias planning-heavy bounded work toward lightweight specs, and bias
+    clearly multi-phase or cross-cutting work toward initiatives earlier than a
+    purely minimal reading would.
 
 ## Output Requirements
 
@@ -274,14 +295,17 @@ When using this skill for non-trivial workflow work, include:
 2. `mode_note`
 3. `scope_note`
 4. `decision_note`
-5. `artifact_note`
-6. `gate_note`
-7. `validation_note`
-8. `next_action_note`
+5. `promotion_note` when lane escalation happens
+6. `artifact_note`
+7. `gate_note`
+8. `validation_note`
+9. `next_action_note`
 
 ## Completion Checklist
 
 - The lane choice is explicit.
+- Lane promotion is explicit when work moves from direct bounded work to a
+  lightweight spec or from a lightweight spec to an initiative.
 - The lifecycle phase is explicit.
 - The current initiative-level gate is explicit.
 - Discovery and PRD readiness are explicit before roadmap generation.

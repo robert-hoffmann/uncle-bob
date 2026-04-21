@@ -33,9 +33,11 @@ A lightweight spec is ready only when:
 7. documentation touch points are explicit when they matter
 8. the boundary to direct bounded work and the promotion trigger to a full
    initiative are explicit
-9. the next action is explicit
-10. another operator could continue without chat history
-11. the active interaction mode is explicit when the spec will drive
+9. if the spec was created by promotion, the reason direct bounded work was no
+   longer the smallest safe surface is explicit
+10. the next action is explicit
+11. another operator could continue without chat history
+12. the active interaction mode is explicit when the spec will drive
     user-facing or resumable execution behavior
 
 ## Research Readiness
@@ -182,7 +184,8 @@ When validating an initiative or sprint, ask:
 3. is the current blocker or gate state explicit?
 4. was the scale decision intentional: direct bounded task, lightweight spec,
    or initiative?
-5. are validation expectations concrete instead of implied?
-6. are documentation and synchronized artifacts accounted for instead of assumed?
-7. do the touched workflow documents satisfy ub-quality formatting and structure rules?
-8. is the final audit still present as the terminal roadmap step?
+5. if lane promotion happened, is the reason for that promotion explicit?
+6. are validation expectations concrete instead of implied?
+7. are documentation and synchronized artifacts accounted for instead of assumed?
+8. do the touched workflow documents satisfy ub-quality formatting and structure rules?
+9. is the final audit still present as the terminal roadmap step?
