@@ -1,6 +1,6 @@
 ---
 name: ub-nuxt
-description: Build, review, migrate, and debug Nuxt (latest stable) applications with typed composables, SSR/SSG/hybrid rendering, runtime config, Nitro/server routes, and app-directory semantics. Use when tasks mention nuxt.config.*, Nuxt modules, middleware/plugins, server APIs, deployment/runtime mode, or Nuxt migration, especially when framework/runtime behavior is the primary concern.
+description: Use this skill for Nuxt framework, runtime, and app-structure work. Apply it when the task involves nuxt.config.*, Nuxt modules, middleware or plugins, runtime config, Nitro or server routes, rendering or deployment mode, data fetching, route structure, app setup, or Nuxt migration.
 ---
 
 # UB Nuxt
@@ -26,9 +26,11 @@ layouts, outdated recipes, or compatibility-layer drift by default.
 
 - Do not use this skill when the task is framework-agnostic Vue component or
   composable logic without Nuxt runtime, app-directory, or Nitro concerns;
-  defer that to `ub-vuejs`.
+  co-load or defer that to `ub-vuejs` depending on whether Vue authoring
+  remains a first-class concern.
 - Do not use this skill when the primary change surface is pure CSS or
-  Tailwind integration rather than Nuxt framework behavior.
+  Tailwind integration rather than Nuxt framework behavior; co-load the
+  relevant styling skill when the task spans both surfaces.
 
 ## Core Workflow
 

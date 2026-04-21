@@ -1,6 +1,6 @@
 ---
 name: ub-python
-description: Design, review, refactor, and test repository Python code using typed Python (latest stable) patterns, boundary validation, and structured error handling. Use when tasks involve Python files, pytest/ruff/mypy workflows, packaging/tooling decisions, dataclass or Pydantic modeling, or Python service/repository logic.
+description: Use this skill for Python code, typing, tests, and tooling. Apply it when the task involves Python files, pytest, Ruff, mypy or pyright, packaging or environment setup, dataclasses or Pydantic, API or service boundaries, or Python application and repository logic.
 ---
 
 # UB Python
@@ -17,9 +17,8 @@ Write against the project's currently supported Python version, but structure co
 
 - Do not use this skill for workflow intake, sprint planning, or resumable
   initiative orchestration; defer that to `ub-workflow`.
-- Do not use this skill as the primary surface for framework-specific behavior
-  when the real question is owned by a sibling framework skill such as
-  `ub-nuxt`, `ub-vuejs`, or `ub-ts`.
+- Do not use this skill as the primary surface when the main problem is owned
+  by a non-Python workflow, documentation, or framework skill.
 - Do not use this skill as a generic documentation-normalization layer when the
   main task is Markdown structure or documentation quality rather than Python
   implementation.

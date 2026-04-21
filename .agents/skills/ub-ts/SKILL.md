@@ -1,6 +1,6 @@
 ---
 name: ub-ts
-description: Design, review, migrate, and debug TypeScript (latest stable) codebases and tsconfig strategy for Node, bundlers, and libraries. Use when tasks center on typing, module/moduleResolution, compiler flags, type errors, project-wide TS modernization, or tsconfig architecture, especially when framework-specific behavior is secondary.
+description: Use this skill for TypeScript typing and compiler configuration in Node, bundler, library, Vue, Nuxt, and other TypeScript projects. Apply it when the task involves tsconfig, module or moduleResolution behavior, compiler flags, emitted types, type errors, project-wide TS modernization, or boundary typing.
 ---
 
 # UB TS
@@ -33,6 +33,13 @@ yet have active TypeScript config of its own.
 - Use `scripts/scaffold_ts_baseline.py` with `assets/tsconfig-template/` and
   `assets/eslint-template/` when a target repository needs a deterministic
   starter instead of ad hoc config creation.
+
+## Skill Coordination
+
+- Co-load this skill with `ub-vuejs` or `ub-nuxt` when TypeScript issues live
+  inside framework projects.
+- Defer framework runtime, routing, and app-structure decisions to the sibling
+  skill that owns them.
 
 ## Core Workflow
 

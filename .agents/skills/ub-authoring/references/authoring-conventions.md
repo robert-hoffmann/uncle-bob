@@ -13,6 +13,16 @@ where they become boilerplate.
 
 Treat a skill description as routing metadata, not marketing copy.
 
+Platform constraints to respect:
+
+- keep the description comfortably below the `1024`-character hard limit from
+  the Agent Skills spec
+- remember that discovery reads only the skill `name` and `description`
+- keep the description self-sufficient for routing because the body loads only
+  after activation
+- front-load the strongest user-intent and keyword triggers as a defensive
+  authoring practice, even though order-sensitive ranking is not documented
+
 Preferred pattern:
 
 > Use this skill when the user wants X, Y, or Z; when the task involves A, B,
@@ -25,7 +35,8 @@ Good descriptions:
 
 1. lead with what the user is trying to do
 2. include adjacent phrasings the user might actually say
-3. include at least one explicit non-use boundary
+3. include an explicit non-use boundary only when misrouting is realistically
+  common or costly
 4. stay short enough to remain high-signal
 
 Failure modes to avoid:
@@ -37,11 +48,23 @@ Failure modes to avoid:
 
 ### 2. Explicit "When Not To Use" Guidance
 
-Add or strengthen a `When Not To Use` section when:
+Use description-level non-use boundaries selectively, not mechanically.
+
+Prefer them when:
 
 - routing mistakes are realistically common
 - the skill has a nearby sibling with overlapping surface area
 - a wrong-skill choice would waste time or produce misleading guidance
+
+Prefer body-level coordination guidance when:
+
+- multiple skills should normally co-load
+- the boundary depends on the task's primary concern rather than simple
+  artifact presence
+- a hard exclusion would suppress valid dual-layer loading
+
+Add or strengthen a `When Not To Use` section when the description alone would
+not make the boundary clear enough.
 
 Keep it concise:
 
@@ -49,6 +72,9 @@ Keep it concise:
 - explain the boundary in plain language
 - avoid duplicating what the description already makes obvious unless the
   confusion is common in practice
+
+For stack skills, prefer wording such as `co-load when overlap is normal; defer
+only when the sibling clearly owns the primary concern`.
 
 ### 3. Clear Output Expectations
 

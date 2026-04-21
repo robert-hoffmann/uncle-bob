@@ -1,6 +1,6 @@
 ---
 name: ub-quality
-description: Portable baseline quality skill for creating, modifying, reviewing, and refactoring code or documents. Load and apply the required references. Favor high-signal documentation that reduces cognitive load for future readers, including tool-assisted agents. For touched eligible vertical separator blocks, enforce separator-column alignment.
+description: Use this skill alongside the primary implementation, review, or workflow skill when the user wants code review, repo scanning, maintainability or architecture feedback, implementation planning, documentation cleanup, readable comparisons, or a clearer structured answer. Apply it when shared formatting, alignment, and response-structure rules must be enforced across touched code or documents. Do not use it as the primary owner of language, framework, runtime, or workflow decisions.
 ---
 
 # UB Quality
@@ -35,14 +35,19 @@ textMuted: ''
 
 ## When To Use
 
-Use this skill for:
+Use this skill alongside the primary implementation, review, or workflow skill
+for:
 
 - New code generation
 - Code edits and refactors
 - Code review responses
+- Repo scans, architecture explanations, and maintainability feedback
 - Documentation, config, comment, and formatting normalization in touched regions
+- User-facing responses that need clearer structure or comparison formatting
 
-Apply this skill whenever you create, modify, review, refactor, or normalize code or documents.
+Apply this skill whenever you create, modify, review, refactor, or normalize
+code or documents and the task benefits from shared quality or readability
+rules.
 
 ## Do Not Treat As Optional
 
@@ -122,6 +127,8 @@ Table rule:
 ## Skill Coordination
 
 - Apply this skill together with the most relevant language/framework skill when available.
+- Treat this skill as a companion baseline, not as a replacement for the
+  primary implementation or workflow skill.
 - Treat syntax, runtime, and framework correctness as primary constraints.
 - Do not treat formatter preference or familiar house style as a valid reason to violate the alignment contract.
 - Prefer code and naming to carry mechanics, then use docs and comments for

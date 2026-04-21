@@ -1,6 +1,6 @@
 ---
 name: ub-css
-description: Author, review, and refactor plain CSS and Vue/Nuxt style blocks using design tokens, cascade layers, native nesting, container queries, and progressive enhancement. Use when tasks mention .css files, style blocks, selectors, specificity, layout/theming, accessibility styling, or browser-support fallbacks, especially when Tailwind utility workflow is not the primary change surface.
+description: Use this skill for plain CSS and style-block architecture. Apply it when the task involves .css files, selectors, specificity, cascade layers, tokens, layout or theming, accessibility styling, browser-support fallbacks, or CSS architecture in Vue, Nuxt, or Tailwind-bearing projects.
 ---
 
 # UB CSS
@@ -19,8 +19,9 @@ Apply modern CSS platform features with predictable cascade control, token-drive
 ## When Not To Use
 
 - Do not use this skill when Tailwind utility workflow, Tailwind setup, or
-  Tailwind migration is the primary change surface; defer that to
-  `ub-tailwind`.
+  Tailwind migration is the primary change surface; co-load or defer to
+  `ub-tailwind` depending on whether CSS architecture remains a first-class
+  concern.
 - Do not use this skill when the main problem is Nuxt runtime behavior, app
   structure, or Nitro/server concerns; defer that to `ub-nuxt`.
 - Do not use this skill for general Vue component logic when CSS is secondary

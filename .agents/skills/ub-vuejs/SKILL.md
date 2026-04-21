@@ -1,6 +1,6 @@
 ---
 name: ub-vuejs
-description: Build, review, migrate, and debug Vue (latest stable) application code with strict TypeScript, focusing on SFCs, composables, reactivity, watchers, SSR/hydration primitives, and component contracts. Use when tasks are Vue core/component architecture in Vite or framework-agnostic Vue apps, especially when Nuxt runtime or app-directory policy is not the main concern.
+description: Use this skill for Vue component and composable authoring. Apply it when the task involves SFCs, reactivity, watchers, props or emits contracts, template patterns, SSR or hydration primitives, or Vue-core architecture in Vite projects and in Nuxt projects when the main issue is Vue authoring rather than Nuxt runtime behavior.
 ---
 
 # UB VueJS
@@ -23,15 +23,16 @@ patterns or outdated guidance by default.
 ## When Not To Use
 
 - Do not use this skill when the task depends primarily on Nuxt runtime
-  behavior, app-directory policy, server routes, or Nitro concerns; defer that
-  to `ub-nuxt`.
+  behavior, app-directory policy, server routes, or Nitro concerns; co-load or
+  defer that to `ub-nuxt` depending on whether Vue authoring remains a
+  first-class concern.
 - Do not use this skill when the main issue is Tailwind integration or plain
   CSS architecture rather than Vue component logic.
 
 ## Core Workflow
 
 1. Detect Vue version family and tooling from `package.json`, lockfiles, `vite.config.*`, `vue.config.*`, and TypeScript config.
-2. Confirm the task is Vue core scope (SFCs, reactivity, watchers, SSR and hydration, component contracts). If the task is Nuxt-specific, defer framework rules to `.agents/skills/ub-nuxt/SKILL.md`.
+2. Confirm the task is Vue core scope (SFCs, reactivity, watchers, SSR and hydration, component contracts). If the task is Nuxt-specific, co-load or defer framework rules to `.agents/skills/ub-nuxt/SKILL.md`.
 3. Compare official guidance, repo truth, and observed code reality for
    non-trivial or version-sensitive recommendations.
 4. Surface `OFFICIAL_CONFLICT` when authoritative sources, repo truth, or live

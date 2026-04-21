@@ -1,6 +1,6 @@
 ---
 name: ub-tailwind
-description: Set up, migrate, debug, and review Tailwind CSS (latest stable) integrations across standalone HTML, Vue + Vite, and Nuxt projects. Use when tasks mention Tailwind directives/utilities, @import "tailwindcss", @theme tokens, legacy-to-modern migration, plugin wiring, or framework-specific Tailwind build issues, especially when utility-class workflow is the primary change surface.
+description: Use this skill for Tailwind setup, migration, integration, and utility-first styling. Apply it when the task mentions Tailwind directives or utilities, @import "tailwindcss", @theme, plugin wiring, legacy-to-modern migration, token bridging with CSS variables, or framework-specific Tailwind build issues.
 ---
 
 # UB Tailwind
@@ -25,7 +25,7 @@ legacy configuration habits or compatibility layers by default.
 
 - Do not use this skill when the task is plain CSS architecture, selector
   strategy, or token-driven styling without Tailwind as the primary surface;
-  defer that to `ub-css`.
+  co-load or defer to `ub-css` when Tailwind and CSS architecture overlap.
 - Do not use this skill when the main issue is framework runtime behavior
   rather than Tailwind integration or utility-class authoring.
 
