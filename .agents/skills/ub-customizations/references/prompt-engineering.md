@@ -1,10 +1,12 @@
 # Prompt & Instruction Engineering Reference
 
-Use this reference to generate prompts, instructions, skills, and agent bodies that trigger reliably, constrain behavior clearly, and avoid vague guidance.
+Use this reference to generate skills, hooks, and MCP-adjacent guidance that
+trigger reliably, constrain behavior clearly, and avoid vague guidance.
 
 ## Canonical Structure for Generated Content
 
-Use this consistent structure when generating prompts, instructions, skills, or agent bodies:
+Use this consistent structure when generating skills or closely related
+customization guidance:
 
 1. **Identity / role** — who or what is this?
 2. **Mission / goal** — what is the primary objective?
@@ -25,12 +27,12 @@ The shared skill-description routing formula now lives in
 [`../../ub-authoring/references/authoring-conventions.md`](../../ub-authoring/references/authoring-conventions.md).
 
 Use that shared reference for reusable description guidance.
-Keep this file focused on prompt, instruction, and artifact-structure guidance
-that is specific to customization work.
+Keep this file focused on artifact-structure guidance that is specific to
+skills, hooks, and MCP customization work.
 
-## Instruction-Writing Rules
+## SKILL.md Body-Writing Rules
 
-Generated instructions should:
+Generated SKILL.md bodies should:
 
 - Be **concise and actionable** — no filler.
 - Focus on **non-obvious rules** the model would not already know.
@@ -66,26 +68,26 @@ Generated instructions should:
 - Be sure to handle errors appropriately.
 ```
 
-## Prompt-Writing Rules
-
-Generated prompts should:
+Generated workflow and validation guidance should:
 
 - Specify **inputs, outputs, and constraints** clearly.
 - **Break down** complex work into numbered steps.
 - Include **acceptance criteria** or expected output format.
 - Avoid **vague verbs** like "improve" without defining what improvement means.
 - Tell the model **when to ask questions** vs proceed autonomously.
-- Prefer **concrete over abstract**: "Check for SQL injection in query builders" over "Review security."
+- Prefer **concrete over abstract**: "Check MCP transport and secret inputs"
+  over "Review the integration."
 - Prefer **named boundaries and exclusions** over open-ended scope.
-- Replace soft requests like "make it better" with concrete criteria, defect classes, or measurable outcomes.
+- Replace soft requests like "make it better" with concrete criteria, defect
+  classes, or measurable outcomes.
 
 ## Tool Guidance Rules
 
-When generating agent or prompt tool configurations:
+When generating hooks, MCP configs, or skill-adjacent tool guidance:
 
 - Expose **only relevant tools** — least privilege.
 - Keep the **active tool set small** — models perform better with fewer tools.
-- Document **tool intent** clearly in the agent/prompt body.
+- Document **tool intent** clearly in the generated artifact or guidance.
 - Prefer **tool names and outputs that are high-signal**.
 - Avoid returning noisy identifiers that do not help downstream decisions.
 

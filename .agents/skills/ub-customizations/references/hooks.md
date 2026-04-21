@@ -16,8 +16,9 @@ Use hooks when deterministic lifecycle automation is required — behavior that 
 
 **Do NOT use hooks for:**
 
-- General style guidance → use instructions
-- Occasional user-invoked workflows → use prompt files or skills
+- General style guidance or reusable domain procedures → use a skill or other
+  non-hook customization surface
+- Occasional user-invoked workflows → use skills
 - Domain expertise → use skills
 - External system integration → use MCP
 
@@ -96,20 +97,6 @@ VS Code supports 8 lifecycle events:
 | `command` | Yes | Shell command or script path to execute. |
 | `timeout` | No | Max execution time in seconds. Default conservatively (10-30s). |
 | `toolNames` | No | Filter — only fire for specific tool names (PostToolUse, PreToolUse). |
-
-### Agent-Scoped Hooks (Preview)
-
-Custom agents can define hooks in their frontmatter:
-
-```yaml
-hooks:
-  PostToolUse:
-    - type: command
-      command: "node ./scripts/validate.mjs"
-      timeout: 15
-```
-
-**Warning**: Agent-scoped hooks are a preview feature. Behavior may change.
 
 ## Example Patterns
 

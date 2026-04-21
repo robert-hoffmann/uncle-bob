@@ -10,30 +10,10 @@ Every generation response should follow this structure:
 4. **Generated content** — file-by-file output
 5. **Validation checklist** — from the relevant section below
 6. **Smoke-test prompts** — from the relevant section below
-7. **Portability notes** — VS Code-only, Copilot-compatible, or broadly portable
-8. **Risks / follow-up** — preview features, secrets, plugin trust
+7. **Portability notes** — VS Code-only, Copilot-compatible, or Agent-Skills-portable
+8. **Risks / follow-up** — preview features, secrets, trust
 
 ## Per-Artifact Validation Checklists
-
-### Custom Instructions
-
-- [ ] Correct file location (`.github/` or `.github/instructions/`)
-- [ ] Valid `applyTo` glob (if scoped instruction)
-- [ ] Concise — not a policy encyclopedia
-- [ ] Non-obvious rules only — no linter duplication
-- [ ] Examples for ambiguous rules
-- [ ] Imperative phrasing
-- [ ] No hardcoded secrets
-
-### Prompt Files
-
-- [ ] File at `.github/prompts/<name>.prompt.md`
-- [ ] Valid frontmatter: `name` and `description`
-- [ ] `argument-hint` provided if arguments are expected
-- [ ] `agent` set correctly if routing to a custom agent
-- [ ] `tools` only if intentionally overriding agent tools
-- [ ] Body specifies task, constraints, output format
-- [ ] Acceptance criteria included
 
 ### Skills
 
@@ -46,17 +26,6 @@ Every generation response should follow this structure:
 - [ ] No auxiliary docs (README, CHANGELOG)
 - [ ] Scripts tested if included
 - [ ] No hardcoded secrets
-
-### Custom Agents
-
-- [ ] File at `.github/agents/<name>.agent.md`
-- [ ] Valid frontmatter: `name` and `description`
-- [ ] `tools` follows least privilege
-- [ ] `handoffs` have descriptive labels and `send: false`
-- [ ] `agents` list only includes needed subagents
-- [ ] Body follows role/mission/constraints/procedure structure
-- [ ] No hardcoded secrets
-- [ ] Source-of-truth references are valid paths
 
 ### Hooks
 
@@ -79,15 +48,6 @@ Every generation response should follow this structure:
 - [ ] Descriptive camelCase server name
 - [ ] Sandbox considered for untrusted servers
 - [ ] Install/test instructions provided
-
-### Plugins
-
-- [ ] `plugin.json` with name, description, version
-- [ ] Clean directory structure
-- [ ] All components individually valid
-- [ ] Security review note for hooks and MCP
-- [ ] Install instructions documented
-- [ ] Preview status noted
 
 ## Smoke-Test Prompts
 
@@ -123,33 +83,6 @@ Generate 1-2 boundary cases:
 ```text
 1. "[Request that is too simple — should stay with built-in tools]"
 2. "[Adjacent use case that tests scope boundaries]"
-```
-
-### For Prompt Files
-
-Generate 3-5 smoke prompts with realistic arguments:
-
-```text
-1. "/prompt-name [typical argument]"
-2. "/prompt-name [edge case argument]"
-3. "/prompt-name" (no argument — test default behavior)
-```
-
-### For Custom Agents
-
-Generate 3 task prompts that validate persona and tool boundaries:
-
-```text
-1. "[Request within the agent's role]"
-2. "[Request requiring the agent's specific tools]"
-3. "[Multi-step request the agent should handle end-to-end]"
-```
-
-Generate 2 anti-prompts that should reveal over-broad scope:
-
-```text
-1. "[Request outside the agent's role — should refuse or redirect]"
-2. "[Request requiring tools the agent shouldn't have]"
 ```
 
 ### For Hooks

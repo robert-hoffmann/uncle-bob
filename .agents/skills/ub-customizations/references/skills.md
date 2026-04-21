@@ -4,14 +4,13 @@ Use this reference to write skills that trigger reliably, stay lean in context, 
 
 ## When to Use Skills
 
-Use a skill when the workflow is **reusable, multi-step, and benefits from bundled resources** (scripts, references, assets). Skills are the right choice for on-demand domain workflows that need more than a simple prompt file can provide.
+Use a skill when the workflow is **reusable, multi-step, and benefits from bundled resources** (scripts, references, assets). Skills are the right choice for on-demand domain workflows that need more than a simple inline request or one-off local procedure can provide.
 
 Do NOT use skills for:
 
-- Always-on guidance → use instructions
-- Simple one-step user-invoked tasks → use prompt files
-- Role-specific personas with tool restrictions → use custom agents
 - Deterministic automation → use hooks
+- Direct external integration when the real need is tools or remote data → use
+  MCP, optionally paired with a skill
 
 ## Skill Anatomy
 
@@ -45,7 +44,7 @@ Skills follow the Agent Skills open standard (agentskills.io). They work across 
 | Field | Required | Description |
 | --- | --- | --- |
 | `name` | Yes | Skill name. Lowercase, hyphens, verb-led, under 64 characters. |
-| `description` | Yes | **Primary triggering mechanism.** Treat it as routing logic: state what the skill does, when to use it, adjacent phrasings the user may use, and when not to use it. |
+| `description` | Yes | **Primary triggering mechanism.** Treat it as routing logic: state what the skill does, when to use it, adjacent phrasings the user may use, and when not to use it. Maximum 1024 characters under the Agent Skills spec. |
 | `argument-hint` | No | Placeholder text shown when invoked explicitly. |
 | `user-invocable` | No | Set `true` to allow explicit invocation as a slash command. |
 | `disable-model-invocation` | No | Set `true` to prevent auto-activation — only user invocation works. |

@@ -1,11 +1,11 @@
 ---
 name: ub-customizations
 description: >-
-  Create, update, review, or refactor VS Code Copilot customizations — skills,
-  prompt files, custom instructions, custom agents with handoffs, hooks, MCP
-  server configs, or plugin bundles. Use when the user wants to build agent
-  workflows, slash commands, lifecycle hooks, or multi-artifact combos, or
-  needs help choosing which customization primitive fits their need.
+  Create, update, review, or refactor VS Code Copilot skills, hooks, and MCP
+  configs. Use when the user wants to build or maintain reusable skills,
+  lifecycle hooks, MCP integrations, or the supporting references and
+  validation flow around those artifacts, or needs help deciding between a
+  skill, hook, or MCP config.
 argument-hint: "[what to build] [constraints]"
 user-invocable: true
 disable-model-invocation: false
@@ -15,7 +15,10 @@ disable-model-invocation: false
 
 ## Mission
 
-Route the user to the correct VS Code Copilot customization primitive(s), generate safe and valid artifacts, validate output, and recommend companion artifacts when a single file is not enough.
+Route the user to the correct VS Code Copilot artifact within this skill's
+scope, generate safe and valid skills, hooks, or MCP configs, validate output,
+and recommend companion artifacts only when they materially improve the
+workflow.
 
 Implement against the target host and tool reality, but bias the generated
 customization toward current official guidance and forward-compatible artifact
@@ -31,12 +34,12 @@ default.
 - Do not use this skill as the owner of reusable cross-skill authoring
   conventions; defer those to `ub-authoring`.
 - Do not use this skill when the user only needs normal code implementation in
-  an existing stack rather than Copilot customization artifacts.
+  an existing stack rather than skill, hook, or MCP artifacts.
 
 ## Coordination
 
-- Use `ub-customizations` to choose and generate the right customization
-  primitive.
+- Use `ub-customizations` as the default builder workflow for skills, hooks,
+  and MCP configs.
 - Use `ub-authoring` when the task is about reusable cross-skill conventions
   such as routing-quality descriptions, non-use boundaries, naming, or shared
   authoring structure.
@@ -49,50 +52,55 @@ Classify the request BEFORE generating anything.
 
 | User Need | Primary Artifact | Common Companions | Why |
 | --- | --- | --- | --- |
-| Project-wide conventions, architecture rules | Custom instructions | `AGENTS.md`, scoped `.instructions.md` | Always-on, low ceremony |
-| Repetitive user-invoked one-step task | Prompt file | Optional custom agent | Best for slash-command workflows |
-| Reusable multi-step capability with scripts/resources | Skill | Optional prompt file, instructions | On-demand domain workflows |
-| Stable persona / role / tool policy / handoffs | Custom agent | Prompt file, skills | Roles, tool boundaries, guided workflows |
-| Deterministic lifecycle automation | Hook | Custom agent, scripts | Guaranteed execution, not guidance |
-| External systems, APIs, databases, browsers | MCP config | Skill, agent, prompt file | Real new capabilities via tools/resources |
-| Shareable installable bundle | Plugin | Any of the above | Packaging layer, not behavior |
+| Reusable multi-step capability with scripts/resources | Skill | Optional MCP config | On-demand domain workflow with bundled references, scripts, or assets |
+| Deterministic lifecycle automation | Hook | Optional helper script | Guaranteed execution at agent lifecycle points; not soft guidance |
+| External systems, APIs, databases, browsers | MCP config | Optional skill | Real new capabilities via tools/resources and authenticated external access |
+| Everything else | Out of scope here | See other customization primitives directly | Instructions, prompt files, custom agents, and plugin packaging are no longer first-class scope for this skill |
 
 ## Rules of Thumb
 
-1. If it should be **always on** → instruction file.
-2. If the user should **explicitly run it** and it is lightweight → prompt file.
-3. If it is a **reusable capability bundle** with optional scripts/assets → skill.
-4. If it needs a **persona, tool restrictions, subagents, or handoffs** → custom agent.
-5. If it must **run deterministically** before/after lifecycle events → hook.
-6. If it needs **real external capabilities/data** → MCP.
-7. If the user wants to **ship/share/install** the whole thing → plugin.
+1. If it is a **reusable multi-step capability** with references, scripts, or
+  assets → skill.
+2. If it must **run deterministically** before or after lifecycle events →
+  hook.
+3. If it needs **real external capabilities, tools, or data** outside the
+  workspace → MCP.
+4. If a skill depends on external systems, pair the skill with MCP instead of
+  overloading the skill alone.
+5. Always choose the smallest sufficient artifact inside this skill's scope.
+6. Do not use MCP where a local script is enough.
+7. Do not use a hook for soft guidance when a skill is the real fit.
 
-**Always choose the smallest sufficient primitive.** Do not use a skill where an instruction file is enough. Do not use MCP where a local script is enough. Do not use a plugin where a repo-local folder is enough.
+**Always choose the smallest sufficient artifact inside this skill's scope.**
 
 ## Deep Classification Interview
 
 Before generating anything, interview the user with targeted questions. Use
 `askQuestions` when available, and follow the shared `ub-authoring`
-choice-question contract for any multiple-choice prompts. Cover these areas —
-skip questions whose answers are already clear from context:
+choice-question contract for any multiple-choice prompts. Skip questions whose
+answers are already clear from context.
 
 ### Core Questions (always ask)
 
-1. **What do you want to customize?** Describe the behavior, task, role, or automation you need.
-2. **Should it always be active, or only when explicitly invoked?** (Always-on → instructions; invoked → prompt/skill/agent)
-3. **Is it a one-step task or a multi-step workflow?** (One-step → prompt; multi-step → skill or agent)
-4. **Does it need a specific persona, tool restrictions, or model preference?** (Yes → custom agent)
-5. **Does it need guaranteed deterministic execution at specific lifecycle points?** (Yes → hook)
-6. **Does it need access to external systems, APIs, or data sources?** (Yes → MCP)
-7. **Should it be shareable or installable by other teams?** (Yes → plugin packaging)
-8. **Do you need cross-vendor compatibility?** (Codex, Claude Code, Gemini CLI → export mode)
+1. **What do you want to build or change?** Describe the behavior, workflow,
+  automation, or integration you need.
+2. **Is this a reusable on-demand workflow, a deterministic lifecycle action,
+  or an external integration?**
+3. **Does it need to run automatically at specific lifecycle points?** If yes,
+  which events matter?
+4. **Does it need access to external systems, APIs, databases, browsers, or
+  remote data sources?**
+5. **Does it need bundled references, scripts, or assets to guide repeated
+  use?**
 
 ### Conditional Deep-Dive Questions (ask when relevant)
 
-1. **Which tools should the agent/prompt have access to?** (When creating an agent or prompt with tool restrictions)
-2. **What handoff stages does your workflow need?** (When creating a multi-phase agent: Plan → Implement → Review → Iterate)
-3. **Which lifecycle events matter?** (When creating hooks: SessionStart, UserPromptSubmit, PreToolUse, PostToolUse, PreCompact, SubagentStart, SubagentStop, Stop)
-4. **Would a multi-artifact bundle serve you better?** Recommend bundles when appropriate — see [references/bundles.md](references/bundles.md).
+1. **Which lifecycle events matter?** Use the VS Code hook events when a hook
+  is in scope.
+2. **Which external systems, credentials, transports, or trust boundaries
+  matter?** Use this when MCP is in scope.
+3. **Would a companion artifact materially improve the workflow?** Recommend
+  Skill + MCP when the skill depends on external systems.
 
 After classification, state the recommendation, assumptions, and rationale before generating.
 
@@ -128,12 +136,8 @@ Many workflows need multiple artifacts working together. Actively recommend thes
 
 | Bundle | Components | When to Recommend |
 | --- | --- | --- |
-| **A** | Skill + Prompt file | Capability that should auto-activate AND be invocable via `/` |
-| **B** | Agent + Prompt file | Persona/role with a shortcut entry point |
-| **C** | Skill + MCP | Capability depending on external systems |
-| **D** | Agent + Hook | Role agent needing guaranteed validation/automation |
-| **E** | Instructions + Skill | Team conventions + on-demand domain procedures |
-| **F** | Plugin | Multi-component distribution bundle |
+| **A** | Skill + MCP | The workflow is reusable but depends on external systems, authenticated tools, or remote data |
+| **B** | Hook + helper script | Deterministic lifecycle automation needs logic that should live outside inline shell |
 
 For detailed bundle guidance and example scenarios, read [references/bundles.md](references/bundles.md).
 
@@ -155,14 +159,9 @@ State assumptions, file tree, and rationale. For the artifact type being generat
 
 | Artifact Type | Reference to Load |
 | --- | --- |
-| Custom instructions | [references/instructions.md](references/instructions.md) |
-| Prompt files | [references/prompt-files.md](references/prompt-files.md) |
 | Skills | [references/skills.md](references/skills.md) |
-| Custom agents | [references/custom-agents.md](references/custom-agents.md) |
 | Hooks | [references/hooks.md](references/hooks.md) |
 | MCP configs | [references/mcp.md](references/mcp.md) |
-| Plugins | [references/plugins.md](references/plugins.md) |
-| Cross-vendor exports | [references/cross-vendor.md](references/cross-vendor.md) |
 
 For customization-artifact writing guidance, read
 [references/prompt-engineering.md](references/prompt-engineering.md).
@@ -211,7 +210,7 @@ Structure every generation response as:
 6. **Validation checklist** — human review items + technical checks
 7. **Smoke-test prompts** — how to verify the artifact works
 8. **Portability notes** — which pieces are VS Code-only, Copilot-compatible, or broadly portable
-9. **Risks / follow-up** — preview features, secrets, plugin trust, unsupported vendor features
+9. **Risks / follow-up** — preview features, secrets, trust, unsupported host features
 10. **Conflict note when relevant** — `OFFICIAL_CONFLICT` or `UNVERIFIED`
     with a concise explanation and the implementation consequence
 
@@ -222,7 +221,7 @@ Structure every generation response as:
 - Generated files are valid for the chosen customization type.
 - Tool access is least-privilege rather than broad by default.
 - Validation and smoke-test guidance is explicit.
-- VS Code-only versus broadly portable behavior is called out.
+- VS Code-only versus Agent-Skills-portable behavior is called out.
 - Secret handling, trust, or preview-feature risks are surfaced when relevant.
 - Any material official-source conflict or unverified non-trivial guidance is
   disclosed explicitly when relevant.
@@ -230,30 +229,28 @@ Structure every generation response as:
 ## Safety Defaults
 
 - Default to **read-only planning** where possible.
-- Default to **minimal tool sets** for generated agents.
+- Default to **minimal scopes** for generated hooks and MCP servers.
 - **Never hardcode** API keys, tokens, or secrets.
 - Gate destructive actions behind **approval hooks** or confirmation.
 - Include **review warnings** for hooks and MCP configs.
-- Warn about **trust and security** when suggesting third-party skills, plugins, or MCP servers.
+- Warn about **trust and security** when suggesting third-party skills or MCP servers.
 
 ## Anti-Patterns to Avoid
 
-- Do NOT default to a skill when an instruction file or prompt file is a better fit.
+- Do NOT default to a skill when a hook or MCP config is the real fit.
 - Do NOT treat this skill as the owner of cross-catalog authoring conventions
   now that `ub-authoring` exists.
 - Do NOT generate giant monolithic files — use progressive disclosure and references.
-- Do NOT copy vendor-specific features (Claude `context: fork`, Gemini hook semantics) into VS Code outputs.
 - Do NOT use hooks for soft guidance — hooks are for deterministic lifecycle actions.
 - Do NOT use MCP for trivial local tasks — MCP is for real external capabilities.
-- Do NOT grant all-tools access by default — use least privilege.
-- Do NOT generate plugin packaging unless distribution is explicitly requested.
+- Do NOT grant broad tool or secret access by default — use least privilege and explicit inputs.
 
 ## Freshness Review
 
 - Volatility: high
 - Review recommendation: review on touch and during periodic maintenance, targeting a quarterly rhythm when practical.
-- Trigger signals: VS Code Copilot customization-surface changes, new agent or hook capabilities, MCP schema changes, or portability model changes across supported vendors.
+- Trigger signals: VS Code Copilot skill, hook, or MCP surface changes; Agent Skills spec changes; MCP schema changes; lifecycle-event changes; or portability guidance changes tied to the official Agent Skills spec.
 - Enforcement: advisory only; freshness warnings should not block unrelated customization work by default.
-- Stable core: smallest-sufficient artifact choice, least privilege, and
-  explicit validation remain the durable guidance even when platform features
-  evolve quickly. Reusable authoring conventions now live in `ub-authoring`.
+- Stable core: smallest-sufficient artifact choice, least privilege, explicit
+  validation, and the builder-versus-authoring ownership split remain the
+  durable guidance.

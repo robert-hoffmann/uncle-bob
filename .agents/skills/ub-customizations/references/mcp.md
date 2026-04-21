@@ -17,7 +17,8 @@ Use MCP when the model needs **tools, resources, or data outside the local works
 **Do NOT use MCP when:**
 
 - The capability is fully local and simple → use a script
-- The model only needs guidance → use instructions
+- The model only needs guidance or a reusable local procedure → use a skill or
+  other non-MCP customization surface
 - A shell command is enough → use a hook or script
 
 ## Config File

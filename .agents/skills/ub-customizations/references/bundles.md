@@ -6,41 +6,7 @@ Most real-world workflows need **multiple artifacts working together**. The buil
 
 ## Bundle Matrix
 
-### Bundle A: Skill + Prompt File
-
-**When to recommend**: The capability should both auto-activate when relevant AND be invocable explicitly via `/slash-command`.
-
-**Example scenario**: "Teach Copilot how to run Playwright tests and let me invoke it directly."
-
-- **Skill**: `SKILL.md` with testing workflow, references, and templates.
-- **Prompt file**: `/run-playwright` entry point that routes to the skill.
-
-**File structure**:
-
-```text
-.agents/skills/playwright-testing/
-├── SKILL.md
-└── references/
-.github/prompts/run-playwright.prompt.md
-```
-
-### Bundle B: Custom Agent + Prompt File
-
-**When to recommend**: The workflow needs a stable persona or tool policy, plus a quick shortcut entry point.
-
-**Example scenario**: "Create a security review agent I can invoke with /review-security."
-
-- **Agent**: `security-reviewer.agent.md` with restricted analysis tools.
-- **Prompt file**: `/review-security` that routes to the agent.
-
-**File structure**:
-
-```text
-.github/agents/security-reviewer.agent.md
-.github/prompts/review-security.prompt.md
-```
-
-### Bundle C: Skill + MCP
+### Bundle A: Skill + MCP
 
 **When to recommend**: The capability depends on external systems or remote data.
 
@@ -58,87 +24,39 @@ Most real-world workflows need **multiple artifacts working together**. The buil
 .vscode/mcp.json
 ```
 
-### Bundle D: Agent + Hook
+### Bundle B: Hook + helper script
 
-**When to recommend**: A role-specific agent also needs guaranteed validation or automation at lifecycle points.
+**When to recommend**: Deterministic lifecycle automation needs logic that
+should live outside a long inline shell command.
 
-**Example scenario**: "I need a code review agent that automatically runs ESLint after every edit."
+**Example scenario**: "Run a reviewable validation script after every edit and
+block unsafe terminal commands before they execute."
 
-- **Agent**: `code-reviewer.agent.md` with analysis tools.
-- **Hook**: PostToolUse hook running ESLint after file edits.
+- **Hook**: `PreToolUse` or `PostToolUse` hook definition.
+- **Helper script**: small JS or Python wrapper that keeps the hook command
+    portable and reviewable.
 
 **File structure**:
 
 ```text
-.github/agents/code-reviewer.agent.md
 .github/hooks/post-tool-use.json
-scripts/lint-after-edit.mjs
-```
-
-### Bundle E: Instructions + Skill
-
-**When to recommend**: There is a mix of always-on team conventions and on-demand domain procedures.
-
-**Example scenario**: "Set up TypeScript strict mode rules for the whole repo, plus a skill for complex type migrations."
-
-- **Instructions**: `AGENTS.md` for always-on TS conventions.
-- **Skill**: `ts-migration` skill for on-demand migration workflows.
-
-**File structure**:
-
-```text
-AGENTS.md
-.agents/skills/ts-migration/
-├── SKILL.md
-└── references/
-```
-
-### Bundle F: Plugin (Multi-Component)
-
-**When to recommend**: The user explicitly wants bundling, distribution, or installability.
-
-**Example scenario**: "Package our planning, testing, and release workflows for the whole team."
-
-- **Plugin**: Contains skills, agents, hooks, MCP config, and prompt entry points.
-
-**File structure**:
-
-```text
-team-workflows/
-├── plugin.json
-├── skills/
-│   ├── planning/SKILL.md
-│   └── testing/SKILL.md
-├── agents/
-│   ├── planner.agent.md
-│   └── reviewer.agent.md
-├── hooks.json
-└── .vscode/
-    └── mcp.json
+scripts/validate-after-edit.mjs
 ```
 
 ## Bundle Selection During Classification
 
 When classifying the user's request, check if any bundle applies:
 
-1. **Does the user want both auto-activation and explicit invocation?** → Bundle A (Skill + Prompt)
-2. **Does the user want a persona/role with a quick entry point?** → Bundle B (Agent + Prompt)
-3. **Does the capability need external data/tools?** → Bundle C (Skill + MCP) or add MCP to any bundle
-4. **Does a role agent need lifecycle guarantees?** → Bundle D (Agent + Hook)
-5. **Are there both conventions and procedures?** → Bundle E (Instructions + Skill)
-6. **Is distribution or team sharing needed?** → Bundle F (Plugin)
+1. **Does the capability need external data or tools?** → Bundle A (Skill + MCP)
+2. **Does deterministic lifecycle automation need reviewable logic outside the hook file?** → Bundle B (Hook + helper script)
 
-If a bundle fits, recommend it proactively. Generate all components together.
+If a bundle fits, recommend it proactively. Otherwise prefer a single artifact.
 
 ## Example Requests → Bundle Mapping
 
 | User Request | Recommended Bundle |
 | --- | --- |
-| "Always use pnpm and strict TS" | No bundle — just instructions |
-| "Create /review-security for dependency review" | B: Agent + Prompt (or just Prompt if simple) |
-| "Teach Copilot Playwright testing with templates" | A: Skill + Prompt |
-| "Planning agent that never edits code" | B: Agent + Prompt + Handoff to implementer |
-| "Run ESLint after every edit" | No bundle — just a hook |
-| "Connect Jira so agent can query tickets" | C: Skill + MCP |
-| "Ship workflow tools for the team" | F: Plugin |
-| "Set TS rules + complex migration helper" | E: Instructions + Skill |
+| "Run ESLint after every edit" | B: Hook + helper script |
+| "Connect Jira so agent can query tickets" | A: Skill + MCP |
+| "Wrap a DB workflow around a reusable skill" | A: Skill + MCP |
+| "Block destructive commands with a tested script" | B: Hook + helper script |
