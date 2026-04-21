@@ -57,6 +57,7 @@ Apply this skill whenever you create, modify, review, refactor, or normalize cod
 - Load and apply `references/formatting-alignment.md` for mandatory alignment rules and guardrails.
 - Load and apply `references/documentation-structure-refactoring.md` for documentation standards, file structure, and refactoring workflow.
 - Load and apply `references/important-tags-and-doc-generation.md` for mandatory comment-tag preservation and document-generation policy.
+- Load and apply `references/response-readability.md` for user-facing response structure, comparison formatting, and narrow-pane readability guidance.
 - Read `references/freshness-portability.md` when deciding whether a quality rule is repository policy, a strong house default, or an advisory freshness concern.
 
 ## Non-Compliance
@@ -83,15 +84,40 @@ choice-bearing guidance:
 - Leave sibling skills free to add domain-specific tradeoff dimensions when
   they add real value.
 
+## Readability Baseline
+
+For user-facing responses across chat, planning, reviews, specs, and
+explanations:
+
+- Lead with the answer, recommendation, or key point.
+- Use informative headings for substantial responses.
+- Keep paragraphs short and visually separated.
+- Use bullets for collections and numbered steps for sequence.
+- Keep list items parallel in grammar and intent.
+- Use tables only for true multi-attribute comparisons that stay compact.
+- Avoid dense text blocks when structure would improve scanning.
+- Keep short answers compact and avoid ceremonial formatting.
+
+Table rule:
+
+- Prefer compact tables only when they materially improve side-by-side
+  comparison.
+- Usually keep tables to `2-4` columns with short headers and brief cells.
+- Do not force sentence-length prose into table cells.
+- When a table becomes too wide, dense, or renderer-fragile, convert it to a
+  safer fallback structure instead of trying to preserve the grid.
+
 ## Core Workflow
 
 1. Inspect the task scope and touched files.
 2. Load and apply the required references before writing.
 3. Apply the decision-analysis baseline for planning, design, architecture,
    implementation direction, and other choice-bearing guidance.
-4. Choose the simplest approach that preserves behavior and constraints.
-5. Apply formatting, documentation, and structure rules only in touched logical blocks.
-6. Validate behavior and explain any intentional exceptions allowed by the required references.
+4. Apply the readability baseline for user-facing responses and choose tables
+   versus safer fallback structures accordingly.
+5. Choose the simplest approach that preserves behavior and constraints.
+6. Apply formatting, documentation, and structure rules only in touched logical blocks.
+7. Validate behavior and explain any intentional exceptions allowed by the required references.
 
 ## Skill Coordination
 
@@ -118,6 +144,9 @@ When generating or modifying code:
 4. Call out any intentionally retained technical debt or deferred cleanup.
 5. Favor high-signal documentation over broad narration, especially in shared
    guidance and heavily reused code.
+6. Make user-facing explanations easy to scan before deep reading.
+7. Match the structure to the information shape instead of defaulting to dense
+   prose or oversized tables.
 
 ## Completion Gate
 
@@ -130,3 +159,11 @@ Before finalizing:
 - Confirm no unrelated blocks were normalized.
 - If any eligible block remains unaligned, the edit is incomplete unless a named exception from `references/formatting-alignment.md` applies.
 - Ensure special comment tags and `AGENT_TODO` handling policy are respected.
+- Expose the answer or recommendation early in user-facing responses.
+- Use headings, bullets, steps, tables, or fallback blocks only when they
+  improve scanability for the information shape.
+- Confirm list items stay parallel and concise.
+- Confirm any table adds clarity rather than width or density problems.
+- If a comparison table became too wide or text-heavy, convert it to a stacked
+  fallback structure instead of forcing the grid.
+- Keep brief answers brief.
