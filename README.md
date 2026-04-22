@@ -31,7 +31,7 @@ The core stack is:
 4. `ub-governance` for testing posture, evidence depth, decision memory, and
    repository-control discipline
 
-Those four skills can stand together as a complete baseline for planning,
+Those four skills stand together as a complete baseline for planning,
 review, authoring, and governance work even before any language or framework
 specialist is involved.
 
