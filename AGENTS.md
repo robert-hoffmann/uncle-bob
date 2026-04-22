@@ -12,9 +12,11 @@ Use these command-entry defaults when working in this repository:
 
 1. use `uv run python ...` for repository Python scripts, tests, and helper
    tooling
-2. use `python3 ...` only for short ad hoc local inspection when `uv` is not
-   needed
-3. do not assume bare `python` exists on `PATH`
+2. for short ad hoc local inspection when `uv` is not needed, use the
+   interpreter command that matches the local environment rather than assuming
+   one universal fallback name
+3. prefer interpreter-explicit commands and confirm the command exists in the
+   current environment before relying on it
 4. prefer `task` wrappers when the repository already exposes a check or helper
    through `Taskfile.yml`
 

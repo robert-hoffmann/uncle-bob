@@ -73,7 +73,8 @@ Shell-entrypoint guidance:
 
 1. prefer interpreter-explicit commands such as `python -m ...`
 2. follow the repo's active environment tool instead of assuming `uv`
-3. do not assume bare `python` exists on `PATH`
+3. if direct interpreter invocation is needed, use the command that matches the
+   local environment instead of assuming one universal fallback name
 
 ## Starter Scaffolding
 

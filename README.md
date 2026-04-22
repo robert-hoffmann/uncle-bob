@@ -7,7 +7,7 @@
 </td>
 <td>
 
-Uncle Bob is a practical collection of skills and a focused teaching agent for GitHub Copilot in VS Code, Copilot CLI, Claude Code, and Codex users. It gives agentic coding tools stronger defaults for planning, quality, governance, authoring, and implementation work without forcing a heavy framework around day-to-day development.
+Uncle Bob is a practical collection of skills and a focused teaching agent for GitHub Copilot in VS Code, Copilot CLI, Claude Code, and Codex users. It gives agentic coding tools a coordinated core of quality, authoring, workflow, and governance, with implementation specialists and customization tooling layered on top without forcing a heavy framework around day-to-day development.
 
 I use these skills in an actual corporate production environment for supply-chain management in the aerospace industry.
 
@@ -20,49 +20,98 @@ I use these skills in an actual corporate production environment for supply-chai
 This repository is a practical operating system for guided agentic coding work.
 
 Its center of gravity is not the framework-specific skills.
-The real backbone is:
+The core stack is:
 
-1. `ub-workflow` for planning, specs, initiatives, sprints, audit, and archive
-2. `ub-quality` for the always-on baseline of structure, clarity, and code or doc hygiene
-3. `ub-governance` for evidence, decision memory, testing, and repository-control discipline
+1. `ub-quality` for the mandatory baseline of structure, readability, and code
+   or document hygiene
+2. `ub-authoring` for reusable routing, naming, non-use boundaries, and shared
+   authoring conventions
+3. `ub-workflow` for planning, lightweight specs, initiatives, sprints, audit,
+   and archive
+4. `ub-governance` for testing posture, evidence depth, decision memory, and
+   repository-control discipline
 
-The language and framework skills matter, but they are supporting specialists.
-They plug into the workflow once the work has been shaped and routed correctly.
+Those four skills can stand together as a complete baseline for planning,
+review, authoring, and governance work even before any language or framework
+specialist is involved.
+
+`ub-customizations` sits next to that core when you need to build or maintain
+skills, hooks, or MCP configs.
+
+The language and framework skills still matter, but they are supporting
+specialists that plug in after the work has been shaped and routed correctly.
 
 ## Why Use It
 
-Use it when you want your coding agent to work through a clearer system instead of acting like a collection of disconnected prompts.
+Use it when you want your coding agent to work through a coherent operating
+model instead of acting like a collection of disconnected prompts.
 
-The repository is designed so bigger work starts with the right planning surface,
-moves through explicit review points, and stays resumable across sessions.
-That is why `ub-workflow` is the main driver: it decides whether the work should
-stay direct, become a lightweight spec, or grow into a full initiative with a
-PRD, roadmap, sprint preparation, execution, and final audit.
+The repository is designed so quality, authoring, workflow, and governance
+reinforce each other instead of competing:
+
+1. `ub-quality` acts as the companion baseline for formatting, readability,
+   decision analysis, and touched-scope discipline
+2. `ub-authoring` keeps reusable skill guidance portable and treats
+   descriptions as routing logic instead of marketing copy
+3. `ub-workflow` picks the smallest safe planning surface, promotes work out of
+   direct mode when needed, and uses explicit artifacts and readiness gates
+4. `ub-governance` stays lean by default and escalates only when the scope,
+   risk, or audit path truly requires it
+
+You do not need a framework-specific skill for every task.
+Many planning, review, documentation, authoring, and governance tasks are
+handled cleanly by the core stack alone.
+
+## How The Core Skills Work Together
+
+The current repo workflow is more explicit than a simple "pick a skill and
+go" model:
+
+1. `ub-workflow` chooses the lane: direct bounded work, lightweight spec, or
+   initiative
+2. `ub-quality` travels with touched documents and code as the formatting,
+   readability, and decision-analysis baseline
+3. `ub-authoring` owns shared installable guidance and reusable routing rules
+   when the catalog itself is being shaped
+4. `ub-governance` stays on the Level 1 fast path for ordinary workflow-backed
+   work and escalates to heavier evidence or ADR machinery only when needed
+5. `ub-customizations` classifies the artifact first, then builds the smallest
+   sufficient customization: skill, hook, or MCP config
 
 ## Tooling Footnote
 
 For repository Python commands, prefer `uv run python ...`.
 
-Use `python3 ...` only for short ad hoc local inspection when `uv` is not
-needed, and do not assume bare `python` exists on `PATH`.
+For short ad hoc local inspection when `uv` is not needed, use the interpreter
+command that matches your environment instead of assuming one universal
+fallback name across platforms.
 
 When the repo already exposes a Taskfile entrypoint, prefer that wrapper over a
 custom shell command.
 
 ## Workflow At A Glance
 
+Within that core stack, `ub-workflow` provides the planning model.
+
 The planning model in this repo is intentionally tiered:
 
 1. direct bounded work for truly small tasks that do not need a durable
    planning artifact
-2. lightweight specs for bounded work that has become planning-heavy enough to
-   need assumptions, scope, options, validation, or an execution shape written
-   down
+2. lightweight specs under `./.ub-workflows/specs/` for bounded work that has
+   become planning-heavy enough to need assumptions, scope, options,
+   validation, or an execution shape written down
 3. initiatives for broader, higher-impact work where PRD, roadmap, sprint
-   preparation, sprint execution, and final audit improve delivery quality
+   preparation, sprint execution, final audit, and retained notes improve
+   delivery quality
 
 In practice, specs are the preferred small planning surface, while initiatives
-plus sprints are the main driver for bigger impact areas.
+plus sprints are the heavier delivery path for bigger impact areas.
+
+The repo's default operating root for durable workflow state is
+`./.ub-workflows/`.
+The workflow contract also expects explicit promotion when work outgrows direct
+mode, roadmap approval before sprint initialization, and standalone prepared
+`sprint.md` files before execution starts.
 
 If you want guided help choosing the right lane, ask the main coding agent to
 explain `ub-workflow` from its skill contract and choose the smallest correct
@@ -102,8 +151,8 @@ workflow pauses between sprints or execution chunks.
 
 ## How The Workflow Feels
 
-The main value of this repo is not that it gives an agent more prompts.
-It gives the work a better shape.
+Within the core stack, the workflow layer is what gives bigger work a durable
+shape.
 
 The intended rhythm looks like this:
 
@@ -125,7 +174,8 @@ The intended rhythm looks like this:
    finishing with a final audit instead of letting bigger work fade out in chat
    history.
 
-That is why the workflow layer matters so much here.
+That is why the workflow layer matters so much here, even though it is only one
+part of the core stack.
 It turns agent use into a delivery system:
 
 - research and planning before blind execution
@@ -135,6 +185,10 @@ It turns agent use into a delivery system:
 
 If the work is small, this stays lightweight.
 If the work is important, it becomes structured without becoming bureaucratic.
+
+In `reviewed` mode, that structure is deliberately strict: starting the next
+sprint opens a preview first, not execution in the same turn, and execution
+waits for a later approval message.
 
 ## Prompt-Driven Initiative Flow
 
@@ -146,15 +200,18 @@ The usual progression is:
 1. scaffold the initiative from the PRD
    Start by invoking `ub-workflow` once and giving it the PRD. The first prompt
    is simply to scaffold a new initiative from that PRD. That creates the
-   working structure and establishes `prd.md` as the source of truth.
+   working structure and establishes a self-contained `prd.md` as the source of
+   truth.
 2. generate and review the roadmap
    Next, ask it to generate the roadmap from the PRD. Review the roadmap before
    moving forward so the sprint sequence, dependencies, and planned slices are
-   correct before execution starts.
+   correct before `roadmap_ready` is treated as passed.
 3. prepare and initialize the sprint set
    Once the roadmap looks right, ask it to prepare the sprints from that
    roadmap and then initialize them so the sprint structure is ready for
-   execution. `reviewed` or `flow` mode is usually the cleanest fit here.
+   execution. Each sprint should be prepared as a standalone `sprint.md`
+   before the sprint begins. `reviewed` or `flow` mode is usually the cleanest
+   fit here.
 4. execute Sprint 01 with the generated artifacts as context
    Start Sprint 01, work through the sprint using the prepared artifacts as the
    context system, then close out the sprint and prepare the handoff into the
@@ -178,41 +235,52 @@ Practical note:
   mode first, or simply reusing the existing session when possible, so the
   agent reloads the initiative state before continuing execution
 
-## Core Drivers
+## Core Stack
 
-These are the three surfaces that explain how the repo actually works:
+These are the four skills that explain how the repo actually works:
 
-1. `ub-workflow`
-   The orchestration layer. It shapes work into direct tasks, specs, or
-   initiatives and then carries larger work through roadmap, sprint,
-   final-audit, and archive flow.
-2. `ub-quality`
-   The mandatory baseline. It keeps code and documents readable, reviewable,
-   and consistent across everything else in the repo.
-3. `ub-governance`
-   The control layer. It defines how evidence, testing posture, ADR usage,
-   repository constraints, and exception handling should work.
+1. `ub-quality`
+   The mandatory companion baseline. It keeps code and documents readable,
+   reviewable, aligned, and consistent, and it enforces touched-scope
+   formatting and response-structure discipline.
+2. `ub-authoring`
+   The reusable authoring contract. It owns routing-quality descriptions,
+   naming, non-use boundaries, progressive disclosure, and other shared skill
+   conventions that should travel with the catalog.
+3. `ub-workflow`
+   The planning and orchestration layer. It shapes work into direct tasks,
+   lightweight specs, or initiatives, then carries larger work through
+   roadmap, gated sprint preparation, execution, final-audit, and archive flow.
+4. `ub-governance`
+   The control layer. It defaults to a lean profile, treats workflow artifacts
+   as the normal Level 1 record, and only escalates to heavier governance
+   machinery when scope or risk requires it.
    The extracted repo-maintenance checks in this development repository are a
    separate surface, not part of the distributable governance command path.
 
+Adjacent to that core is `ub-customizations`, which is the builder surface for
+skills, hooks, and MCP configs when you are extending VS Code Copilot
+customizations themselves. Its workflow is classification-first: interview the
+request, choose the smallest sufficient artifact, then generate and validate.
+
 The other skills are implementation specialists that become useful after the
-workflow and quality baselines have already done their job.
+core stack has already shaped the work.
 
 ## What's Included
 
 | Skill             | Description                                                                                                         |
 | ----------------- | ------------------------------------------------------------------------------------------------------------------- |
-| ub-workflow       | Main planning driver: direct work, specs, initiatives, roadmaps, resumable sprints, audit, archive.                 |
-| ub-quality        | Mandatory baseline for code quality, formatting, documentation, and refactoring.                                    |
-| ub-authoring      | Shared authoring conventions for routing, non-use boundaries, naming, and progressive disclosure.                   |
-| ub-governance     | Governance routing for testing posture, evidence, ADR or claim decisions, repository controls, and exceptions.      |
-| ub-customizations | Builder skill for Copilot skills, agents, prompts, instructions, hooks, MCP, and plugin bundles.                    |
-| ub-python         | Typed Python patterns, boundary validation, structured error handling, and Ruff-aware repo truth.                   |
-| ub-ts             | TypeScript typing, module resolution, compiler flags, tsconfig baselines, and optional ESLint starters.             |
-| ub-css            | CSS and Vue/Nuxt styling with design tokens, cascade layers, and progressive enhancement.                           |
-| ub-vuejs          | Vue SFCs, composables, reactivity, SSR and hydration, and strict TypeScript contracts.                              |
-| ub-nuxt           | Nuxt patterns for typed composables, rendering modes, runtime config, and server routes.                            |
-| ub-tailwind       | Tailwind setup, migration, and debugging across HTML, Vue, and Nuxt.                                                |
+| ub-quality        | Companion baseline for touched-scope quality: alignment, readability, decision analysis, documentation cleanup, and structured responses. |
+| ub-authoring      | Shared authoring workflow for installable skills and reusable references: routing quality, portability, naming, and non-use boundaries. |
+| ub-workflow       | Canonical lane-and-gate workflow for direct work, lightweight specs in `./.ub-workflows/specs/`, and initiatives with roadmaps and prepared sprints. |
+| ub-governance     | Lean-by-default governance workflow for testing posture, evidence depth, repository controls, gate semantics, and bounded exceptions. |
+| ub-customizations | Classification-first builder workflow for VS Code Copilot skills, hooks, and MCP configs, plus supporting references, validation, and portability notes. |
+| ub-python         | Python workflow for repo-truth detection, strict typing, tests-first behavior changes, tooling validation, and forward-compatible implementation. |
+| ub-ts             | TypeScript workflow for archetype detection, runtime-faithful module strategy, strict typing, config baselines, and modernization. |
+| ub-css            | CSS workflow for token-first styling, cascade layers, modern selectors, container queries, and progressive enhancement. |
+| ub-vuejs          | Vue workflow for modern SFC authoring, strict TypeScript, current reactivity patterns, and hydration-aware component design. |
+| ub-nuxt           | Nuxt workflow for app-structure detection, runtime/rendering choices, modern framework-native patterns, and migration away from legacy layouts. |
+| ub-tailwind       | Tailwind workflow for environment detection, CSS-first setup, modern directives, upgrade-safe migration, and framework-specific integration. |
 
 | Agent             | Description                                                                          |
 | ----------------- | ------------------------------------------------------------------------------------ |
@@ -335,10 +403,13 @@ Skills and custom agents do not currently have the same portability story.
   ecosystem. This repo is usable there today, but its most polished packaging
   remains Copilot-first plus `skills.sh`.
 
-For most real work, the best starting point is the main coding agent with
-`ub-workflow` available in the repo.
-It helps decide whether the work should stay direct, become a lightweight
-spec, or become a full initiative.
+For most real work, the best starting point is the main coding agent with the
+core stack available in the repo: `ub-quality`, `ub-authoring`,
+`ub-workflow`, and `ub-governance`.
+Within that stack, `ub-workflow` helps decide whether the work should stay
+direct, become a lightweight spec, or become a full initiative.
+Then add a specialist skill or `ub-customizations` only when the execution
+surface is genuinely owned there.
 
 Use `ub-teacher` when you want explanation-first help instead of execution.
 
