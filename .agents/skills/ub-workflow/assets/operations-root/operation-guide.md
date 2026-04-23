@@ -107,15 +107,15 @@ temporary execution detail with a concise retained note.
 This SOP uses lifecycle gates in addition to any repository-specific merge or
 release gates.
 
-| Gate | Meaning | Allowed States |
-| ---- | ------- | -------------- |
-| `prd_ready` | The PRD is execution-ready and sprint planning may begin | `pass`, `fail`, `blocked` |
-| `roadmap_ready` | The roadmap is execution-ready and sprint preparation may begin | `pass`, `fail`, `blocked` |
-| `sprint_content_ready` | The sprint pack is execution-ready and sprint start readiness may begin | `pass`, `fail`, `blocked` |
-| `sprint_start_ready` | The next sprint may begin after context refresh and any required reviewed-mode approval | `pass`, `fail`, `blocked` |
-| `sprint_closeout` | A sprint has enough evidence and handoff detail to pause or continue | `pass`, `fail`, `blocked` |
-| `archive_ready` | The final audit output is ready for explicit archive review | `pass`, `fail`, `blocked` |
-| `initiative_complete` | The initiative has a retained note and a validated completion baseline | `pass`, `fail`, `blocked` |
+| Gate                   | Meaning                                                                  | Allowed States            |
+| ---------------------- | ------------------------------------------------------------------------ | ------------------------- |
+| `prd_ready`            | The PRD is execution-ready and sprint planning may begin                 | `pass`, `fail`, `blocked` |
+| `roadmap_ready`        | The roadmap is execution-ready and sprint preparation may begin           | `pass`, `fail`, `blocked` |
+| `sprint_content_ready` | The sprint pack is execution-ready and sprint start readiness may begin  | `pass`, `fail`, `blocked` |
+| `sprint_start_ready`   | Context refreshed; reviewed-mode post-preview approval is recorded       | `pass`, `fail`, `blocked` |
+| `sprint_closeout`      | A sprint has enough evidence and handoff detail to pause or continue     | `pass`, `fail`, `blocked` |
+| `archive_ready`        | The final audit output is ready for explicit archive review              | `pass`, `fail`, `blocked` |
+| `initiative_complete`  | The initiative has a retained note and a validated completion baseline   | `pass`, `fail`, `blocked` |
 
 `roadmap_ready: pass` is human-owned in this workflow. The agent may recommend
 approval after surfacing the roadmap review checklist, but the human must

@@ -847,7 +847,8 @@ Status: planned
             readme = (initiative_root / "README.md").read_text(encoding="utf-8")
             roadmap = roadmap_path.read_text(encoding="utf-8")
             self.assertIn("Roadmap approved, sprint initialization complete", readme)
-            self.assertIn("Start Sprint 01 - Define Contract", readme)
+            self.assertIn("Open the sprint-start checkpoint for Sprint 01 - Define Contract", readme)
+            self.assertIn("wait for the single later approval before execution", readme)
             self.assertIn("`roadmap_ready: pass`", readme)
             self.assertIn("Status: generated", roadmap)
             self.assertIn(

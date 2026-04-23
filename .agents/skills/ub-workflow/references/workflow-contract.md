@@ -150,9 +150,14 @@ Canonical modes:
      concise pros and cons plus a recommended path
    - questions that change the sprint path should be resolved before execution
      using the structured question fallback when needed
-   - explicit human approval before execution or `sprint_start_ready: pass`
+   - explicit human approval before execution; when `sprint_start_ready` is
+     used, that gate records the same approval rather than adding another
+     prompt
    - user-facing post-execution reporting
-   - mandatory pause between sprints or bounded execution chunks
+   - the post-execution report is the pause boundary between sprints or
+     bounded execution chunks
+   - a later move-on request opens the next pre-sprint preview and start
+     approval prompt
 2. `flow`
    - short user-facing pre-execution note
    - richer user-facing post-execution reporting
@@ -181,6 +186,8 @@ Question handling:
    before the explicit start-approval question.
    A request like `Start the next sprint.` opens the preview, but it does not
    count as sprint-start approval in the same turn.
+   A later affirmative approval after that preview starts execution directly
+   and records `sprint_start_ready: pass` when the gate is used.
 
 Mode reporting:
 
@@ -201,6 +208,9 @@ Mode reporting:
 6. user-facing post-execution reporting should cover what changed, why it
    mattered, considerations moving forward, assumptions made, and things to
    watch whenever the active mode surfaces post-execution reporting
+7. in `reviewed` mode, the post-sprint report is the pause; the next user
+   move-on request opens pre-sprint analysis for the next sprint and asks for
+   approval to start it
 
 ## Reviewed-Mode Pre-Sprint Preview Pattern
 
@@ -216,6 +226,8 @@ Always required:
 5. state the approval boundary explicitly
 6. state that execution begins only after a later approval message, not from
    the same start request that opened the preview
+7. state that the later approval starts the sprint directly and is not followed
+   by a second start prompt
 
 Required only for non-trivial reviewed-mode sprints:
 
@@ -230,8 +242,8 @@ Required only for non-trivial reviewed-mode sprints:
 6. mark the recommended path with `(*)`
 7. include a `Recommendation` section that explains why the recommended path
    is currently the best fit
-8. ask the questions that change the sprint path before asking for explicit
-   sprint-start approval
+8. ask the questions that change the sprint path before asking for the single
+   explicit sprint-start approval
 9. close with the explicit approval boundary and a no-edits-yet statement
 
 Treat a sprint as non-trivial when any of these are true:
@@ -287,7 +299,8 @@ Start approval:
 I have not started Sprint 03.
 This preview turn does not start execution.
 Execution would begin only after a later approval message that approves
-path `A`.
+path `A`. That approval would start the sprint directly; there will not be a
+second start prompt.
 
 No files were edited in this pre-sprint evaluation step.
 ```
@@ -342,12 +355,13 @@ No files were edited in this pre-sprint evaluation step.
     Do not lead the user-facing preview with artifact-update or validation
     bookkeeping.
 21. Wait for explicit human approval only after the reviewed-mode preview and
-    its questions are resolved, then advance `sprint_start_ready: pass` or
-    start the sprint.
+    its questions are resolved, then start the sprint and record
+    `sprint_start_ready: pass` when that gate is used.
 22. In `reviewed` mode, that approval must come in a later user reply after
     the preview is shown.
     Do not infer sprint-start approval from the same user turn that requested
     the sprint start.
+    Do not ask a second start question after that later approval.
 23. Stop after sprint-pack preparation and wait for an explicit user request
     before Sprint 01 or any later sprint begins.
 24. Keep sprint execution ordered unless the roadmap explicitly allows parallel
@@ -369,6 +383,7 @@ No files were edited in this pre-sprint evaluation step.
 31. When the active mode surfaces post-execution reporting, write a recoverable
     post-execution summary into `closeout.md` before the workflow pauses or
     advances.
+    In `reviewed` mode, treat that report itself as the pause boundary.
 32. Materialize newly introduced additive workflow files in existing sprint
     folders from the canonical `ub-workflow` sprint template when it evolves,
     without overwriting prepared sprint content.

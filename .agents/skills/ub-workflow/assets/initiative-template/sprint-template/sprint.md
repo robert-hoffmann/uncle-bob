@@ -77,26 +77,28 @@ begins.
 3. If the active mode is `reviewed`, follow the canonical reviewed-mode
    pre-sprint preview pattern defined in the `ub-workflow`
    `workflow-contract.md` reference.
-4. If the active mode is `reviewed`, record the explicit approval checkpoint
-   and any question that changes the sprint path before
-   `sprint_start_ready: pass`.
-5. If the active mode is `reviewed` and the sprint is non-trivial, record at
+4. If the active mode is `reviewed`, record any question that changes the
+   sprint path before the explicit approval checkpoint.
+5. If the active mode is `reviewed`, record the later explicit approval as the
+   event that starts execution and, when used, sets `sprint_start_ready: pass`;
+   do not create a second start prompt.
+6. If the active mode is `reviewed` and the sprint is non-trivial, record at
    least two plausible implementation paths with concise pros and cons plus a
    recommended path marked `(*)`.
-6. If the active mode is `reviewed` and the sprint is non-trivial, structure
+7. If the active mode is `reviewed` and the sprint is non-trivial, structure
    the user-facing preview in this order:
    `What Repo Truth Says`, `Inference`, `Implementation Paths`,
    `Recommendation`, `Questions That Change The Sprint Path`,
    then the explicit approval boundary.
-7. If the active mode is `reviewed` and the sprint is non-trivial, do not
+8. If the active mode is `reviewed` and the sprint is non-trivial, do not
    lead the preview with artifact-update or validation bookkeeping unless that
    bookkeeping is itself the repo truth that materially changes the sprint.
-8. If the active mode is `reviewed`, follow the shared `ub-authoring`
+9. If the active mode is `reviewed`, follow the shared `ub-authoring`
    choice-question contract when questions are needed and preserve the same
    decision structure inside the sprint preview.
-9. If the active mode is not `reviewed`, record why a pre-execution stop is
+10. If the active mode is not `reviewed`, record why a pre-execution stop is
    not required for this sprint.
-10. Record the expected post-execution reporting shape so the closeout can
+11. Record the expected post-execution reporting shape so the closeout can
    recover it without relying on chat history.
 
 ## Reviewability Check

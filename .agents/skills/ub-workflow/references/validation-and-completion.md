@@ -99,7 +99,7 @@ Do not start sprint execution until:
 8. when needed, `sprint_start_ready` is explicit after context refresh
 9. the final roadmap item is a final audit
 10. the workflow stops after initialization and waits for an explicit user
-   request before the active sprint begins
+   request before the active sprint checkpoint begins
 
 ## Sprint Start Readiness
 
@@ -122,9 +122,9 @@ Do not start sprint execution until:
    counterfactual structure:
    `What Repo Truth Says`, `Inference`, `Implementation Paths`,
    `Recommendation`, then the questions that change the sprint path
-10. in `reviewed` mode, any questions that change the sprint path are resolved and the
-   explicit human approval to start the sprint is recorded before execution
-   begins
+10. in `reviewed` mode, any questions that change the sprint path are resolved,
+   and the later explicit human approval starts the sprint directly while being
+   recorded as `sprint_start_ready: pass` when that gate is used
 
 ## Archive Readiness
 
@@ -157,6 +157,8 @@ Do not start sprint execution until:
     reporting, considerations moving forward and things to watch are explicit
 12. when the active interaction mode surfaces post-execution reporting, a
     recoverable post-execution summary is recorded in `closeout.md`
+13. in `reviewed` mode, the post-execution report itself is the pause boundary
+    before any later move-on request opens the next pre-sprint preview
 
 ## Initiative Completion
 

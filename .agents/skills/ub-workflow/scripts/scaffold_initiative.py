@@ -1118,7 +1118,10 @@ def refresh_initiative_readme_for_sprints(
         "Current gate"         : gate,
         "Roadmap status"       : "`generated`",
         "Next step"            : (
-            f"Start {first_sprint_title} by opening `{normalize_path(first_sprint_path)}` and creating the first evidence and closeout entries as execution begins"
+            f"Open the sprint-start checkpoint for {first_sprint_title} from "
+            f"`{normalize_path(first_sprint_path)}`; in reviewed mode, "
+            "preview the sprint and wait for the single later approval before "
+            "execution"
         ),
         "Active sprint"        : "`none`",
         "Last completed sprint": "`none`",

@@ -86,3 +86,7 @@ When the active mode surfaces post-execution reporting, include at minimum:
 3. assumptions made
 4. considerations moving forward
 5. things to watch before the next sprint begins
+
+In `reviewed` mode, this post-execution report is the pause boundary. A later
+move-on request opens the next sprint's pre-sprint analysis and start-approval
+prompt.

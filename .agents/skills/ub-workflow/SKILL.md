@@ -66,10 +66,14 @@ secondary document to be applied correctly.
    execution until `roadmap_ready: pass`.
 9. Prepare each sprint as a standalone `sprint.md` before the sprint begins.
 10. Sprint execution never starts from placeholder-only sprint shells.
-11. In `reviewed` mode, a request like `Start the next sprint.` opens preview
-   only. It does not start execution in the same user turn.
-12. In `reviewed` mode, execution begins only after a later approval message.
-13. End every initiative with a final audit and a retained note, then stop for
+11. In `reviewed` mode, after sprint closeout, a request like `ok lets move on`
+   or `Start the next sprint.` opens the next sprint preview only.
+12. In `reviewed` mode, that preview analyzes the next sprint, surfaces any
+   path-changing questions, and asks for one explicit start approval.
+13. In `reviewed` mode, a later approval message starts execution and, when
+   used, records `sprint_start_ready: pass`; it does not trigger a second start
+   prompt.
+14. End every initiative with a final audit and a retained note, then stop for
     human review before archive.
 
 ## Initiative Lifecycle
@@ -120,7 +124,9 @@ It does not weaken readiness rules.
    - user-facing pre-sprint preview as a distinct checkpoint
    - explicit human approval before execution
    - user-facing post-execution reporting with considerations and watchouts
-   - mandatory pause between sprints or bounded execution chunks
+   - the post-execution report is the pause boundary after a sprint
+   - a later move-on request opens the next pre-sprint preview and start
+     approval prompt
 2. `flow`
    - short pre-execution note
    - richer post-execution reporting
@@ -153,7 +159,7 @@ Question handling:
    contract in `../ub-authoring/references/authoring-conventions.md`
 2. in `reviewed` mode, keep the same decision structure as the canonical
    reviewed-mode pre-sprint preview pattern
-3. resolve the questions that change the sprint path before the explicit
+3. resolve the questions that change the sprint path before the single explicit
    start-approval question
 
 For non-trivial `reviewed`-mode sprints, the preview should lead with:
