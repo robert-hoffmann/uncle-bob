@@ -55,6 +55,10 @@ Always load these skills for every task — no exceptions.
 | -------------- | ---------------------------------------------------------------------------------------------------------------------- | ------------------------------------ |
 | **ub-quality** | Cross-language code quality standards for design patterns, formatting, documentation, code structure, and refactoring. | `.agents/skills/ub-quality/SKILL.md` |
 
+`ub-quality` is mandatory and must not be skipped. Its `SKILL.md` body is the
+always-loaded baseline; its deeper references are loaded by the explicit
+trigger rules inside the skill before producing work that depends on them.
+
 ## Skills
 
 | Skill             | Description                                                                                                                                      | Path                                        |

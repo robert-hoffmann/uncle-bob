@@ -7,7 +7,12 @@ description: Use this skill alongside the primary implementation, review, or wor
 
 ## Critical Contract
 
-Before generating or modifying any code or document, load and apply the required references in this skill.
+Apply the embedded baseline in this `SKILL.md` immediately whenever
+`ub-quality` is loaded.
+
+For work that depends on deeper quality rules, load the relevant references by
+the trigger table in this skill before producing the output. Do not skip a
+triggered reference because the task looks small or the local style differs.
 
 For every touched eligible vertical separator block, separators must align into one column. Use separator-column alignment (`key : value`), not value-column alignment (`key: value`).
 
@@ -56,14 +61,35 @@ rules.
 - Do not skip alignment because nearby code is unaligned, because a shorter style looks more familiar, or because the block is in documentation rather than code.
 - Do not normalize unrelated blocks outside the touched logical scope unless broader normalization was explicitly requested.
 
-## Required References
+## Reference Loading Contract
 
-- Load and apply `references/design-patterns.md` for architecture and implementation principles.
-- Load and apply `references/formatting-alignment.md` for mandatory alignment rules and guardrails.
-- Load and apply `references/documentation-structure-refactoring.md` for documentation standards, file structure, and refactoring workflow.
-- Load and apply `references/important-tags-and-doc-generation.md` for mandatory comment-tag preservation and document-generation policy.
-- Load and apply `references/response-readability.md` for user-facing response structure, comparison formatting, and narrow-pane readability guidance.
-- Read `references/freshness-portability.md` when deciding whether a quality rule is repository policy, a strong house default, or an advisory freshness concern.
+`ub-quality` itself remains the always-loaded baseline. Deeper references are
+not optional; they are loaded by trigger so the right contract is applied at
+the right time without treating every task as if every quality subdomain is
+active.
+
+MUST load and apply:
+
+- `references/design-patterns.md` when making architecture, implementation,
+  refactoring, abstraction, dependency, or maintainability decisions.
+- `references/formatting-alignment.md` before creating or modifying code,
+  configs, examples, comments, docstrings, markup attributes, documentation
+  tables, or any other touched content with eligible separator blocks.
+- `references/documentation-structure-refactoring.md` before creating,
+  editing, reviewing, reorganizing, or refactoring documentation, comments,
+  file structure, public call surfaces, or large source files.
+- `references/important-tags-and-doc-generation.md` before creating or
+  modifying generated documents, comment tags, TODO-like markers, or any
+  content that may contain special preservation tags.
+- `references/response-readability.md` before substantial user-facing plans,
+  reviews, explanations, comparisons, or any answer where structure materially
+  affects scanability.
+- `references/freshness-portability.md` when deciding whether guidance is
+  repository policy, a strong house default, advisory freshness guidance, or a
+  portability concern.
+
+If more than one trigger applies, load every relevant reference before
+producing the dependent output.
 
 ## Non-Compliance
 
@@ -115,14 +141,16 @@ Table rule:
 ## Core Workflow
 
 1. Inspect the task scope and touched files.
-2. Load and apply the required references before writing.
-3. Apply the decision-analysis baseline for planning, design, architecture,
+2. Apply the embedded baseline immediately.
+3. Load and apply every reference triggered by the task before producing
+   dependent output.
+4. Apply the decision-analysis baseline for planning, design, architecture,
    implementation direction, and other choice-bearing guidance.
-4. Apply the readability baseline for user-facing responses and choose tables
+5. Apply the readability baseline for user-facing responses and choose tables
    versus safer fallback structures accordingly.
-5. Choose the simplest approach that preserves behavior and constraints.
-6. Apply formatting, documentation, and structure rules only in touched logical blocks.
-7. Validate behavior and explain any intentional exceptions allowed by the required references.
+6. Choose the simplest approach that preserves behavior and constraints.
+7. Apply formatting, documentation, and structure rules only in touched logical blocks.
+8. Validate behavior and explain any intentional exceptions allowed by the triggered references.
 
 ## Skill Coordination
 
@@ -136,7 +164,7 @@ Table rule:
 
 ## Policy Versus Defaults
 
-- In this repository, the alignment contract and required-reference workflow are repository policy when `ub-quality` is loaded.
+- In this repository, the alignment contract and triggered-reference workflow are repository policy when `ub-quality` is loaded.
 - Many language/framework recommendations coordinated through sibling skills are strong defaults, not universal portability requirements.
 - Treat volatile setup recipes as freshness-review candidates first, not as automatic blockers, unless the repository explicitly promotes them to policy.
 
