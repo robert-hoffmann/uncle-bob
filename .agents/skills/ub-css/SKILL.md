@@ -182,7 +182,9 @@ Apply modern CSS platform features with predictable cascade control, token-drive
 ## Version & Research Policy
 
 - Use web search to verify current browser support data before recommending or gating CSS features.
-- Refer to AGENTS.md for centralized version policy and default tooling.
+- Inspect the host repository's `AGENTS.md` or equivalent instructions when
+  present for project-specific version policy and tooling; do not assume it
+  contains this catalog's defaults.
 - Do not hardcode snapshot dates or version numbers in generated guidance — keep recommendations evergreen.
 
 ## Output Requirements

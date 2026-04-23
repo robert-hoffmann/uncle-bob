@@ -47,6 +47,41 @@ explicitly promotes it beyond advisory status.
 | Tailwind CSS | Latest stable       | —                | —        |
 | Pydantic     | Latest stable (v2+) | —                | —        |
 
+## Repository And Distribution Boundaries
+
+This repository is the authoring and validation factory for the distributable
+agent customizations. Do not assume every repository file ships to downstream
+projects.
+
+Distributable surfaces:
+
+1. `.agents/skills/`
+   The portable skill payload. Skills may depend on their own `SKILL.md`,
+   `references/`, `assets/`, `scripts/`, and explicitly named sibling skills.
+   Skills must not depend on repo-maintenance scripts, root `Taskfile.yml`, CI,
+   plugin metadata, root documentation, `.ub-workflows/`, or optional agents.
+2. `.github/agents/ub-teacher.agent.md`
+   The optional teaching-agent payload. The agent may know about itself and the
+   skills. Skills must not require this agent or mention it as a runtime
+   dependency.
+3. Repository-only surfaces
+   `AGENTS.md`, `README.md`, `Taskfile.yml`, `pyproject.toml`, `plugin.json`,
+   `.github/workflows/`, `scripts/repo-maintenance/`, `tests/`, `docs/`, and
+   factory workflow artifacts are repository truth. These files may know about
+   the skills, the optional agent, packaging, CI, and validation rules.
+
+When editing:
+
+1. Keep files under `.agents/skills/` host-agnostic, repo-agnostic, and
+   portable unless the skill explicitly owns the referenced asset or helper.
+2. Keep `ub-teacher` independent from factory-only paths except where it needs
+   to locate the distributable skills in this repository.
+3. Put factory-only planning, validation, release, and maintenance knowledge in
+   repository-only surfaces, not inside distributable skill contracts.
+4. If a downstream project needs repo behavior, bundle it through skill-owned
+   `scripts/` or `assets/`, or describe how to detect and adapt the target
+   project instead of pointing at this repository's root tooling.
+
 ## Mandatory Skills
 
 Always load these skills for every task — no exceptions.

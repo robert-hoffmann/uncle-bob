@@ -99,22 +99,13 @@ increment.
 Portable script surface:
 
 ```bash
-python .agents/skills/ub-governance/scripts/check_test_signal.py --path <test-file-or-dir> --language auto --strict
-```
-
-In this repository, direct local invocation should use:
-
-```bash
 uv run python .agents/skills/ub-governance/scripts/check_test_signal.py --path <test-file-or-dir> --language auto --strict
 ```
 
+Replace `uv run python` with the host repository's configured Python runner,
+such as `python`, when `uv` is unavailable or inappropriate for the host.
+
 For JSON output, the portable script surface is:
-
-```bash
-python .agents/skills/ub-governance/scripts/check_test_signal.py --path <test-file-or-dir> --language auto --format json --strict
-```
-
-For JSON output in this repository, direct local invocation should use:
 
 ```bash
 uv run python .agents/skills/ub-governance/scripts/check_test_signal.py --path <test-file-or-dir> --language auto --format json --strict

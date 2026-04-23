@@ -137,7 +137,7 @@ If a trigger is not active, do not read the reference just because it exists.
    externally observable outcome.
 3. `Show me the repo-maintenance checks for README, AGENTS, and skill schema.`
    Do not route that through governance. Those checks belong to the
-   development repository's `scripts/repo-maintenance/` surface.
+   host repository's own maintenance/check surface.
 
 ## When Not To Use
 

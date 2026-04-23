@@ -2,20 +2,21 @@
 
 Stable governance entrypoints (Pass 2 baseline):
 
-1. `python .agents/skills/ub-governance/scripts/build_adr_registry.py`
-2. `python .agents/skills/ub-governance/scripts/check_adr_gate.py`
-3. `python .agents/skills/ub-governance/scripts/check_claim_register.py`
-4. `python .agents/skills/ub-governance/scripts/check_test_signal.py`
+1. `uv run python .agents/skills/ub-governance/scripts/build_adr_registry.py`
+2. `uv run python .agents/skills/ub-governance/scripts/check_adr_gate.py`
+3. `uv run python .agents/skills/ub-governance/scripts/check_claim_register.py`
+4. `uv run python .agents/skills/ub-governance/scripts/check_test_signal.py`
 
-These entrypoints execute the canonical Python implementations directly for cross-platform portability.
+These entrypoints execute the canonical Python implementations through `uv`
+when available so the command uses the host project's intended environment.
 
-Repository note:
+Host repository note:
 
-1. in this repository, prefer `task` wrappers when they exist
-2. use `uv run python ...` for direct repository Python invocation when no task
-   wrapper fits
-3. the `python ...` commands below describe the portable script surface, not
-   the only valid local wrapper
+1. Prefer host-defined wrappers when the repository exposes them.
+2. Prefer `uv run python ...` when `uv` is available or the host repository
+   uses `uv`.
+3. Replace `uv run python` with the configured local Python runner, such as
+   `python`, when `uv` is unavailable or inappropriate for the host.
 
 Use them as explicit governance tools, not as the default workflow path for
 every change.
@@ -34,30 +35,23 @@ Operator intent:
 4. Repository-catalog, package-metadata, and skill-surface integrity scripts
    are repo-maintenance tooling, not default governance commands.
 
-Common repo-local wrappers:
+Host-repository wrappers:
 
-1. `task test-integrity` for repository integrity baseline checks
-2. `task test-governance` for governance regression tests
+1. A host repository may expose an integrity-baseline wrapper through its own
+   task runner.
+2. A host repository may expose a governance-regression wrapper through its own
+   task runner.
 
 Repo-local maintenance note:
 
-1. In this development repository, the extracted repo-maintenance command
-   surface is documented alongside the scripts in `scripts/repo-maintenance/`.
+1. Repo-maintenance wrappers belong to the host repository's own documented
+   maintenance/check surface.
 2. That surface is intentionally separate from the distributable governance
-   command set carried under `.agents/skills/ub-governance/`.
+   command set carried by this skill.
 
 ## Usage Examples
 
 Portable script-surface examples:
-
-```bash
-python .agents/skills/ub-governance/scripts/build_adr_registry.py --strict --output docs/adr/registry.json
-python .agents/skills/ub-governance/scripts/check_adr_gate.py --gate merge --changed-files-file artifacts/decision-governance/changed-files.txt --output artifacts/decision-governance/adr-gate.json
-python .agents/skills/ub-governance/scripts/check_claim_register.py --claim-register docs/adr/claim-register.json --output artifacts/decision-governance/claim-gate.json
-python .agents/skills/ub-governance/scripts/check_test_signal.py --path .agents/skills/ub-governance/tests --language auto --strict
-```
-
-Repo-local direct invocation examples:
 
 ```bash
 uv run python .agents/skills/ub-governance/scripts/build_adr_registry.py --strict --output docs/adr/registry.json
@@ -65,19 +59,3 @@ uv run python .agents/skills/ub-governance/scripts/check_adr_gate.py --gate merg
 uv run python .agents/skills/ub-governance/scripts/check_claim_register.py --claim-register docs/adr/claim-register.json --output artifacts/decision-governance/claim-gate.json
 uv run python .agents/skills/ub-governance/scripts/check_test_signal.py --path .agents/skills/ub-governance/tests --language auto --strict
 ```
-
-## Repo-Maintenance In This Repository
-
-These commands are for maintaining this development repository's catalog and
-skill surfaces. They are not part of the normal governance command path that
-gets copied into downstream workspaces.
-
-Task wrappers:
-
-1. `task test-repo-catalog`
-2. `task test-package-metadata`
-3. `task test-repo-paths`
-4. `task test-skill-schema`
-5. `task test-governance-integrity`
-6. `task test-integrity`
-7. `task test-repo-maintenance`

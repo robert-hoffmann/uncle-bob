@@ -96,7 +96,9 @@ Python lint config of its own.
   version-sensitive, or contested guidance rather than trivial edits.
 - Do not generate syntax or stdlib behavior only available in unreleased Python versions unless the user explicitly requests it.
 - When the project's installed version is behind latest stable, note the version gap, recommend an upgrade path, and prefer patterns that will survive that upgrade cleanly.
-- Refer to AGENTS.md for centralized version policy and default tooling.
+- Inspect the host repository's `AGENTS.md` or equivalent instructions when
+  present for project-specific version policy and tooling; do not assume it
+  contains this catalog's defaults.
 - Do not hardcode version numbers in generated guidance — keep recommendations evergreen.
 
 ## Freshness Review

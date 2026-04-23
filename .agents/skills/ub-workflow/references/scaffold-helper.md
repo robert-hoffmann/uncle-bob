@@ -3,16 +3,17 @@
 Use the helper script when you want deterministic initiative operations instead
 of a manual copy workflow.
 
-In this repository, prefer `uv run python ...` for direct helper invocation.
-In an adopting repository, resolve the equivalent local Python runner first.
+Prefer `uv run python ...` when `uv` is available or the host repository uses
+`uv`. If `uv` is unavailable or the host has a different configured runner,
+replace `uv run python` with that local Python runner, such as `python`.
 
 ## Commands
 
-1. `uv run python .agents/skills/ub-workflow/scripts/scaffold_initiative.py create --prd-source <path-to-prd>` in this repository
-2. `uv run python .agents/skills/ub-workflow/scripts/scaffold_initiative.py prepare-sprints <initiative-root>` in this repository
-3. `uv run python .agents/skills/ub-workflow/scripts/scaffold_initiative.py init-sprints <initiative-root>` in this repository
-4. `uv run python .agents/skills/ub-workflow/scripts/scaffold_initiative.py archive <initiative-root>` in this repository
-5. `uv run python .agents/skills/ub-workflow/scripts/check_scaffold_placeholders.py <initiative-root-or-scan-root>` in this repository
+1. `uv run python .agents/skills/ub-workflow/scripts/scaffold_initiative.py create --prd-source <path-to-prd>`
+2. `uv run python .agents/skills/ub-workflow/scripts/scaffold_initiative.py prepare-sprints <initiative-root>`
+3. `uv run python .agents/skills/ub-workflow/scripts/scaffold_initiative.py init-sprints <initiative-root>`
+4. `uv run python .agents/skills/ub-workflow/scripts/scaffold_initiative.py archive <initiative-root>`
+5. `uv run python .agents/skills/ub-workflow/scripts/check_scaffold_placeholders.py <initiative-root-or-scan-root>`
 
 ## What It Does
 

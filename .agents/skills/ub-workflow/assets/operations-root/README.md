@@ -10,10 +10,10 @@ Use each initiative's `roadmap.md` as the small live progress document when
 resuming work.
 
 If you want to bootstrap a new initiative quickly, use
-`uv run python .agents/skills/ub-workflow/scripts/scaffold_initiative.py create --prd-source <path-to-prd>` in this repository, or the adopting repository's equivalent local Python runner.
+`uv run python .agents/skills/ub-workflow/scripts/scaffold_initiative.py create --prd-source <path-to-prd>`, replacing `uv run python` with the host repository's local Python runner when `uv` is unavailable.
 
 If you want a bounded planning artifact without opening a full initiative, use
-`uv run python .agents/skills/ub-workflow/scripts/scaffold_initiative.py create-spec <slug>` in this repository, or the adopting repository's equivalent local Python runner.
+`uv run python .agents/skills/ub-workflow/scripts/scaffold_initiative.py create-spec <slug>`, replacing `uv run python` with the host repository's local Python runner when `uv` is unavailable.
 
 ## Active Initiative Roots
 

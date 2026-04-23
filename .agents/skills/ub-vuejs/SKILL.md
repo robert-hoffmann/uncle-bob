@@ -66,7 +66,9 @@ patterns or outdated guidance by default.
   version-sensitive, or contested guidance rather than trivial edits.
 - When the project's installed version is behind latest stable, note the version gap and recommend an upgrade path.
 - Do not use pre-release or beta features unless explicitly requested.
-- Refer to AGENTS.md for centralized version policy and default tooling.
+- Inspect the host repository's `AGENTS.md` or equivalent instructions when
+  present for project-specific version policy and tooling; do not assume it
+  contains this catalog's defaults.
 - Do not hardcode version numbers in generated guidance — keep recommendations evergreen.
 
 ## Freshness Review

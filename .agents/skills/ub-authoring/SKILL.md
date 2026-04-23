@@ -32,7 +32,7 @@ customization-specific skill.
 - Do not use this skill for ordinary code implementation or framework work
   where no shared authoring contract is being changed.
 - Do not use this skill as a substitute for repo-local maintenance docs or
-  packaging metadata that belong to the development repository rather than the
+  packaging metadata that belong to a development repository rather than the
   distributable skill payload.
 
 ## Embedded Contract

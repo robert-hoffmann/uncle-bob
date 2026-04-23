@@ -11,7 +11,7 @@ description: >-
   Do not use it for governance-only questions that belong to ub-governance.
 argument-hint: "overview | scaffold | spec | resume | prd | roadmap | sprint | audit | archive | what-next"
 user-invocable: true
-disable-model-invocation: true
+disable-model-invocation: false
 ---
 
 # UB Workflow
