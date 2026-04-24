@@ -43,6 +43,30 @@ tdd_exception:
   follow_up: "https://tracker.example.com/TST-123"
 ```
 
+### Test Double Exception
+
+Use this only when a risky test double is temporarily accepted as reviewer
+guidance. It does not bypass missing bugfix regression evidence.
+
+```yaml
+test_double_exception:
+  owner: "@team-or-person"
+  scope: "test file, boundary, or changed behavior"
+  rationale: "Why a real implementation, maintained fake, or functional guard cannot be used now"
+  risk: "What false confidence this double could create"
+  contract_evidence: "Path to contract, integration, or E2E evidence, or missing"
+  created_at: "2026-03-04"
+  expires_at: "2026-03-11"
+  follow_up: "https://tracker.example.com/TST-124"
+```
+
+Rules:
+
+1. Keep the exception narrowly scoped to the behavior or boundary.
+2. Do not use it to justify mocking the reported bug path.
+3. Pair local-source behavior mocks with a functional guard when accepted
+   temporarily.
+
 ### ADR Waiver Exception
 
 ```yaml

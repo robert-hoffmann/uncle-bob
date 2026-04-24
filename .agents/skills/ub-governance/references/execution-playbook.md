@@ -50,6 +50,22 @@ Test readability note:
 2. run narrow test command
 3. confirm intended failure
 4. run strict test-signal check for touched test file
+5. confirm RED realism before implementation
+
+RED realism is invalid when:
+
+1. the implementation under review is mocked or replaced
+2. the mocked response encodes the expected answer
+3. the assertion only checks calls, call count, or call order
+4. the test would still pass if the real implementation were deleted
+5. the assertion is snapshot-only, render-only, coverage-only, or
+   does-not-throw-only
+6. a bugfix regression test does not exercise the real reported defect path
+
+For reported defects, the regression test must exercise the real defect path
+unless a bounded test-double exception exists. Keep any RED realism note short:
+behavior under test, public surface exercised, why it fails without the fix,
+and test doubles used.
 
 ### GREEN
 
@@ -73,6 +89,7 @@ Test readability note:
 | "These cases are basically the same" | Merge scenarios only when the observable outcome is truly the same; otherwise keep the tests distinct and readable. |
 | "I will run the strict test-signal check later" | Running it during RED prevents low-signal tests from compounding across increments. |
 | "The full suite is enough" | Narrow checks prove increment intent; broader checks prove regression safety. Both matter. |
+| "The mock proves the scenario" | A double can support setup, but it cannot be the proof for behavior it replaced. |
 
 ## 5) Required Checkpoints
 
@@ -91,4 +108,5 @@ Record per increment:
 1. tests added/updated
 2. production code added/updated
 3. refactor summary (or `none`)
-4. final pass/fail state
+4. RED realism note when a test double affects the proof
+5. final pass/fail state

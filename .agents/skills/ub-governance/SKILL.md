@@ -76,6 +76,22 @@ Warning-only signal:
 1. `Internal-Detail Bias` (`TG005`): probable verification of internal details
    over public behavior
 
+Functional-realism signals use risk-scaled guidance rather than automatic new
+gates:
+
+1. `Local Source Mocking` (`TG006`): a test replaces local application source
+   involved in the behavior under review
+2. `Uncontracted Test Double` (`TG007`): a mock, stub, fake, fixture, or route
+   intercept has no visible boundary reason or contract evidence
+3. `Mock-Dominant Test` (`TG008`): the test is mostly double setup or call
+   assertions instead of observable outcomes
+4. `Missing Functional Guard` (`TG009`): risky behavior lacks a public-surface
+   functional, integration, contract, component, or E2E check
+5. `Mutation Survivor on Changed Logic` (`TG010`): changed critical logic has
+   unreviewed surviving mutants when mutation evidence is already in scope
+6. `Snapshot/Coverage-Only Proof` (`TG011`): behavior change relies only on
+   snapshots, render smoke, coverage, or does-not-throw proof
+
 ## Load References By Trigger
 
 Use these load tiers literally.
@@ -164,8 +180,10 @@ If a trigger is not active, do not read the reference just because it exists.
 2. treat reported defects as regression-first work before code fixes are
    accepted
 3. enforce `TG001` through `TG004` as blocking and `TG005` as warning-only
-4. require behavior-first TDD flow for behavior-changing work
-5. keep testing guidance readable, boundary-aware, and deterministic without
+4. apply `TG006` through `TG011` as functional-realism guidance, escalating
+   only when risk, evidence level, or explicit gate scope justifies it
+5. require behavior-first TDD flow for behavior-changing work
+6. keep testing guidance readable, boundary-aware, and deterministic without
    turning advisory guidance into new gates
 
 ### Evidence Mode

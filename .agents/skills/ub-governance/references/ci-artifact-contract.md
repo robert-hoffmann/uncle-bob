@@ -22,6 +22,15 @@ artifacts/
   command-log.txt
 ```
 
+Optional test-realism evidence, when useful for reviewer confidence:
+
+```text
+artifacts/
+  test-realism/
+    mock-audit.json
+    functional-guards.json
+```
+
 ## 2) Confidence/Release Testing Expansion
 
 When profile/scope requires expanded gates:
@@ -29,10 +38,14 @@ When profile/scope requires expanded gates:
 1. full integration suite outputs
 2. full contract verification outputs
 3. full e2e regression outputs
-4. non-functional checks (accessibility/performance/security) when in scope
+4. functional guard evidence for risky behavior when narrow tests can be
+   faked too easily
+5. non-functional checks (accessibility/performance/security) when in scope
 
 ## 3) Enforcement
 
 1. TG001-TG004 are blocking
 2. TG005 is warning-only
-3. overrides require active bounded exception metadata from governance contract
+3. TG006-TG011 are risk-scaled guidance unless a selected gate explicitly
+   promotes them
+4. overrides require active bounded exception metadata from governance contract
