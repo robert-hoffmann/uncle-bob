@@ -55,9 +55,13 @@ This keeps job output focused, preserves parallelism, and still centralizes the 
   - check out the repo
   - install Python 3.12
   - install `uv` with `astral-sh/setup-uv`
-  - install Task with `arduino/setup-task`
+  - install Task with `go-task/setup-task`
   - run `uv sync`
   - execute the relevant Taskfile task
+
+Task is installed through the official setup action rather than the
+`taskfile.dev` shell installer. The workflow pins the Task binary version so
+CI does not depend on resolving the latest GitHub release during each run.
 
 ### Local Equivalent
 

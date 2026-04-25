@@ -48,10 +48,10 @@ jobs:
       - uses: astral-sh/setup-uv@v8.1.0
 
       - name: Install Task
-        run: sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d -b "$HOME/.local/bin"
-
-      - name: Add Task to PATH
-        run: echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+        uses: go-task/setup-task@v2
+        with:
+          version: 3.50.0
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Sync Python tooling
         run: uv sync
