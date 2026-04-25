@@ -3,7 +3,7 @@
 <table>
 <tr>
 <td width="300">
-<img src="docs/assets/uncle-bob.png" alt="Uncle Bob" width="280" />
+<img src="assets/brand/uncle-bob.png" alt="Uncle Bob" width="280" />
 </td>
 <td>
 
