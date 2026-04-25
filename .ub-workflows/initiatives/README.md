@@ -17,7 +17,7 @@ If you want a bounded planning artifact without opening a full initiative, use
 
 ## Active Initiative Roots
 
-1. `none`
+1. `initiatives/2026-04-25-skill-principle-documentation-uplift`
 
 ## Current State
 

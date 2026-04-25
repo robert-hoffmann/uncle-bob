@@ -33,3 +33,13 @@ The public site should answer:
 
 It should not require a reader to understand this repository’s factory setup
 before they can use the skills.
+
+## Progressive Disclosure Boundary
+
+Progressive disclosure is part of the portability model. The main skill should
+travel as a compact contract, while references and helper assets provide deeper
+detail only when the installed task needs them.
+
+Public docs should describe that structure and link readers toward the right
+skill page. They should not turn portable references into a second copied
+source of truth.

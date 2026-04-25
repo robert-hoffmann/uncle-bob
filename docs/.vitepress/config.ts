@@ -9,7 +9,10 @@ export default withMermaid({
     "Workflow-first AI coding skills and custom agents for planning, quality, governance, authoring, and implementation work.",
 
   base,
-  outDir : "../dist",
+  outDir     : "../dist",
+  srcExclude : [
+    "AGENTS.md",
+  ],
 
   head   : [
     [
@@ -73,6 +76,10 @@ export default withMermaid({
           {
             text : "Routing Model",
             link : "/guide/routing-model",
+          },
+          {
+            text : "References And Disclosure",
+            link : "/guide/references-progressive-disclosure",
           },
           {
             text : "Portability Model",

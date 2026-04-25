@@ -42,6 +42,16 @@ A skill changes the agent’s behavior by giving it:
 The skill does not replace project truth. It tells the agent how to inspect the
 project and make better choices from the real context in front of it.
 
+## References And Progressive Disclosure
+
+Most skills keep their main `SKILL.md` concise and place deeper patterns in
+skill-owned references. The agent should load those references only when their
+trigger applies: a migration guide for migration work, a validation reference
+for gate work, or a config-resolution reference for setup work.
+
+See [References And Progressive Disclosure](/guide/references-progressive-disclosure)
+for the public mental model.
+
 ## Common Combinations
 
 - `ub-quality` + `ub-workflow`: planning or delivery work.

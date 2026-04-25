@@ -12,6 +12,8 @@ authoring concerns.
 3. Add the smallest relevant owner skill.
 4. Add a language or framework specialist only when the work actually touches
    that domain.
+5. Load deeper references only after the owner skill says they matter for the
+   active task.
 
 ## Examples
 
@@ -42,4 +44,7 @@ flowchart LR
 
 The common failure is over-routing: loading every related-looking skill. That
 adds noise and can turn a simple task into a policy debate. Uncle Bob prefers
-the smallest useful skill set.
+the smallest useful skill set, then progressive disclosure inside that skill
+when more detail is needed.
+
+For deeper behavior, see [References And Progressive Disclosure](/guide/references-progressive-disclosure).

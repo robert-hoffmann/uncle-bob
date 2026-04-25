@@ -20,13 +20,28 @@ const STATIC_ASSET_EXTENSIONS = new Set([
   ".svg",
   ".webp",
 ]);
-const INSTALL_DOC               = "docs/install.md";
-const VITEPRESS_CONFIG          = "docs/.vitepress/config.ts";
-const GENERATED_PATH_REFERENCES = new Set([
+const INSTALL_DOC                    = "docs/install.md";
+const DOCS_AGENTS                    = "docs/AGENTS.md";
+const VITEPRESS_CONFIG               = "docs/.vitepress/config.ts";
+const GENERATED_PATH_REFERENCES      = new Set([
   "docs/adr/registry.json",
 ]);
-const INSTALL_COMMAND           = "npx skills add robert-hoffmann/uncle-bob";
-const failures                  = [];
+const INSTALL_COMMAND                = "npx skills add robert-hoffmann/uncle-bob";
+const PROGRESSIVE_DISCLOSURE_DOC     = "docs/guide/references-progressive-disclosure.md";
+const REQUIRED_SKILL_DOC_SECTIONS    = [
+  "## Core Principles",
+  "## Behavior In Practice",
+  "## Reference Highlights",
+  "## Progressive Disclosure",
+  "## Common Invocation Examples",
+  "## Boundaries",
+  "## Tradeoffs",
+];
+const REQUIRED_SKILL_DEEP_DIVE_LINKS = new Map([
+  ["ub-workflow", "/deep-dives/ub-workflow"],
+  ["ub-governance", "/deep-dives/ub-governance"],
+]);
+const failures                       = [];
 
 function toPosix(filePath) {
   return filePath.split(path.sep).join("/");
@@ -76,7 +91,7 @@ function getMarkdownFiles() {
 }
 
 function getPublicDocsMarkdownFiles() {
-  return walk("docs").filter((file) => file.endsWith(".md"));
+  return walk("docs").filter((file) => file.endsWith(".md") && file !== DOCS_AGENTS);
 }
 
 function sanitizeLinkTarget(rawTarget) {
@@ -239,6 +254,21 @@ function checkSkillDocs() {
     if (!docs.includes(`.agents/skills/${skillName}/SKILL.md`)) {
       recordFailure(`${docsPath}: must reference its source skill path.`);
     }
+    for (const section of REQUIRED_SKILL_DOC_SECTIONS) {
+      if (!docs.includes(section)) {
+        recordFailure(`${docsPath}: missing required section \`${section}\`.`);
+      }
+    }
+    if (
+      fs.existsSync(path.resolve(ROOT, `.agents/skills/${skillName}/references`)) &&
+      !docs.includes(`.agents/skills/${skillName}/references/`)
+    ) {
+      recordFailure(`${docsPath}: must highlight at least one source reference path.`);
+    }
+    const requiredDeepDive = REQUIRED_SKILL_DEEP_DIVE_LINKS.get(skillName);
+    if (requiredDeepDive && !docs.includes(requiredDeepDive)) {
+      recordFailure(`${docsPath}: missing required deep-dive link \`${requiredDeepDive}\`.`);
+    }
     if (!docsIndex.includes(`./${skillName}`)) {
       recordFailure(`docs/skills/index.md: missing catalog link for \`${skillName}\`.`);
     }
@@ -258,8 +288,11 @@ function checkDocsPlatformConfig() {
   const content = read(VITEPRESS_CONFIG);
   const requiredSnippets = [
     'const base = "/uncle-bob/";',
-    'outDir : "../dist"',
+    'outDir     : "../dist"',
+    'srcExclude : [',
+    '"AGENTS.md"',
     "https://github.com/robert-hoffmann/uncle-bob",
+    "/guide/references-progressive-disclosure",
   ];
 
   for (const snippet of requiredSnippets) {
@@ -351,10 +384,12 @@ function checkInstallDocs() {
 function checkRequiredDocs() {
   const requiredDocs = [
     "docs/index.md",
+    DOCS_AGENTS,
     INSTALL_DOC,
     "docs/guide/skill-system.md",
     "docs/guide/core-stack.md",
     "docs/guide/routing-model.md",
+    PROGRESSIVE_DISCLOSURE_DOC,
     "docs/guide/portability-model.md",
     "docs/skills/index.md",
     "docs/deep-dives/ub-workflow.md",
