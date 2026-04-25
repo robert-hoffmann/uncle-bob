@@ -82,6 +82,69 @@ When editing:
    `scripts/` or `assets/`, or describe how to detect and adapt the target
    project instead of pointing at this repository's root tooling.
 
+## Documentation Synchronization Policy
+
+This repository has three active truth surfaces:
+
+1. `.agents/skills/` and `.github/agents/`
+   These are runtime and distribution truth for the installed skills and custom
+   agents.
+2. `docs/` and `README.md`
+   These are published explanation truth for humans evaluating and adopting
+   the portable skills.
+3. `AGENTS.md`, `Taskfile.yml`, `.github/workflows/`, `scripts/`, and
+   repo-maintenance checks
+   These are repository-control truth for local workflow, CI, validation, and
+   synchronization rules.
+
+Keep those surfaces synchronized. Documentation drift is a defect when any of
+the following are true:
+
+1. a real skill under `.agents/skills/` has no matching published docs page
+2. docs mention a skill, custom agent, command, workflow, or path that no
+   longer exists
+3. skill or custom-agent behavior changes without matching documentation
+   updates
+4. public docs describe repository-maintenance internals instead of portable
+   skill behavior
+5. documentation introduces behavior, guarantees, or workflow steps that the
+   skill contracts do not support
+6. workflow, validation, deployment, or command docs no longer match
+   `Taskfile.yml`, `package.json`, scripts, or GitHub Actions
+
+Synchronization is bidirectional:
+
+1. When editing any skill or custom agent, update the affected docs in the same
+   change or explicitly state why no docs change is needed.
+2. When editing docs, verify the described behavior against the real skill,
+   agent, workflow, script, or config surface.
+3. Keep public VitePress docs focused on portable skill behavior, skill usage,
+   skill interaction, install flow, and diagrams that explain skill contracts.
+4. Keep repository-maintenance details in `README.md`, `AGENTS.md`,
+   `.github/workflows/README.md`, or repo-maintenance scripts instead of the
+   public site.
+5. Do not copy old reports into deep-dive docs. Use reports as research input,
+   then verify claims against current `SKILL.md` and reference files.
+6. When new docs conventions become deterministic, update
+   `scripts/check-docs-sync.mjs` in the same change.
+7. Do not make docs-sync warning-only unless this repository explicitly changes
+   that policy.
+
+Before finishing a change that touches skills, agents, docs, commands,
+workflows, or repo-maintenance behavior, run the smallest relevant validation
+set:
+
+1. `task check` for the Python, YAML, catalog, governance, and workflow
+   integrity baseline
+2. `npm run check:docs-sync` when docs, skills, agents, commands, workflows, or
+   repository paths are affected
+3. `npm run docs:build` when docs content, docs configuration, package
+   metadata, or Pages deployment changes
+4. selected governance or workflow checks when ADR, claim, evidence, or
+   workflow-control behavior is affected
+
+If a check is intentionally skipped, state the reason and the remaining risk.
+
 ## Mandatory Skills
 
 Always load these skills for every task — no exceptions.

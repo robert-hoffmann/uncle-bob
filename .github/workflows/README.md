@@ -15,6 +15,7 @@ Use this file as the source of truth for:
 | ------------- | ------------- | ------- | ------------ |
 | `quality.yml` | `quality` | Repository quality gates: Python, YAML, repository integrity, and regression checks. | `task check` |
 | `decision-governance.yml` | `decision-governance` | Pull-request governance gate for ADR, claim-register, and decision-report enforcement. | Partial: individual governance scripts, not a single Taskfile task |
+| `build-docs.yml` | `build-docs` | VitePress documentation build and GitHub Pages deployment. | `npm run check:docs-sync` and `npm run docs:build` |
 
 ## Quality Workflow
 
@@ -141,6 +142,35 @@ The closest local commands are the underlying governance scripts:
 - `uv run python .agents/skills/ub-governance/scripts/check_claim_register.py`
 
 Use `task check` for normal quality validation, and use the governance scripts directly when you need to reproduce decision-gate behavior outside GitHub Actions.
+
+## Build-Docs Workflow
+
+File: `.github/workflows/build-docs.yml`
+
+### Purpose
+
+This workflow builds the VitePress documentation site and deploys the root
+`dist/` artifact to GitHub Pages.
+
+### Triggers
+
+- push to `main`
+- manual `workflow_dispatch`
+
+### Main Flow
+
+1. Check out the repository.
+2. Set up Node 24 with npm caching.
+3. Install dependencies with `npm ci`.
+4. Run `npm run check:docs-sync`.
+5. Run `npm run docs:build`.
+6. Upload `dist/` as the Pages artifact.
+7. Deploy to GitHub Pages.
+
+### Local Equivalent
+
+- Drift check: `npm run check:docs-sync`
+- Production docs build: `npm run docs:build`
 
 ## Editing Guidelines
 

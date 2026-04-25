@@ -81,6 +81,18 @@ tasks:
       {{.UV}} python -m unittest discover -s tests/skills/ub-workflow -p
       'test_*.py' -v
 
+  docs-sync:
+    desc: Run deterministic documentation drift checks
+    cmd: npm run check:docs-sync
+
+  docs-build:
+    desc: Build the VitePress documentation site
+    cmd: npm run docs:build
+
+  docs-preview:
+    desc: Preview the built VitePress documentation site
+    cmd: npm run docs:preview
+
   test:
     desc: Run local test checks
     deps:

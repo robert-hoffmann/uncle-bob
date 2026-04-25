@@ -297,7 +297,7 @@ your host tool and how much control you want over updates.
    the repository root or in `.github/plugin/`, which this repo provides.
 
    ```bash
-   copilot plugin install robert-hoffmann/itech-agents
+   copilot plugin install robert-hoffmann/uncle-bob
    ```
 
    If you prefer marketplace registration for team discovery, GitHub's docs
@@ -305,7 +305,7 @@ your host tool and how much control you want over updates.
    `.github/plugin/marketplace.json`:
 
    ```bash
-   copilot plugin marketplace add robert-hoffmann/itech-agents
+   copilot plugin marketplace add robert-hoffmann/uncle-bob
    ```
 
    Pros:
@@ -324,14 +324,14 @@ your host tool and how much control you want over updates.
    Agent Skills open standard.
 
    ```bash
-   npx skills add https://github.com/robert-hoffmann/itech-agents
+   npx skills add robert-hoffmann/uncle-bob
    ```
 
    Useful follow-ups:
 
    ```bash
-   npx skills add https://github.com/robert-hoffmann/itech-agents --list
-   npx skills add https://github.com/robert-hoffmann/itech-agents --skill ub-workflow --agent claude-code codex
+   npx skills add robert-hoffmann/uncle-bob --list
+   npx skills add robert-hoffmann/uncle-bob --skill ub-workflow --agent claude-code codex
    npx skills update
    ```
 

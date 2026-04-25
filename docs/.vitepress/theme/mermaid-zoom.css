@@ -1,0 +1,126 @@
+/* Mermaid container click hint */
+.vp-doc .mermaid {
+  position: relative;
+  transition: box-shadow 0.2s ease;
+  border-radius: 8px;
+}
+
+.vp-doc .mermaid:hover {
+  box-shadow: 0 0 0 2px var(--vp-c-brand-1);
+}
+
+/* Fullscreen dialog */
+.mermaid-zoom-dialog {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  max-width: 100vw;
+  max-height: 100vh;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  overflow: hidden;
+}
+
+.mermaid-zoom-dialog::backdrop {
+  background: rgba(0, 0, 0, 0.85);
+}
+
+.mermaid-zoom-dialog .mermaid-zoom-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.mermaid-zoom-dialog .mermaid-zoom-close {
+  position: fixed;
+  top: 16px;
+  right: 20px;
+  z-index: 10;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  font-size: 18px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease;
+}
+
+.mermaid-zoom-dialog .mermaid-zoom-close:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.mermaid-zoom-dialog .mermaid-zoom-controls {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+}
+
+.mermaid-zoom-dialog .mermaid-zoom-hint {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  font-size: 13px;
+  padding: 6px 14px;
+  border-radius: 20px;
+  user-select: none;
+}
+
+.mermaid-zoom-dialog .mermaid-zoom-svg {
+  transform-origin: center center;
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mermaid-zoom-dialog .mermaid-zoom-svg:active {
+  cursor: grabbing;
+}
+
+.mermaid-zoom-dialog .mermaid-zoom-svg svg {
+  max-width: 90vw;
+  max-height: 85vh;
+  background: var(--vp-c-bg);
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.mermaid-zoom-dialog .mermaid-zoom-svg img {
+  max-width: 90vw;
+  max-height: 85vh;
+  border-radius: 8px;
+  object-fit: contain;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* Zoomable image hover hint */
+.vp-doc img[data-zoom-ready],
+.image-gallery img[data-zoom-ready] {
+  cursor: pointer;
+  transition: box-shadow 0.2s ease;
+}
+
+.vp-doc img[data-zoom-ready]:hover,
+.image-gallery img[data-zoom-ready]:hover {
+  box-shadow: 0 0 0 2px var(--vp-c-brand-1);
+  border-radius: 4px;
+}
