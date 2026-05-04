@@ -146,6 +146,64 @@ class RepoMaintenanceScriptRegressionTests(unittest.TestCase):
             self.assertEqual(payload["status"], "pass")
             self.assertEqual(payload["checkedSkills"], EXPECTED_FIXTURE_SKILLS)
 
+    def test_check_skill_schema_accepts_context_fork(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            repo_root = Path(tmp)
+            write_repo_integrity_fixture(repo_root, "pass")
+            skill_path = repo_root / ".agents" / "skills" / "alpha-skill" / "SKILL.md"
+            skill_text = skill_path.read_text(encoding="utf-8")
+            skill_path.write_text(
+                skill_text.replace(
+                    "description: Test description for alpha-skill\n",
+                    "description: Test description for alpha-skill\ncontext: fork\n",
+                ),
+                encoding="utf-8",
+            )
+
+            result = run_cmd(
+                [
+                    PYTHON_BIN,
+                    str(SCRIPTS / "check_skill_schema.py"),
+                    "--repo-root",
+                    str(repo_root),
+                ]
+            )
+
+            self.assertEqual(result.returncode, 0, msg=result.stdout + result.stderr)
+            payload = json.loads(result.stdout)
+            self.assertEqual(payload["status"], "pass")
+
+    def test_check_skill_schema_rejects_invalid_context(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            repo_root = Path(tmp)
+            write_repo_integrity_fixture(repo_root, "pass")
+            skill_path = repo_root / ".agents" / "skills" / "alpha-skill" / "SKILL.md"
+            skill_text = skill_path.read_text(encoding="utf-8")
+            skill_path.write_text(
+                skill_text.replace(
+                    "description: Test description for alpha-skill\n",
+                    "description: Test description for alpha-skill\ncontext: inline\n",
+                ),
+                encoding="utf-8",
+            )
+
+            result = run_cmd(
+                [
+                    PYTHON_BIN,
+                    str(SCRIPTS / "check_skill_schema.py"),
+                    "--repo-root",
+                    str(repo_root),
+                ]
+            )
+
+            self.assertEqual(result.returncode, 1, msg=result.stdout + result.stderr)
+            payload = json.loads(result.stdout)
+            error_text = "\n".join(payload["errors"])
+            self.assertIn(
+                "alpha-skill: frontmatter field 'context' must be one of: fork",
+                error_text,
+            )
+
     def test_check_skill_schema_fails_with_invalid_frontmatter_and_refs(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             repo_root = Path(tmp)

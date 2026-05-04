@@ -42,6 +42,22 @@ A skill changes the agent’s behavior by giving it:
 The skill does not replace project truth. It tells the agent how to inspect the
 project and make better choices from the real context in front of it.
 
+## Inline And Forked Context
+
+By default, a skill loads inline: its main instructions and any triggered
+references become part of the parent agent's working context.
+
+Some VS Code hosts also support an experimental forked mode with
+`context: fork` in `SKILL.md`. In that mode, the skill runs in a dedicated
+subagent context and returns only its final result to the parent agent.
+
+Uncle Bob treats forked context as a targeted optimization for heavy,
+report-oriented skills. It is useful when the skill reads many files or large
+references and produces a focused decision, audit, or summary. It is a poor fit
+for companion baselines such as `ub-quality`, workflow state management such as
+`ub-workflow`, or implementation specialists whose rules need to keep shaping
+follow-up edits in the parent context.
+
 ## References And Progressive Disclosure
 
 Most skills keep their main `SKILL.md` concise and place deeper patterns in

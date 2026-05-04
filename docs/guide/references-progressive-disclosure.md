@@ -59,6 +59,21 @@ The intended behavior is selective loading:
 This protects both speed and correctness. A tiny CSS tweak should not load an
 entire migration guide, but a Tailwind upgrade absolutely should.
 
+## Forked Skill Context
+
+Progressive disclosure keeps most skill detail out of context until it is
+needed. Forked skill context goes one step further in VS Code: when a skill uses
+`context: fork`, its detailed work happens in a dedicated subagent context and
+only the final result returns to the parent conversation.
+
+This is useful for skills that perform long investigations, read many files, or
+load large reference sets to produce a focused report. It is not the right
+default for skills whose rules must remain active throughout follow-up work.
+
+Because forked context is currently a VS Code experimental behavior rather than
+part of the portable Agent Skills specification, public skill guidance should
+describe it as a host-specific optimization instead of a catalog-wide baseline.
+
 ## What Public Docs Should Do
 
 Public docs should make the model easy to understand:

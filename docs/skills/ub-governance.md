@@ -28,6 +28,9 @@ For the lean versus advanced model, read the
 
 - Selects a governance mode first: repository controls, testing posture,
   evidence decisions, core contract semantics, or a full governance audit.
+- Uses VS Code forked-context support when the host honors `context: fork`, so
+  large governance investigations return a focused result without carrying all
+  intermediate reference material into the parent chat.
 - Defaults to `lean`. Advanced governance is an explicit escalation, not a
   background tax on ordinary work.
 - Uses workflow artifacts as the durable record for ordinary Level 1 work,
@@ -78,6 +81,10 @@ The main skill handles ordinary governance routing. Deeper references load by
 mode and risk: testing policy for test-signal review, evidence references for
 Level 2 or high-risk work, repository references for repository controls, and
 schema files only when concrete governance data is being authored or checked.
+
+In VS Code environments that enable forked skill execution, that reference-heavy
+work runs in a dedicated skill context and returns the governance decision,
+gate result, report, or next action as the final output.
 
 ## Common Invocation Examples
 

@@ -41,13 +41,37 @@ Skills follow the Agent Skills open standard (agentskills.io). They work across 
 
 ## Frontmatter Fields
 
-| Field | Required | Description |
-| --- | --- | --- |
-| `name` | Yes | Skill name. Lowercase, hyphens, verb-led, under 64 characters. |
-| `description` | Yes | **Primary triggering mechanism.** Treat it as routing logic: state what the skill does, when to use it, adjacent phrasings the user may use, and when not to use it. Maximum 1024 characters under the Agent Skills spec. |
-| `argument-hint` | No | Placeholder text shown when invoked explicitly. |
-| `user-invocable` | No | Set `true` to allow explicit invocation as a slash command. |
-| `disable-model-invocation` | No | Set `true` to prevent auto-activation — only user invocation works. |
+Required fields:
+
+`name`
+Skill name. Use lowercase letters, digits, and hyphens. Keep it short,
+action-revealing, under 64 characters, and matched to the parent directory.
+
+`description`
+Primary triggering mechanism. Treat it as routing logic: state what the skill
+does, when to use it, adjacent phrasings the user may use, and when not to use
+it. Keep it within the 1024-character Agent Skills spec limit.
+
+Optional fields:
+
+`argument-hint`
+Placeholder text shown when invoked explicitly.
+
+`user-invocable`
+Set `true` to allow explicit invocation as a slash command.
+
+`disable-model-invocation`
+Set `true` to prevent auto-activation. Use this when only direct slash-command
+invocation should activate the skill.
+
+`context`
+VS Code experimental loading mode. Omit it for normal inline loading. Set it to
+`fork` only when the skill should run in a dedicated subagent context and return
+a focused final result.
+
+Portability note: `context` is a VS Code host extension, not part of the current
+Agent Skills open specification. Do not make it a portable baseline for skills
+intended to behave identically across all skills-compatible hosts.
 
 ## Description-Writing Formula
 
@@ -65,6 +89,27 @@ Skills use three-level loading to manage context efficiently:
 1. **Metadata** (name + description) — always in context (~100 words)
 2. **SKILL.md body** — loaded when skill triggers (target < 500 lines)
 3. **Bundled resources** — loaded on-demand as needed (unlimited)
+
+### Forked Context In VS Code
+
+VS Code can run a skill in a forked context when the skill frontmatter includes
+`context: fork` and the user has enabled the experimental skill-tool setting.
+The skill still uses normal discovery, but its instructions, references, and
+intermediate investigation stay in a dedicated subagent context. Only the final
+result returns to the parent agent.
+
+Use `context: fork` when all of these are true:
+
+- the skill reads many files, loads large references, or performs a lengthy
+  investigation
+- the useful output is a focused report, decision, summary, or small set of
+  edits
+- the parent agent should not keep the skill's intermediate reasoning as
+  ongoing behavioral context
+
+Do not use `context: fork` when the skill is a companion baseline, when its
+rules must keep shaping follow-up implementation, or when interactive user
+questions need to stay tightly coupled to the parent conversation.
 
 ### Pattern 1: High-Level Guide with References
 
@@ -190,6 +235,7 @@ Use this skill for browser-based testing tasks, not for simple unit tests.
 - [ ] Description is trigger-optimized (what + when + adjacent phrasings + non-use boundary)
 - [ ] SKILL.md body is under 500 lines
 - [ ] References are one level deep and clearly linked from SKILL.md
+- [ ] Host-specific fields such as `context: fork` are intentional and documented
 - [ ] No auxiliary documentation files (README, CHANGELOG, etc.)
 - [ ] Naming follows the shared authoring conventions reference
 - [ ] Scripts tested if included

@@ -1,6 +1,6 @@
 ---
-name: ub-governance
-description: >-
+name        : ub-governance
+description : >-
    Use this skill when the user wants to review governance rules, check testing
    posture, decide whether ADR or claim evidence is needed, evaluate
    repository or release controls, or understand exception and gate behavior;
@@ -9,10 +9,11 @@ description: >-
    governance escalation. Do not use it for workflow planning, framework
    implementation, or this repository's repo-maintenance catalog, path, and
    skill-integrity checks.
-metadata:
-  desktop-portfolio-help-topics: "overview,evidence,testing,repository,core,glossary,combos,invoke"
-  desktop-portfolio-help-aliases: "repo=repository"
-  desktop-portfolio-help-default-topic: "overview"
+context     : fork
+metadata    :
+   desktop-portfolio-help-topics       : "overview,evidence,testing,repository,core,glossary,combos,invoke"
+   desktop-portfolio-help-aliases      : "repo=repository"
+   desktop-portfolio-help-default-topic : "overview"
 ---
 
 # UB Governance

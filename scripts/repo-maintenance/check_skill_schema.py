@@ -27,8 +27,9 @@ write_payload = REPO_INTEGRITY.write_payload
 
 
 REQUIRED_FRONTMATTER_FIELDS = ("name", "description")
-BOOLEAN_FIELDS = ("user-invocable", "disable-model-invocation")
-STRING_FIELDS = ("argument-hint",)
+BOOLEAN_FIELDS              = ("user-invocable", "disable-model-invocation")
+STRING_FIELDS               = ("argument-hint",)
+CONTEXT_VALUES              = ("fork",)
 
 
 def main() -> int:
@@ -70,6 +71,14 @@ def main() -> int:
             for field in STRING_FIELDS
             if field in frontmatter and not isinstance(frontmatter[field], str)
         )
+
+        if "context" in frontmatter:
+            context = frontmatter["context"]
+            if not isinstance(context, str) or context not in CONTEXT_VALUES:
+                allowed_values = ", ".join(CONTEXT_VALUES)
+                errors.append(
+                    f"{skill_name}: frontmatter field 'context' must be one of: {allowed_values}"
+                )
 
         unresolved = unresolved_local_reference_targets(skill_dir, body)
         errors.extend(f"{skill_name}: unresolved local reference '{target}'" for target in unresolved)
